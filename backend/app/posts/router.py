@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from app.models import User
 from app.posts.dao import PostsDAO
 from app.posts.schemas import PostCreate, PostResponse
-from app.users.dependecies import get_current_user
+from backend.app.users.dependencies import get_current_user
 from datetime import datetime
 import os
 
