@@ -17,4 +17,4 @@ class PostResponse(BaseModel):
     discord_url: str
     author_login: str
     image_url: Optional[str]
-    created_at: str  # Отформатированная дата
+    created_at: str

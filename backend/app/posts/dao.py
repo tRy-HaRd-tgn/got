@@ -52,3 +52,54 @@ class PostsDAO(BaseDAO):
             )
             result = await session.execute(query)
             return result.scalars().first()
+
+    @classmethod
+    async def update(
+        cls,
+        post_id: int,
+        title: Optional[str] = None,
+        content: Optional[str] = None,
+        discord_url: Optional[str] = None,
+        image_url: Optional[str] = None,
+    ) -> Optional[Post]:
+        """
+        Обновление поста по его ID.
+        Возвращает обновленный пост или None, если пост не найден.
+        """
+        async with async_session_maker() as session:
+            try:
+                # Формируем словарь с обновляемыми полями
+                update_data = {}
+                if title is not None:
+                    update_data["title"] = title
+                if content is not None:
+                    update_data["content"] = content
+                if discord_url is not None:
+                    update_data["discord_url"] = discord_url
+                if image_url is not None:
+                    update_data["image_url"] = image_url
+
+                # Если есть что обновлять
+                if update_data:
+                    query = (
+                        update(Post)
+                        .where(Post.id == post_id)
+                        .values(**update_data)
+                        .returning(Post)
+                    )
+                    result = await session.execute(query)
+                    updated_post = result.scalars().first()
+
+                    # Явно загружаем автора
+                    if updated_post:
+                        await session.refresh(updated_post, ["author"])
+
+                    await session.commit()  # Фиксируем изменения
+                    return updated_post
+
+                # Если ничего не обновлялось, возвращаем None
+                return None
+
+            except Exception as e:
+                await session.rollback()  # Откатываем изменения в случае ошибки
+                raise e  # Пробрасываем исключение дальше
