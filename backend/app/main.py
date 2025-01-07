@@ -23,6 +23,5 @@ app.include_router(mailer_router)
 
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
-    # Чтение HTML-файла
     with open(TEMPLATES_PATH / "index.html", "r", encoding="utf-8") as file:
         return HTMLResponse(content=file.read())
