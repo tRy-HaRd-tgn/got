@@ -5,7 +5,7 @@ from os.path import abspath, dirname
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
-from app.models import User, Skin, Donation, PaymentHistory, Post
+from app.models import User, Donation, PaymentHistory, Post
 
 from alembic import context
 from app.database import Base

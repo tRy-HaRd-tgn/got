@@ -1,3 +1,4 @@
+from datetime import datetime
 from pydantic import BaseModel, EmailStr
 
 
@@ -15,3 +16,11 @@ class UserLogin(BaseModel):
 class Token(BaseModel):
     access_token: str
     token_type: str
+
+
+class UserProfile(BaseModel):
+    login: str
+    email: str
+    balance: float
+    created_at: datetime
+    skin_url: str  # URL скина пользователя

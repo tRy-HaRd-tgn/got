@@ -29,6 +29,7 @@ class User(Base):
     login = Column(String, unique=True, nullable=False, index=True)
     email = Column(String, unique=True, nullable=False, index=True)
     hashed_password = Column(String, nullable=False)
+    skin_url = Column(String, nullable=True)
     is_verified = Column(Boolean, default=False)  # Статус подтверждения
     balance = Column(Float, default=0.0)  # Баланс пользователя
     role = Column(String, default="user")  # "user" или "admin"
@@ -41,21 +42,6 @@ class User(Base):
 
     def __str__(self) -> str:
         return f"Пользователь {self.login}, баланс: {self.balance:.2f} золота."
-
-
-class Skin(Base):
-    __tablename__ = "skins"
-
-    id = Column(Integer, primary_key=True, index=True, nullable=False)
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    file_path = Column(String, nullable=False)  # Путь к файлу скина
-    uploaded_at = Column(DateTime, default=datetime.datetime.utcnow)
-
-    # Связь с пользователем
-    user = relationship("User", back_populates="skins")
-
-    def __str__(self) -> str:
-        return f"Скин пользователя {self.user_id}: {self.file_path}"
 
 
 class Post(Base):
