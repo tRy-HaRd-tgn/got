@@ -116,3 +116,60 @@ async def buy_donation(
         "message": "Покупка успешно завершена",
         "transaction_id": transaction.transaction_id,  # Возвращаем transaction_id
     }
+
+
+@router.put("/{donation_id}", response_model=DonationResponse)
+async def update_donation(
+    donation_id: int,  # ID доната для редактирования
+    name: str = Form(None),  # Новое название (опционально)
+    price: float = Form(None),  # Новая цена (опционально)
+    category: str = Form(None),  # Новая категория (опционально)
+    description: str = Form(None),  # Новое описание (опционально)
+    image: UploadFile = File(None),  # Новое изображение (опционально)
+    current_user: User = Depends(get_current_user),  # Текущий пользователь
+):
+    """
+    Редактирование существующего доната.
+    Доступно только для пользователей с ролью "admin".
+    """
+    if current_user.role != "admin":
+        raise HTTPException(
+            status_code=403, detail="Только админ может редактировать донаты"
+        )
+
+    # Проверяем, существует ли донат
+    donation = await DonationsDAO.find_one_or_none(id=donation_id)
+    if not donation:
+        raise HTTPException(status_code=404, detail="Донат не найден")
+
+    # Обновляем изображение, если оно предоставлено
+    image_url = donation.image_url
+    if image:
+        file_extension = image.filename.split(".")[-1]
+        filename = f"{datetime.now().strftime('%Y%m%d%H%M%S')}.{file_extension}"
+        file_path = os.path.join(UPLOAD_DIR, filename)
+        with open(file_path, "wb") as buffer:
+            buffer.write(await image.read())
+        image_url = f"/static/images/{filename}"
+
+    # Обновляем донат через DAO
+    updated_donation = await DonationsDAO.update(
+        donation_id=donation_id,
+        name=name,
+        price=price,
+        category=category,
+        description=description,
+        image_url=image_url,
+    )
+
+    if not updated_donation:
+        raise HTTPException(status_code=500, detail="Не удалось обновить донат")
+
+    return {
+        "id": updated_donation.id,
+        "name": updated_donation.name,
+        "price": updated_donation.price,
+        "category": updated_donation.category,
+        "description": updated_donation.description,
+        "image_url": updated_donation.image_url,
+    }
