@@ -8,56 +8,14 @@ from app.posts.router import UPLOAD_DIR
 from app.users.dao import UsersDAO
 from app.users.dependecies import get_current_user
 from app.models import User
+from app.images.dependencies import FileService
 
 router = APIRouter(prefix="/donations", tags=["Donations"])
 
 
-@router.post("/", response_model=DonationResponse)
-async def create_donation(
-    name: str = Form(...),
-    price: float = Form(...),
-    category: str = Form(...),
-    description: str = Form(None),
-    image: UploadFile = File(None),
-    current_user: User = Depends(get_current_user),
-):
-    if current_user.role != "admin":
-        raise HTTPException(
-            status_code=403, detail="Только админ может добавлять донаты"
-        )
-
-    # Сохраняем изображение (если есть)
-    image_url = None
-    if image:
-        file_extension = image.filename.split(".")[-1]
-        filename = f"{datetime.now().strftime('%Y%m%d%H%M%S')}.{file_extension}"
-        file_path = os.path.join(UPLOAD_DIR, filename)
-        with open(file_path, "wb") as buffer:
-            buffer.write(await image.read())
-        image_url = f"/static/images/{filename}"
-
-    # Создаем донат
-    donation = await DonationsDAO.add(
-        name=name,
-        price=price,
-        category=category,
-        description=description,
-        image_url=image_url,
-    )
-
-    return {
-        "id": donation.id,
-        "name": donation.name,
-        "price": donation.price,
-        "category": donation.category,
-        "description": donation.description,
-        "image_url": donation.image_url,
-    }
-
-
-@router.get("/{category}", response_model=list[DonationResponse])
-async def get_donations_by_category(category: str):
-    donations = await DonationsDAO.get_by_category(category)
+@router.get("/", response_model=list[DonationResponse])
+async def get_all_donations():
+    donations = await DonationsDAO.find_all()
     return [
         {
             "id": donation.id,
@@ -71,9 +29,9 @@ async def get_donations_by_category(category: str):
     ]
 
 
-@router.get("/", response_model=list[DonationResponse])
-async def get_all_donations():
-    donations = await DonationsDAO.find_all()
+@router.get("/{category}", response_model=list[DonationResponse])
+async def get_donations_by_category(category: str):
+    donations = await DonationsDAO.get_by_category(category)
     return [
         {
             "id": donation.id,
@@ -118,26 +76,68 @@ async def buy_donation(
     }
 
 
+@router.post("/", response_model=DonationResponse)
+async def create_donation(
+    name: str = Form(...),
+    price: float = Form(...),
+    category: str = Form(...),
+    description: str = Form(None),
+    image: UploadFile = File(None),
+    current_user: User = Depends(get_current_user),
+):
+    if current_user.role != "admin":
+        raise HTTPException(
+            status_code=403, detail="Только админ может добавлять донаты"
+        )
+
+    # Сохраняем изображение (если есть)
+    image_url = None
+    if image:
+        image_url = await FileService.save_image(
+            image, prefix="donation", entity_id=0
+        )  # entity_id будет обновлен после создания доната
+
+    # Создаем донат
+    donation = await DonationsDAO.add(
+        name=name,
+        price=price,
+        category=category,
+        description=description,
+        image_url=image_url,
+    )
+
+    # Обновляем имя файла с учетом ID доната
+    if image_url:
+        new_image_url = await FileService.save_image(
+            image, prefix="donation", entity_id=donation.id
+        )
+        await DonationsDAO.update(donation.id, image_url=new_image_url)
+
+    return {
+        "id": donation.id,
+        "name": donation.name,
+        "price": donation.price,
+        "category": donation.category,
+        "description": donation.description,
+        "image_url": new_image_url if image_url else None,
+    }
+
+
 @router.put("/{donation_id}", response_model=DonationResponse)
 async def update_donation(
-    donation_id: int,  # ID доната для редактирования
-    name: str = Form(None),  # Новое название (опционально)
-    price: float = Form(None),  # Новая цена (опционально)
-    category: str = Form(None),  # Новая категория (опционально)
-    description: str = Form(None),  # Новое описание (опционально)
-    image: UploadFile = File(None),  # Новое изображение (опционально)
-    current_user: User = Depends(get_current_user),  # Текущий пользователь
+    donation_id: int,
+    name: str = Form(None),
+    price: float = Form(None),
+    category: str = Form(None),
+    description: str = Form(None),
+    image: UploadFile = File(None),
+    current_user: User = Depends(get_current_user),
 ):
-    """
-    Редактирование существующего доната.
-    Доступно только для пользователей с ролью "admin".
-    """
     if current_user.role != "admin":
         raise HTTPException(
             status_code=403, detail="Только админ может редактировать донаты"
         )
 
-    # Проверяем, существует ли донат
     donation = await DonationsDAO.find_one_or_none(id=donation_id)
     if not donation:
         raise HTTPException(status_code=404, detail="Донат не найден")
@@ -145,14 +145,14 @@ async def update_donation(
     # Обновляем изображение, если оно предоставлено
     image_url = donation.image_url
     if image:
-        file_extension = image.filename.split(".")[-1]
-        filename = f"{datetime.now().strftime('%Y%m%d%H%M%S')}.{file_extension}"
-        file_path = os.path.join(UPLOAD_DIR, filename)
-        with open(file_path, "wb") as buffer:
-            buffer.write(await image.read())
-        image_url = f"/static/images/{filename}"
+        # Удаляем старое изображение
+        FileService.delete_image(donation.image_url)
+        # Сохраняем новое изображение
+        image_url = await FileService.save_image(
+            image, prefix="donation", entity_id=donation_id
+        )
 
-    # Обновляем донат через DAO
+    # Обновляем донат
     updated_donation = await DonationsDAO.update(
         donation_id=donation_id,
         name=name,
