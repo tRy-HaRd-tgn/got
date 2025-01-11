@@ -23,4 +23,3 @@ class UserProfile(BaseModel):
     email: str
     balance: float
     created_at: datetime
-    skin_url: str  # URL скина пользователя

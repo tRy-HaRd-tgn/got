@@ -12,10 +12,11 @@ class PostsDAO(BaseDAO):
 
     @classmethod
     async def find_all(cls):
+        """
+        Возвращает все посты с загрузкой автора.
+        """
         async with async_session_maker() as session:
-            query = select(Post).options(
-                joinedload(Post.author)
-            )  # Загружаем связанного автора
+            query = select(Post).options(joinedload(Post.author))
             result = await session.execute(query)
             return result.scalars().all()
 
@@ -25,17 +26,20 @@ class PostsDAO(BaseDAO):
         title: str,
         content: str,
         author_id: int,
-        image_url: Optional[str] = None,
         discord_url: Optional[str] = None,
+        image_url: Optional[str] = None,  # Добавляем параметр image_url
     ) -> Post:
+        """
+        Добавляет новый пост и возвращает его.
+        """
         async with async_session_maker() as session:
             post = Post(
                 title=title,
                 content=content,
                 author_id=author_id,
-                image_url=image_url,
                 discord_url=discord_url,
-                created_at=datetime.now(),  # Устанавливаем текущую дату и время
+                image_url=image_url,  # Передаем image_url
+                created_at=datetime.now(),
             )
             session.add(post)
             await session.commit()
@@ -44,12 +48,11 @@ class PostsDAO(BaseDAO):
 
     @classmethod
     async def find_one_or_none(cls, **filters):
+        """
+        Возвращает один пост по фильтрам с загрузкой автора.
+        """
         async with async_session_maker() as session:
-            query = (
-                select(Post)
-                .options(joinedload(Post.author))  # Жадная загрузка автора
-                .filter_by(**filters)
-            )
+            query = select(Post).options(joinedload(Post.author)).filter_by(**filters)
             result = await session.execute(query)
             return result.scalars().first()
 
@@ -60,10 +63,10 @@ class PostsDAO(BaseDAO):
         title: Optional[str] = None,
         content: Optional[str] = None,
         discord_url: Optional[str] = None,
-        image_url: Optional[str] = None,
+        image_url: Optional[str] = None,  # Добавляем параметр image_url
     ) -> Optional[Post]:
         """
-        Обновление поста по его ID.
+        Обновляет пост по его ID.
         Возвращает обновленный пост или None, если пост не найден.
         """
         async with async_session_maker() as session:

@@ -15,6 +15,6 @@ class PostResponse(BaseModel):
     title: str
     content: str
     discord_url: str
-    author_login: str
     image_url: Optional[str]
+    author_login: str
     created_at: str

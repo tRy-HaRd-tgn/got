@@ -1,38 +1,63 @@
 import os
-from datetime import datetime
 from fastapi import UploadFile, HTTPException
+from PIL import Image
 from pathlib import Path
-
-UPLOAD_DIR = "app/static/images"  # Папка для загрузки изображений
 
 
 class FileService:
     @staticmethod
-    async def save_image(file: UploadFile, prefix: str, entity_id: int) -> str:
+    async def save_image(file: UploadFile, entity_type: str, entity_id: int) -> str:
         """
-        Сохраняет изображение с уникальным именем, связанным с сущностью (пост, донат и т.д.).
-        Если старое изображение существует, оно будет удалено.
-
+        Сохраняет изображение для поста или доната.
         :param file: Файл изображения.
-        :param prefix: Префикс для имени файла (например, "post" или "donation").
-        :param entity_id: ID сущности (поста, доната и т.д.).
+        :param entity_type: Тип сущности ("post" или "donation").
+        :param entity_id: ID сущности (поста или доната).
         :return: Путь к сохраненному изображению.
         """
         try:
-            # Генерируем уникальное имя файла
-            file_extension = file.filename.split(".")[-1]
-            filename = f"{prefix}_{entity_id}.{file_extension}"
-            file_path = os.path.join(UPLOAD_DIR, filename)
+            # Проверяем формат файла
+            if not file.filename.endswith(".png"):
+                raise HTTPException(
+                    status_code=400, detail="Изображение должно быть в формате PNG"
+                )
 
-            # Удаляем старое изображение (если оно существует)
-            if os.path.exists(file_path):
-                os.remove(file_path)
+            # Проверяем размер файла (максимум 1 МБ)
+            if file.size > 1024 * 1024:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Размер изображения не должен превышать 1 МБ",
+                )
+
+            # Читаем изображение
+            img = Image.open(file.file)
+
+            # Проверяем размер изображения
+            if entity_type == "skin" and img.size not in [
+                (64, 64),
+                (128, 128),
+                (256, 256),
+            ]:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Размер изображения должен быть 64x64, 128x128 или 256x256 пикселей",
+                )
+
+            # Определяем папку для сохранения
+            upload_dir = Path(f"app/static/{entity_type}s")
+            upload_dir.mkdir(parents=True, exist_ok=True)
+
+            # Формируем имя файла
+            filename = f"{entity_id}.png"
+            file_path = upload_dir / filename
+
+            # Удаляем старое изображение (если есть)
+            if file_path.exists():
+                file_path.unlink()
 
             # Сохраняем новое изображение
-            with open(file_path, "wb") as buffer:
-                buffer.write(await file.read())
+            img.save(file_path)
 
-            return f"/static/images/{filename}"
+            return f"/static/{entity_type}s/{filename}"
 
         except Exception as e:
             raise HTTPException(
@@ -40,21 +65,16 @@ class FileService:
             )
 
     @staticmethod
-    def delete_image(image_url: str) -> None:
+    def delete_image(entity_type: str, entity_id: int) -> None:
         """
-        Удаляет изображение по его URL.
-
-        :param image_url: URL изображения.
+        Удаляет изображение для поста или доната.
+        :param entity_type: Тип сущности ("post" или "donation").
+        :param entity_id: ID сущности (поста или доната).
         """
         try:
-            if image_url:
-                # Извлекаем имя файла из URL
-                filename = image_url.replace("/static/images/", "")
-                file_path = os.path.join(UPLOAD_DIR, filename)
-
-                # Удаляем файл, если он существует
-                if os.path.exists(file_path):
-                    os.remove(file_path)
+            file_path = Path(f"app/static/{entity_type}s/{entity_id}.png")
+            if file_path.exists():
+                file_path.unlink()
         except Exception as e:
             raise HTTPException(
                 status_code=500, detail=f"Ошибка при удалении изображения: {str(e)}"

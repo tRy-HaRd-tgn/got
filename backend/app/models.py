@@ -12,10 +12,10 @@ class Donation(Base):
     name = Column(String, nullable=False)  # Название доната
     description = Column(String, nullable=True)  # Описание
     price = Column(Float, nullable=False)  # Цена
+    image_url = Column(String, nullable=True)
     category = Column(
         String, nullable=False
     )  # Категория (Привилегии, Питомцы, Маунты, Разное)
-    image_url = Column(String, nullable=True)  # Ссылка на изображение
     created_at = Column(DateTime, default=datetime.datetime.utcnow)  # Дата создания
 
     def __str__(self) -> str:
@@ -50,7 +50,7 @@ class Post(Base):
     title = Column(String, nullable=False)
     content = Column(String, nullable=False)
     author_id = Column(Integer, ForeignKey("users.id"), nullable=False)  # ID автора
-    image_url = Column(String, nullable=True)  # URL изображения
+    image_url = Column(String, nullable=True)
     discord_url = Column(String, nullable=True)  # URL Discord новости
     created_at = Column(DateTime(timezone=True))
 

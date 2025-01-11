@@ -20,7 +20,7 @@ router = APIRouter(
 )
 
 
-@router.post("/register", response_model=Token)
+@router.post("/register")
 async def register_user(user: UserRegister):
     # Проверяем, существует ли пользователь с таким логином или email
     existing_user = await UsersDAO.find_one_or_none(login=user.login)
@@ -40,19 +40,13 @@ async def register_user(user: UserRegister):
         is_verified=False,
     )
 
-    # Создаем базовый скин
-    skin_url = await SkinService.create_base_skin(user.login)
-
-    # Обновляем профиль пользователя с URL скина
-    await UsersDAO.update(new_user.id, skin_url=skin_url)
-
     # Генерируем токен подтверждения и отправляем письмо
     token = generate_confirmation_token(user.email)
     await send_confirmation_email(user.email, token)
 
     # Создаем access token для авторизации
-    access_token = create_access_token(data={"sub": user.login})
-    return {"access_token": access_token, "token_type": "bearer"}
+
+    return {"Вы создали аккаунт, подтвердите почту!"}
 
 
 @router.post("/login", response_model=Token)
@@ -81,5 +75,4 @@ async def get_profile(current_user: User = Depends(get_current_user)):
         "email": current_user.email,
         "balance": current_user.balance,
         "created_at": current_user.created_at,
-        "skin_url": current_user.skin_url,  # URL скина
     }

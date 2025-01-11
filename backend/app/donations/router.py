@@ -4,7 +4,6 @@ from fastapi import APIRouter, Depends, Form, HTTPException, UploadFile, File
 from app.donations.dao import DonationsDAO
 from app.donations.schemas import DonationCreate, DonationResponse
 from app.payments.dao import PaymentsDAO
-from app.posts.router import UPLOAD_DIR
 from app.users.dao import UsersDAO
 from app.users.dependencies import get_current_user
 from app.models import User
@@ -23,7 +22,6 @@ async def get_all_donations():
             "price": donation.price,
             "category": donation.category,
             "description": donation.description,
-            "image_url": donation.image_url,
         }
         for donation in donations
     ]
