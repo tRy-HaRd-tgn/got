@@ -6,7 +6,7 @@ from app.donations.schemas import DonationCreate, DonationResponse
 from app.payments.dao import PaymentsDAO
 from app.posts.router import UPLOAD_DIR
 from app.users.dao import UsersDAO
-from backend.app.users.dependencies import get_current_user
+from app.users.dependencies import get_current_user
 from app.models import User
 from app.images.dependencies import FileService
 
