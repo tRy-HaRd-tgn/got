@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException
 
 from app.mailer.mailer import confirm_token
 from app.users.dao import UsersDAO
+from app.skins.dependencies import SkinService
 
 
 router = APIRouter(tags=["Mailer"])
@@ -17,6 +18,9 @@ async def confirm_email(token: str):
     if not user:
         raise HTTPException(status_code=404, detail="Пользователь не найден")
 
-    await UsersDAO.update(user.id, is_verified=True)
+    # Создаем базовый скин
+    skin_url = await SkinService.create_base_skin(user.login)
+
+    await UsersDAO.update(user.id, skin_url=skin_url, is_verified=True)
 
     return {"message": "Email успешно подтверждён"}
