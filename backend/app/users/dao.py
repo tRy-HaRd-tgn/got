@@ -17,3 +17,29 @@ class UsersDAO(BaseDAO):
             )
             await session.execute(stmt)
             await session.commit()
+
+    @classmethod
+    async def add(
+        cls,
+        login: str,
+        email: str,
+        hashed_password: str,
+        balance: float = 0,
+        is_verified: bool = False,
+    ) -> User:
+        """
+        Добавляет нового пользователя и возвращает его.
+        """
+        async with async_session_maker() as session:
+            # Создаем нового пользователя
+            user = User(
+                login=login,
+                email=email,
+                hashed_password=hashed_password,
+                balance=balance,
+                is_verified=is_verified,
+            )
+            session.add(user)
+            await session.commit()
+            await session.refresh(user)  # Обновляем объект, чтобы получить его ID
+            return user  # Возвращаем созданного пользователя

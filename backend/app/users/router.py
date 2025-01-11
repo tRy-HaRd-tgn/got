@@ -10,7 +10,7 @@ from jose import JWTError, jwt
 from app.config import settings
 from app.users.dao import UsersDAO
 from app.models import User
-from backend.app.users.dependencies import get_current_user
+from app.users.dependencies import get_current_user
 from app.skins.dependencies import SkinService
 
 
