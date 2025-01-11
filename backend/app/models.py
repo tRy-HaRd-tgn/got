@@ -38,7 +38,6 @@ class User(Base):
     # Связь с другими таблицами
     posts = relationship("Post", back_populates="author")
     payment_history = relationship("PaymentHistory", back_populates="user")
-    skins = relationship("Skin", back_populates="user")
 
     def __str__(self) -> str:
         return f"Пользователь {self.login}, баланс: {self.balance:.2f} золота."
