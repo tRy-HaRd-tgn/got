@@ -73,7 +73,7 @@ python-dotenv==1.0.0
 python-jose==3.3.0
 python-multipart==0.0.20
 pyunormalize==15.1.0
-pywin32==306
+pywin32==306; platform_system == "Windows"
 PyYAML==6.0.2
 qt5-applications==5.15.2.2.3
 qt5-tools==5.15.2.1.3
