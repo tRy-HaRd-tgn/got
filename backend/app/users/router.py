@@ -82,7 +82,7 @@ async def login_user(
         value=refresh_token,
         httponly=True,
         max_age=settings.REFRESH_TOKEN_EXPIRE_DAYS * 24 * 60 * 60,
-        secure=not settings.DEBUG,  # Включить secure в production
+        secure=False,  # Включить secure в production
         samesite="lax",
     )
 
