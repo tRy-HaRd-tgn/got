@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Response
+from fastapi import APIRouter, Depends, HTTPException, Request, Response
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from app.mailer.mailer import generate_confirmation_token, send_confirmation_email
 from app.users.dao import UsersDAO
@@ -55,6 +55,19 @@ async def register_user(user: UserRegister):
     return {"Вы создали аккаунт, подтвердите почту!"}
 
 
+@router.get("/profile", response_model=UserProfile)
+async def get_profile(current_user: User = Depends(get_current_user)):
+    """
+    Возвращает информацию о текущем пользователе (личный кабинет).
+    """
+    return {
+        "login": current_user.login,
+        "email": current_user.email,
+        "balance": current_user.balance,
+        "created_at": current_user.created_at,
+    }
+
+
 @router.post("/login", response_model=Token)
 async def login_user(
     form_data: OAuth2PasswordRequestForm = Depends(),
@@ -89,24 +102,13 @@ async def login_user(
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@router.get("/profile", response_model=UserProfile)
-async def get_profile(current_user: User = Depends(get_current_user)):
-    """
-    Возвращает информацию о текущем пользователе (личный кабинет).
-    """
-    return {
-        "login": current_user.login,
-        "email": current_user.email,
-        "balance": current_user.balance,
-        "created_at": current_user.created_at,
-    }
-
-
 @router.post("/refresh-token", response_model=Token)
-async def refresh_token(refresh_token: str = Depends(lambda: None)):
+async def refresh_token(request: Request):
     """
     Обновляет access token с помощью refresh token.
     """
+    # Получаем refresh token из куки
+    refresh_token = request.cookies.get("refresh_token")
     if not refresh_token:
         raise HTTPException(status_code=401, detail="Refresh token отсутствует")
 
