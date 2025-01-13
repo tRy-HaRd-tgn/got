@@ -1,9 +1,15 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Response
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from app.mailer.mailer import generate_confirmation_token, send_confirmation_email
 from app.users.dao import UsersDAO
 from app.users.schemas import UserProfile, UserRegister, Token, UserLogin
-from app.users.auth import create_access_token, hash_password, verify_password
+from app.users.auth import (
+    create_access_token,
+    create_refresh_token,
+    decode_token,
+    hash_password,
+    verify_password,
+)
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
@@ -50,7 +56,13 @@ async def register_user(user: UserRegister):
 
 
 @router.post("/login", response_model=Token)
-async def login_user(form_data: OAuth2PasswordRequestForm = Depends()):
+async def login_user(
+    form_data: OAuth2PasswordRequestForm = Depends(),
+    response: Response = None,
+):
+    """
+    Авторизация пользователя.
+    """
     # Проверяем логин и пароль
     db_user = await UsersDAO.find_one_or_none(login=form_data.username)
     if not db_user or not verify_password(form_data.password, db_user.hashed_password):
@@ -60,8 +72,20 @@ async def login_user(form_data: OAuth2PasswordRequestForm = Depends()):
     if not db_user.is_verified:
         raise HTTPException(status_code=403, detail="Email не подтверждён")
 
-    # Создаем access token
+    # Создаем access и refresh токены
     access_token = create_access_token(data={"sub": db_user.login})
+    refresh_token = create_refresh_token(data={"sub": db_user.login})
+
+    # Устанавливаем refresh token в куки
+    response.set_cookie(
+        key="refresh_token",
+        value=refresh_token,
+        httponly=True,
+        max_age=settings.REFRESH_TOKEN_EXPIRE_DAYS * 24 * 60 * 60,
+        secure=not settings.DEBUG,  # Включить secure в production
+        samesite="lax",
+    )
+
     return {"access_token": access_token, "token_type": "bearer"}
 
 
@@ -76,3 +100,28 @@ async def get_profile(current_user: User = Depends(get_current_user)):
         "balance": current_user.balance,
         "created_at": current_user.created_at,
     }
+
+
+@router.post("/refresh-token", response_model=Token)
+async def refresh_token(refresh_token: str = Depends(lambda: None)):
+    """
+    Обновляет access token с помощью refresh token.
+    """
+    if not refresh_token:
+        raise HTTPException(status_code=401, detail="Refresh token отсутствует")
+
+    # Декодируем refresh token
+    payload = decode_token(refresh_token)
+    if not payload:
+        raise HTTPException(status_code=401, detail="Неверный refresh token")
+
+    # Получаем пользователя
+    user_login = payload.get("sub")
+    db_user = await UsersDAO.find_one_or_none(login=user_login)
+    if not db_user:
+        raise HTTPException(status_code=404, detail="Пользователь не найден")
+
+    # Создаем новый access token
+    access_token = create_access_token(data={"sub": db_user.login})
+
+    return {"access_token": access_token, "token_type": "bearer"}
