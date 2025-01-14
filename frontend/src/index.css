@@ -1,0 +1,22 @@
+@font-face {
+  font-family: "Game of Thrones KG";
+  src: url("./fonts/game_of_thrones_kg.eot"); /* IE 9 Compatibility Mode */
+  src: url("./fonts/game_of_thrones_kg.eot?#iefix") format("embedded-opentype"),
+    /* IE < 9 */ url("./fonts/game_of_thrones_kg.woff2") format("woff2"),
+    /* Super Modern Browsers */ url("./fonts/game_of_thrones_kg.woff")
+      format("woff"),
+    /* Firefox >= 3.6, any other modern browser */
+      url("./fonts/game_of_thrones_kg.ttf") format("truetype"),
+    /* Safari, Android, iOS */
+      url("./fonts/game_of_thrones_kg.svg#game_of_thrones_kg") format("svg"); /* Chrome < 4, Legacy iOS */
+}
+@font-face {
+  font-family: "pieces-of-eight-cyrillic-aa";
+  src: url("./fonts/pieces-of-eight-cyrillic-aa.ttf"); /* IE 9 Compatibility Mode */
+}
+
+
+
+
+
+/*pieces-of-eight-cyrillic-aa*/

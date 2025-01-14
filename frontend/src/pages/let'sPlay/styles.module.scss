@@ -1,0 +1,109 @@
+body {
+  margin: 0;
+}
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.description {
+  background-position: center;
+  background-image: url("../../imgs/backgrounds/sandCastle.png");
+  background-repeat: no-repeat;
+  background-size: 101% 102vh;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 0;
+}
+h1 {
+  font-family: "Game of Thrones KG";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 96px;
+  line-height: 124px;
+  color: #ffffff;
+  text-shadow: 0px 0px 1303.28px #ffffff, 0px 0px 383.88px #ffffff,
+    0px 0px 109.68px #ffffff, 0px 0px 54.84px #ffffff;
+}
+.project {
+  background-position: center;
+
+  background-repeat: no-repeat;
+  background-size: 101% 102vh;
+  height: 100vh;
+  width: 100%;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.descriptionP {
+  font-family: "Game of Thrones KG";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 48px;
+  text-align: center;
+  width: 80%;
+  color: #cccccc;
+}
+.devider {
+  position: absolute;
+  width: 100%;
+  top: calc(100vh - 50px);
+}
+.descriptionBtn {
+  background: #181f37;
+  border: 4px solid #232646;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 32px;
+  cursor: pointer;
+  font-family: "Game of Thrones KG";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 48px;
+  /* identical to box height */
+  display: flex;
+  align-items: center;
+  text-align: center;
+  width: 20%;
+  height: 6%;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+h3 {
+  font-family: "Game of Thrones KG";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 52px;
+
+  color: #ffffff;
+
+  text-shadow: 0px 0px 1349.96px #ffffff, 0px 0px 771.408px #ffffff,
+    0px 0px 449.988px #ffffff, 0px 0px 224.994px #ffffff,
+    0px 0px 64.284px #ffffff, 0px 0px 32.142px #ffffff;
+}
+.videoplayer {
+  width: 90%;
+  height: 70%;
+}
+.swiper {
+  width: 70%;
+  height: 60%;
+  border-radius: 25px;
+}
+.componentWrapper {
+  display: flex;
+  justify-content: space-between;
+  width: 90%;
+  height: 40%;
+}

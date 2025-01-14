@@ -1,0 +1,70 @@
+.header {
+  position: absolute;
+  height: 10%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Game of Thrones KG";
+  z-index: 999;
+}
+.container {
+  padding-left: 5%;
+  padding-right: 5%;
+  height: 70%;
+  width: 80%;
+  background: rgba(10, 4, 4, 0.822);
+
+  border-radius: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.menu {
+  display: flex;
+  width: 60%;
+  justify-content: space-between;
+  align-items: center;
+}
+.menuP {
+  padding-left: 1%;
+  padding-right: 1%;
+  font-family: "Game of Thrones KG";
+  text-wrap: nowrap;
+  color: #606060;
+  cursor: pointer;
+}
+.menuP:not(:last-child) {
+}
+
+.authBtn {
+  font-family: "Game of Thrones KG";
+  padding-left: 1.5%;
+  padding-right: 1.5%;
+  cursor: pointer;
+  background: #181f37;
+  border-radius: 32px;
+  border: none;
+  color: white;
+  width: auto;
+  height: 65%;
+}
+.userInfoP {
+  margin: 0;
+
+  font-family: "pieces-of-eight-cyrillic-aa";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 20px;
+  /* identical to box height */
+
+  color: #606060;
+}
+.userInfo {
+  cursor: pointer;
+  text-wrap: nowrap;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

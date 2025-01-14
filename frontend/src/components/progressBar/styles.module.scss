@@ -1,0 +1,21 @@
+.progressBar {
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  height: 3px;
+  width: 30%;
+  bottom: 5%;
+  left: calc(70% / 2);
+}
+.bar {
+  background-color: #CCCCCC;
+  height: 100%;
+  width: 25%;
+  border-radius: 5px;
+}
+.active {
+  height: 100%;
+  width: 25%;
+  border-radius: 5px;
+  background-color: #232646;
+}

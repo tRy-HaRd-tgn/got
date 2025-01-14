@@ -1,0 +1,82 @@
+.news {
+  display: flex;
+  width: 100%;
+  background-color: black;
+  height: 500px;
+  z-index: 999;
+  margin-bottom: 5%;
+
+  background: #1a1a1a;
+  border-radius: 32px;
+}
+.newsImg {
+  width: 50%;
+  height: 100%;
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
+}
+.newsRight {
+  padding-top: 1%;
+  padding-left: 1%;
+  padding-right: 1%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  font-family: "Game of Thrones KG";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 46px;
+
+  color: #ffffff;
+}
+.newsRightP {
+  font-family: "pieces-of-eight-cyrillic-aa";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 36px;
+
+  color: #606060;
+}
+.newsFooter {
+  padding-bottom: 2%;
+  width: 100%;
+  height: 10%;
+  display: flex;
+  justify-content: space-between;
+}
+.butn {
+  font-family: "pieces-of-eight-cyrillic-aa";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 36px;
+  line-height: 36px;
+  width: 25%;
+  height: 100%;
+  color: white;
+  border: none;
+  background: #181f37;
+  border-radius: 24px;
+  cursor: pointer;
+}
+.newsFooterWrapper{
+  display: flex;
+  align-items: center;
+  width: 24%;
+  justify-content: space-between;
+}
+.flex{
+  display: flex;
+  height: 60%;
+  align-items: center;
+}
+.p{
+  font-family: "pieces-of-eight-cyrillic-aa";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 36px;
+  color: white;
+}

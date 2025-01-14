@@ -1,0 +1,36 @@
+.footer {
+  width: 100%;
+  display: flex;
+
+  position: relative;
+  height: 15vh;
+  bottom: 0px;
+  background: #111111;
+  align-items: center;
+  font-family: "Game of Thrones KG";
+}
+.wrapper {
+  padding-left: 15%;
+  padding-right: 15%;
+  width: calc(100% - 15% - 15%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.wrapperLeft {
+  max-height: 15vh;
+}
+.wrapperRight {
+  max-height: 15vh;
+}
+h2 {
+  margin: 0px;
+  width: auto;
+  font-weight: 400;
+}
+p {
+  padding: 0px;
+  font-family: "Pieces of Eight Cyrillic AA";
+  color: #606060;
+}

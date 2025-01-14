@@ -1,0 +1,45 @@
+.component {
+  width: 30%;
+  padding-top: 2%;
+  height: 100%;
+
+  background: #1a1a1a;
+  border-radius: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+.componentWrapper {
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.componentWrapperH2 {
+  font-family: "Font Awesome 6 Pro";
+  font-style: normal;
+  font-weight: 900;
+  font-size: 96px;
+  line-height: 96px;
+  color: #ffffff;
+}
+.componentWrapperP {
+  margin: 0;
+  font-family: "pieces-of-eight-cyrillic-aa";
+  font-size: 45px;
+  line-height: 64px;
+
+  color: #ffffff;
+}
+.componentP {
+  width: 90%;
+  height: 55%;
+  font-family: "pieces-of-eight-cyrillic-aa";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 36px;
+  line-height: 36px;
+
+  color: #606060;
+}

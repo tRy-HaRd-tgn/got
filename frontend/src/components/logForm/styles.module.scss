@@ -1,0 +1,64 @@
+.descriptionForm {
+  width: 40%;
+  background: rgba(17, 17, 17, 0.75);
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 55%;
+}
+.descriptionFormH2 {
+  font-family: "Game of Thrones KG";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 41px;
+
+  color: #ffffff;
+}
+.descriptionFormH4 {
+  font-family: "pieces-of-eight-cyrillic-aa";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 32px;
+  text-align: center;
+  width: 50%;
+  color: #606060;
+}
+.descriptionFormInput {
+  box-sizing: border-box;
+  text-align: center;
+  width: 70%;
+  height: 11%;
+  background: rgba(24, 31, 55, 0.5);
+  border: 2px solid #181f37;
+  border-radius: 16px;
+  color: white;
+  font-family: "pieces-of-eight-cyrillic-aa";
+  font-size: 21px;
+}
+::placeholder {
+  color: white;
+}
+.descriptionFormInput:not(:last-child) {
+  margin-bottom: 5%;
+}
+.descriptionFormButtons {
+  display: flex;
+  width: 70%;
+  justify-content: space-between;
+  height: 10%;
+}
+.descriptionFormButton {
+  cursor: pointer;
+  font-family: "pieces-of-eight-cyrillic-aa";
+  font-size: 21px;
+  color: white;
+  width: 35%;
+  box-sizing: border-box;
+  background: rgba(24, 31, 55, 0.25);
+  border: 2px solid #181f37;
+  border-radius: 16px;
+}
