@@ -16,11 +16,11 @@ app.mount("/static", StaticFiles(directory="app/static"), name="static")
 TEMPLATES_PATH = Path("app/templates")
 
 
-app.include_router(users_router)
-app.include_router(posts_router)
-app.include_router(donations_router)
-app.include_router(mailer_router)
-app.include_router(skins_router)
+app.include_router(users_router, prefix="/api")
+app.include_router(posts_router, prefix="/api")
+app.include_router(donations_router, prefix="/api")
+app.include_router(mailer_router, prefix="/api")
+app.include_router(skins_router, prefix="/api")
 
 
 @app.get("/", response_class=HTMLResponse)
