@@ -21,8 +21,18 @@ services:
     networks:
       - app-network
 
+  redis:
+    image: redis
+    ports:
+      - "${REDIS_PORT}:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - app-network
+
 volumes:
   postgres_data:
+  redis_data:
 
 networks:
   app-network:
