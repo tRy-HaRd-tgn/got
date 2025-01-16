@@ -169,7 +169,6 @@ async def update_post(
 
 
 @router.get("/{post_id}/image")
-@cache(expire=300)
 async def get_post_image(post_id: int):
     """
     Возвращает изображение поста по его ID в виде бинарных данных.
