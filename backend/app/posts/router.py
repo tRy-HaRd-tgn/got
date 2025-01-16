@@ -6,6 +6,7 @@ from app.posts.schemas import PostCreate, PostResponse
 from app.users.dependencies import get_current_user
 from datetime import datetime
 from app.images.dependencies import FileService
+from fastapi_cache.decorator import cache
 
 router = APIRouter(
     prefix="/posts",
@@ -34,6 +35,7 @@ async def get_post(post_id: int):
 
 
 @router.get("/", response_model=list[PostResponse])
+@cache(expire=60)
 async def get_posts():
     """
     Возвращает список всех постов с URL для получения изображений.
