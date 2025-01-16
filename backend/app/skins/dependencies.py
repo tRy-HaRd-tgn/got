@@ -94,3 +94,22 @@ class SkinService:
             return f"/static/skins/{username}.png"
         else:
             return f"/static/skins/{username}_base.png"
+
+
+def extract_face(skin_path: str, output_path: str) -> str:
+    """
+    Извлекает лицо скина и сохраняет его как отдельное изображение.
+    :param skin_path: Путь к файлу скина (64x64).
+    :param output_path: Путь для сохранения аватарки.
+    """
+    # Открываем изображение скина
+    skin = Image.open(skin_path)
+
+    # Извлекаем область лица (8x8 пикселей)
+    face = skin.crop((8, 8, 16, 16))
+
+    # Увеличиваем лицо до 64x64 пикселей
+    face = face.resize((64, 64), Image.NEAREST)
+
+    # Сохраняем аватарку
+    face.save(output_path)

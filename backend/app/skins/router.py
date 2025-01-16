@@ -5,6 +5,8 @@ from app.models import User
 from app.skins.dependencies import SkinService
 from app.users.dao import UsersDAO
 from fastapi.responses import FileResponse
+from app.skins.dependencies import extract_face
+from fastapi_cache.decorator import cache
 
 router = APIRouter(
     prefix="/users",
@@ -21,12 +23,25 @@ async def upload_skin(
     Загружает скин для текущего пользователя.
     """
     try:
-        skin_url = await SkinService.upload_skin(current_user.login, skin)
+        # Сохраняем скин на сервере
+        skin_path = Path(f"app/static/skins/{current_user.login}.png")
+        with open(skin_path, "wb") as buffer:
+            buffer.write(await skin.read())
+
+        # Извлекаем аватарку
+        avatar_path = Path(f"app/static/skins/{current_user.login}_face.png")
+        extract_face(skin_path, avatar_path)
 
         # Обновляем URL скина в профиле пользователя
-        await UsersDAO.update(current_user.id)
+        await UsersDAO.update(
+            current_user.id, skin_url=str(skin_path), avatar_url=str(avatar_path)
+        )
 
-        return {"message": "Скин успешно загружен", "skin_url": skin_url}
+        return {
+            "message": "Скин успешно загружен",
+            "skin_url": str(skin_path),
+            "avatar_url": str(avatar_path),
+        }
 
     except HTTPException as e:
         raise e
@@ -37,6 +52,7 @@ async def upload_skin(
 
 
 @router.get("/get-skin")
+@cache(expire=120)
 async def get_skin(current_user: User = Depends(get_current_user)):
     """
     Возвращает URL скина текущего пользователя.
@@ -52,3 +68,25 @@ async def get_skin(current_user: User = Depends(get_current_user)):
             raise HTTPException(status_code=404, detail="Скин не найден")
 
     return FileResponse(skin_path)
+
+
+@router.get("/avatar")
+@cache(expire=300)
+async def get_avatar(current_user: User = Depends(get_current_user)):
+    """
+    Возвращает аватарку текущего пользователя.
+    """
+    avatar_path = Path(f"app/static/skins/{current_user.login}_face.png")
+
+    if not avatar_path.exists():
+        raise HTTPException(status_code=404, detail="Аватарка не найдена")
+
+    # Устанавливаем заголовки для кеширования на стороне клиента
+    headers = {
+        "Cache-Control": "public, max-age=300",  # Кешировать на 5 минут
+        "ETag": str(
+            avatar_path.stat().st_mtime
+        ),  # Используем время изменения файла как ETag
+    }
+
+    return FileResponse(avatar_path, headers=headers)
