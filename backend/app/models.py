@@ -30,6 +30,7 @@ class User(Base):
     email = Column(String, unique=True, nullable=False, index=True)
     hashed_password = Column(String, nullable=False)
     skin_url = Column(String, nullable=True)
+    avatar_url = Column(String, nullable=True)
     is_verified = Column(Boolean, default=False)  # Статус подтверждения
     balance = Column(Float, default=0.0)  # Баланс пользователя
     role = Column(String, default="user")  # "user" или "admin"
