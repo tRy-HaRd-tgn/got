@@ -19,6 +19,8 @@ from app.models import User
 from app.users.dependencies import get_current_user
 from app.skins.dependencies import SkinService
 from fastapi_cache.decorator import cache
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.ext.asyncio import AsyncSession
 
 router = APIRouter(
     prefix="/users",
@@ -37,22 +39,28 @@ async def register_user(user: UserRegister):
     if existing_email:
         raise HTTPException(status_code=400, detail="Email уже используется")
 
-    # Создаем пользователя
-    new_user = await UsersDAO.add(
-        login=user.login,
-        email=user.email,
-        hashed_password=hash_password(user.password),
-        balance=0,
-        is_verified=False,
-    )
+    try:
+        # Генерируем токен подтверждения и отправляем письмо
+        token = generate_confirmation_token(user.email)
+        await send_confirmation_email(user.email, token)
 
-    # Генерируем токен подтверждения и отправляем письмо
-    token = generate_confirmation_token(user.email)
-    await send_confirmation_email(user.email, token)
+        # Создаем пользователя только после успешной отправки письма
+        new_user = await UsersDAO.add(
+            login=user.login,
+            email=user.email,
+            hashed_password=hash_password(user.password),
+            balance=0,
+            is_verified=False,
+        )
 
-    # Создаем access token для авторизации
+        return {"message": "Вы создали аккаунт, подтвердите почту!"}
 
-    return {"Вы создали аккаунт, подтвердите почту!"}
+    except Exception as e:
+        # Если произошла ошибка при отправке письма, отменяем создание пользователя
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Ошибка при регистрации: {str(e)}",
+        )
 
 
 @router.get("/profile", response_model=UserProfile)
