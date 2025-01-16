@@ -157,13 +157,18 @@ async def refresh_token(request: Request):
 
 
 @router.post("/logout")
-async def logout(response: Response, current_user: User = Depends(get_current_user)):
+async def logout(
+    request: Request, response: Response, current_user: User = Depends(get_current_user)
+):
     """
     Выход пользователя из системы.
     """
     try:
-        # Аннулируем токен пользователя
-        await revoke_token(current_user.id)
+        # Получаем текущий токен из заголовка
+        token = request.headers.get("Authorization").split("Bearer ")[1]
+
+        # Аннулируем текущий токен
+        await revoke_token(current_user.id, token)
 
         # Удаляем refresh token из Redis
         await delete_refresh_token(current_user.id)
