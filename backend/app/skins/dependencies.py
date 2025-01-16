@@ -114,7 +114,7 @@ def extract_face(skin_path: str, output_path: str) -> str:
     face = skin.crop((8, 8, 16, 16))
 
     # Увеличиваем лицо до 64x64 пикселей
-    face = face.resize((64, 64), Image.NEAREST)
+    # face = face.resize((64, 64), Image.NEAREST)
 
     # Сохраняем аватарку
     face.save(output_path)
