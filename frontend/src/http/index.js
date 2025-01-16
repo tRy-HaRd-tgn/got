@@ -12,22 +12,22 @@ $api.interceptors.request.use((config) => {
   return config;
 });
 
-$api.interceptors.response.use(
-  (config) => {
-    return config;
-  },
-  async (error) => {
-    if (error.response.status == 401) {
-      const originalRequest = error.config;
-      try {
-        const response = await AuthService.checkAuth();
-        localStorage.setItem("token", response.data.accessToken);
-        return $api.request(originalRequest);
-      } catch (e) {
-        console.log("НЕ АВТОРИЗОВАН");
-      }
-    }
-  }
-);
+//$api.interceptors.response.use(
+//  (config) => {
+//    return config;
+//  },
+//  async (error) => {
+//    if (error.response.status == 401) {
+//      const originalRequest = error.config;
+//      try {
+//        const response = await AuthService.checkAuth();
+//        localStorage.setItem("token", response.data.accessToken);
+//        return $api.request(originalRequest);
+//      } catch (e) {
+//        console.log("НЕ АВТОРИЗОВАН");
+//      }
+//    }
+// }
+//);
 
 export default $api;

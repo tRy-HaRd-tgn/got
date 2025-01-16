@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import styles from "./styles.module.scss";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -8,6 +9,7 @@ export const LogForm = ({ setState, state }) => {
   const setAuth = () => {
     dispatch({ type: "SET_AUTH", isAuth: true });
   };
+ 
   return (
     <form className={styles.descriptionForm} action="">
       <h2 className={styles.descriptionFormH2}>Авторизация</h2>
@@ -30,7 +32,20 @@ export const LogForm = ({ setState, state }) => {
           className={styles.descriptionFormButton}
           onClick={(e) => {
             e.preventDefault();
-            setAuth(true);
+            try {
+              const responce = await AuthService.login(email, password);
+              console.log(responce);
+              localStorage.setItem("token", responce.data.accessToken);
+              setAuth(true);
+              setInfo(responce.data.user);
+              setPassword("");
+            } catch (e) {
+              setError(true);
+              setPassword("");
+              console.log(e.responce?.data?.message);
+            }
+
+
             navigator("/");
           }}
         >
