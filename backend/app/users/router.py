@@ -7,7 +7,10 @@ from app.users.auth import (
     create_access_token,
     create_refresh_token,
     decode_token,
+    delete_refresh_token,
+    get_refresh_token,
     hash_password,
+    revoke_token,
     verify_password,
 )
 from fastapi import Depends, HTTPException, status
@@ -132,7 +135,36 @@ async def refresh_token(request: Request):
     if not db_user:
         raise HTTPException(status_code=404, detail="Пользователь не найден")
 
+    # Проверяем, что refresh token совпадает с сохраненным в Redis
+    saved_refresh_token = await get_refresh_token(db_user.id)
+    if saved_refresh_token != refresh_token:
+        raise HTTPException(status_code=401, detail="Неверный refresh token")
+
     # Создаем новый access token
     access_token = create_access_token(data={"sub": db_user.login})
 
     return {"access_token": access_token, "token_type": "bearer"}
+
+
+@router.post("/logout")
+async def logout(response: Response, current_user: User = Depends(get_current_user)):
+    """
+    Выход пользователя из системы.
+    """
+    try:
+        # Аннулируем токен пользователя
+        await revoke_token(current_user.id)
+
+        # Удаляем refresh token из Redis
+        await delete_refresh_token(current_user.id)
+
+        # Удаляем refresh token из куки
+        response.delete_cookie("refresh_token")
+
+        return {"message": "Успешный выход из системы"}
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Ошибка при выходе из системы: {str(e)}",
+        )
