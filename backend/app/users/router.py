@@ -18,7 +18,7 @@ from app.users.dao import UsersDAO
 from app.models import User
 from app.users.dependencies import get_current_user
 from app.skins.dependencies import SkinService
-
+from fastapi_cache.decorator import cache
 
 router = APIRouter(
     prefix="/users",
@@ -56,6 +56,7 @@ async def register_user(user: UserRegister):
 
 
 @router.get("/profile", response_model=UserProfile)
+@cache(expire=120)
 async def get_profile(current_user: User = Depends(get_current_user)):
     """
     Возвращает информацию о текущем пользователе (личный кабинет).
