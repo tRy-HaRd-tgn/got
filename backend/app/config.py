@@ -19,6 +19,9 @@ class Settings(BaseSettings):
 
     SALT: str
 
+    REDIS_HOST: str
+    REDIS_PORT: int
+
     EMAIL_USERNAME: str
     EMAIL_PASSWORD: SecretStr
     EMAIL_FROM: EmailStr
