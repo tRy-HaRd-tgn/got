@@ -52,18 +52,23 @@ def decode_token(token: str) -> dict:
         return None
 
 
-async def revoke_token(user_id: int):
+async def revoke_token(user_id: int, token: str):
     """
-    Аннулирует токен пользователя.
+    Аннулирует текущий токен пользователя.
     """
-    await redis.set(f"revoked_token:{user_id}", str(datetime.utcnow()))
+    ttl = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    await redis.set(
+        f"revoked_token:{user_id}:{token}",  # Ключ включает user_id и токен
+        str(datetime.utcnow()),
+        ex=int(ttl.total_seconds()),  # Устанавливаем TTL
+    )
 
 
-async def is_token_revoked(user_id: int) -> bool:
+async def is_token_revoked(user_id: int, token: str) -> bool:
     """
-    Проверяет, аннулирован ли токен пользователя.
+    Проверяет, аннулирован ли текущий токен пользователя.
     """
-    return await redis.exists(f"revoked_token:{user_id}") == 1
+    return await redis.exists(f"revoked_token:{user_id}:{token}") == 1
 
 
 async def save_refresh_token(user_id: int, refresh_token: str):

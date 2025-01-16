@@ -11,6 +11,7 @@ from app.users.auth import (
     get_refresh_token,
     hash_password,
     revoke_token,
+    save_refresh_token,
     verify_password,
 )
 from fastapi import Depends, HTTPException, status
@@ -24,6 +25,7 @@ from app.skins.dependencies import SkinService
 from fastapi_cache.decorator import cache
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.database import redis
 
 router = APIRouter(
     prefix="/users",
@@ -97,9 +99,17 @@ async def login_user(
     if not db_user.is_verified:
         raise HTTPException(status_code=403, detail="Email не подтверждён")
 
+    # Удаляем все revoked_token для этого пользователя
+    revoked_keys = await redis.keys(f"revoked_token:{db_user.id}:*")
+    if revoked_keys:
+        await redis.delete(*revoked_keys)
+
     # Создаем access и refresh токены
     access_token = create_access_token(data={"sub": db_user.login})
     refresh_token = create_refresh_token(data={"sub": db_user.login})
+
+    # Сохраняем refresh token в Redis
+    await save_refresh_token(db_user.id, refresh_token)
 
     # Устанавливаем refresh token в куки
     response.set_cookie(

@@ -22,15 +22,16 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         if login is None:
             raise credentials_exception
 
-        # Проверяем, аннулирован ли токен
+        # Получаем пользователя
         user = await UsersDAO.find_one_or_none(login=login)
-        if user and await is_token_revoked(user.id):
+        if user is None:
             raise credentials_exception
+
+        # Проверяем, аннулирован ли текущий токен
+        if await is_token_revoked(user.id, token):
+            raise credentials_exception
+
+        return user
 
     except JWTError:
         raise credentials_exception
-
-    user = await UsersDAO.find_one_or_none(login=login)
-    if user is None:
-        raise credentials_exception
-    return user
