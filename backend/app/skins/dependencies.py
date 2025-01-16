@@ -11,27 +11,32 @@ class SkinService:
     @staticmethod
     async def create_base_skin(username: str) -> str:
         """
-        Создает базовое изображение с ником игрока.
+        Создает базовый скин и аватарку для пользователя.
+        :param username: Логин пользователя.
+        :return: URL скина.
         """
         try:
-            # Создаем изображение 64x64
-            img = Image.new("RGB", (64, 64), color="white")
-            draw = ImageDraw.Draw(img)
+            # Путь для сохранения скина и аватарки
+            skin_path = Path(f"app/static/skins/{username}.png")
+            avatar_path = Path(f"app/static/skins/{username}_face.png")
 
-            # Добавляем текст с ником
-            font = ImageFont.load_default()
-            draw.text((10, 25), username, fill="black", font=font)
+            # Создаем базовый скин (например, загружаем шаблон)
+            base_skin = Image.new(
+                "RGBA", (64, 64), (255, 255, 255, 255)
+            )  # Белый квадрат как пример
+            base_skin.save(skin_path)
 
-            # Сохраняем изображение
-            filename = f"{username}.png"
-            file_path = os.path.join(UPLOAD_DIR, filename)
-            img.save(file_path)
+            # Создаем аватарку на основе скина
+            face = base_skin.crop((8, 8, 16, 16))  # Извлекаем область лица
+            face = face.resize((64, 64), Image.NEAREST)  # Увеличиваем до 64x64
+            face.save(avatar_path)
 
-            return f"/static/skins/{filename}"
+            # Возвращаем URL скина
+            return f"/static/skins/{username}.png"
 
         except Exception as e:
             raise HTTPException(
-                status_code=500, detail=f"Ошибка при создании базового скина: {str(e)}"
+                status_code=500, detail=f"Ошибка при создании скина: {str(e)}"
             )
 
     @staticmethod
