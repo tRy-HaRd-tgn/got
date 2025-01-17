@@ -21,7 +21,10 @@ venv
 docs.zip
 archive.zip
 .env
-app/static
+app/static/posts/*
+app/static/skins/*
+app/static/donations/*
+app/static/videos/*
 .env-for-docker
 
 # vim temporary files
