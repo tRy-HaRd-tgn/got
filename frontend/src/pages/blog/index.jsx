@@ -3,11 +3,22 @@ import { Header, Footer } from "../../components";
 import { vector } from "../../imgs";
 import { useEffect } from "react";
 import { News } from "../../components";
+import PostService from "../../services/PostService";
 import data from "./data";
 export const Blog = (props) => {
+  const pickNews = async (e) => {
+    try {
+      const responce = await PostService?.getPosts();
+      console.log(responce);
+    } catch {
+      console.log(e.responce?.data?.message);
+    }
+  };
   useEffect(() => {
     console.log("загрузка новостей");
+    pickNews();
   }, []);
+
   return (
     <main className={styles.main}>
       <Header />

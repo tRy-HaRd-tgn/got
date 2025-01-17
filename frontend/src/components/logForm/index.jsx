@@ -7,7 +7,6 @@ export const LogForm = ({ setState, state }) => {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const navigator = useNavigate();
-  const auth = useSelector((state) => state.auth.isAuth);
   const dispatch = useDispatch();
   const setAuth = () => {
     dispatch({ type: "SET_AUTH", isAuth: true });
@@ -20,10 +19,10 @@ export const LogForm = ({ setState, state }) => {
       localStorage.setItem("token", responce.data.accessToken);
       setInfo(responce.data.user);
       setAuth(true);
+      navigator("/");
     } catch (e) {
       console.log(e.responce?.data?.message);
     }
-    navigator("/");
   };
   return (
     <form className={styles.descriptionForm} action="">
