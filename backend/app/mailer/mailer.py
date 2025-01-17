@@ -19,6 +19,7 @@ conf = ConnectionConfig(
 )
 
 
+# ds
 async def send_confirmation_email(email: str, token: str):
     # Убедитесь, что используете правильный протокол и домен
     confirmation_url = f"http://127.0.0.1:8000/api/confirm-email?token={token}"
