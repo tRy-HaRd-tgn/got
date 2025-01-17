@@ -1,5 +1,5 @@
 import $api from "../http";
-export default class PostsService {
+export default class PostService {
   static async getPost(id) {
     // получение поста по id
     return $api.post(`/api/posts/${id}`, { id });
@@ -16,6 +16,6 @@ export default class PostsService {
     return $api.post("/api/posts");
   }
   static async getPostImg(id) {
-    return $api.get(`/api/posts/${id}/profile`);
+    return $api.get(`/api/posts/${id}/image`);
   }
 }
