@@ -5,7 +5,7 @@ from app.config import settings
 from app.users.dao import UsersDAO
 from app.users.auth import is_token_revoked
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/users/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/users/login-for-test")
 
 
 async def get_current_user(token: str = Depends(oauth2_scheme)):
