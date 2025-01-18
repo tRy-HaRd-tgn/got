@@ -8,3 +8,4 @@ export { LogForm } from "./logForm";
 export { RegForm } from "./regForm";
 export { News } from "./news";
 export { DonateComp } from "./donate";
+export { Video } from "./videoApp";
