@@ -1,9 +1,10 @@
 import UserService from "../../services/UserService";
 import styles from "./styles.module.scss";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 export const LogForm = ({ setState, state }) => {
+  const [error, setError] = useState();
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const navigator = useNavigate();
@@ -17,11 +18,12 @@ export const LogForm = ({ setState, state }) => {
       const responce = await UserService.login(login, password);
       console.log(responce);
       localStorage.setItem("token", responce.data.accessToken);
-      setInfo(responce.data.user);
+      setError(false);
       setAuth(true);
       navigator("/");
     } catch (e) {
-      console.log(e.responce?.data?.message);
+      setError(true);
+      console.log(e.responce?.detail?.msg);
     }
   };
   return (
@@ -44,6 +46,7 @@ export const LogForm = ({ setState, state }) => {
         type="password"
         onChange={(e) => setPassword(e.target.value)}
       />
+      {error ? <div className={styles.text}>ошибка авторизации</div> : <></>}
       <div className={styles.descriptionFormButtons}>
         <button
           style={{ background: "#181F37" }}

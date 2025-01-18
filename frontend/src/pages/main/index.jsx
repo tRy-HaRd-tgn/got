@@ -26,16 +26,15 @@ export const Main = (props) => {
           spaceBetween={150}
           slidesPerView={1}
           onSlideChange={() => console.log("slide change")}
-          onSwiper={(swiper) => console.log(swiper)}
         >
           <SwiperSlide style={{ backgroundColor: "red" }}>
-            <ProgressBar index={0}/>
+            <ProgressBar index={0} />
           </SwiperSlide>
           <SwiperSlide style={{ backgroundColor: "green" }}>
-            <ProgressBar index={1}/>
+            <ProgressBar index={1} />
           </SwiperSlide>
           <SwiperSlide style={{ backgroundColor: "blue" }}>
-            <ProgressBar index={2}/>
+            <ProgressBar index={2} />
           </SwiperSlide>
         </Swiper>
       </div>

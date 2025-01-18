@@ -3,7 +3,6 @@ import { privateRoutes, publicRoutes } from "../router";
 import { Routes, Route } from "react-router-dom";
 export const AppRouter = () => {
   const auth = useSelector((state) => state.auth.isAuth);
-  console.log(auth);
   return (
     <Routes>
       {auth
