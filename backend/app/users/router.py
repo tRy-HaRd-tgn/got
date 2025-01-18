@@ -84,15 +84,15 @@ async def get_profile(current_user: User = Depends(get_current_user)):
 
 @router.post("/login", response_model=Token)
 async def login_user(
-    form_data: OAuth2PasswordRequestForm = Depends(),
+    user: UserLogin,
     response: Response = None,
 ):
     """
     Авторизация пользователя.
     """
     # Проверяем логин и пароль
-    db_user = await UsersDAO.find_one_or_none(login=form_data.username)
-    if not db_user or not verify_password(form_data.password, db_user.hashed_password):
+    db_user = await UsersDAO.find_one_or_none(login=user.login)
+    if not db_user or not verify_password(user.password, db_user.hashed_password):
         raise HTTPException(status_code=401, detail="Неверный логин или пароль")
 
     # Проверяем, подтвержден ли email
