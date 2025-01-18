@@ -4,6 +4,8 @@ import { useState } from "react";
 import UserService from "../../services/UserService";
 import { useNavigate } from "react-router-dom";
 export const RegForm = ({ setState, state }) => {
+  const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
   const router = useNavigate();
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
@@ -15,9 +17,17 @@ export const RegForm = ({ setState, state }) => {
       try {
         const responce = await UserService.registration(login, email, password);
         console.log(responce);
+        setLogin("");
+        setPassword("");
+        setEmail("");
+        setSecPassword("");
+        setSuccess(true);
       } catch (e) {
         console.log(e.responce?.data?.message);
       }
+    } else {
+      console.log("Пароли не совпадают");
+      setError(true);
     }
   };
   return (
@@ -54,6 +64,12 @@ export const RegForm = ({ setState, state }) => {
         value={secPassword}
         onChange={(e) => setSecPassword(e.target.value)}
       />
+      {error ? <div className={styles.error}>пароли не совпадают</div> : <></>}
+      {success ? (
+        <div className={styles.text}>подтвердите создание в почтовом ящике</div>
+      ) : (
+        <div className={styles.text}>произошла ошибка</div>
+      )}
       <div className={styles.descriptionFormButtons}>
         <button
           style={{ background: "#181F37" }}
