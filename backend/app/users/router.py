@@ -124,6 +124,48 @@ async def login_user(
     return {"access_token": access_token, "token_type": "bearer"}
 
 
+@router.post("/login-for-test", response_model=Token)
+async def login_user_test(
+    user: OAuth2PasswordRequestForm = Depends(),
+    response: Response = None,
+):
+    """
+    Авторизация пользователя.
+    """
+    # Проверяем логин и пароль
+    db_user = await UsersDAO.find_one_or_none(login=user.username)
+    if not db_user or not verify_password(user.password, db_user.hashed_password):
+        raise HTTPException(status_code=401, detail="Неверный логин или пароль")
+
+    # Проверяем, подтвержден ли email
+    if not db_user.is_verified:
+        raise HTTPException(status_code=403, detail="Email не подтверждён")
+
+    # Удаляем все revoked_token для этого пользователя
+    revoked_keys = await redis.keys(f"revoked_token:{db_user.id}:*")
+    if revoked_keys:
+        await redis.delete(*revoked_keys)
+
+    # Создаем access и refresh токены
+    access_token = create_access_token(data={"sub": db_user.login})
+    refresh_token = create_refresh_token(data={"sub": db_user.login})
+
+    # Сохраняем refresh token в Redis
+    await save_refresh_token(db_user.id, refresh_token)
+
+    # Устанавливаем refresh token в куки
+    response.set_cookie(
+        key="refresh_token",
+        value=refresh_token,
+        httponly=True,
+        max_age=settings.REFRESH_TOKEN_EXPIRE_DAYS * 24 * 60 * 60,
+        secure=False,  # Включить secure в production
+        samesite="lax",
+    )
+
+    return {"access_token": access_token, "token_type": "bearer"}
+
+
 @router.post("/refresh-token", response_model=Token)
 async def refresh_token(request: Request):
     """
