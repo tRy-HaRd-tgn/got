@@ -3,8 +3,10 @@ import { Header, Footer } from "../../components";
 import { vector } from "../../imgs";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { ProgressBar } from "../../components";
+import { useNavigate } from "react-router-dom";
 import "swiper/css";
 export const Main = (props) => {
+  const router = useNavigate();
   return (
     <main className={styles.main}>
       <Header />
@@ -16,7 +18,7 @@ export const Main = (props) => {
           становись частью великого конфликта. Вступай в игру, где каждый твой
           шаг может изменить судьбу мира.
         </p>
-        <button className={styles.descriptionBtn}>Начать свой путь</button>
+        <button onClick={() => router("/letsPlay")} className={styles.descriptionBtn}>Начать свой путь</button>
       </div>
       <img src={vector} alt="" className={styles.devider} />
       <div className={styles.project}>
@@ -26,16 +28,15 @@ export const Main = (props) => {
           spaceBetween={150}
           slidesPerView={1}
           onSlideChange={() => console.log("slide change")}
-          onSwiper={(swiper) => console.log(swiper)}
         >
           <SwiperSlide style={{ backgroundColor: "red" }}>
-            <ProgressBar index={0}/>
+            <ProgressBar index={0} />
           </SwiperSlide>
           <SwiperSlide style={{ backgroundColor: "green" }}>
-            <ProgressBar index={1}/>
+            <ProgressBar index={1} />
           </SwiperSlide>
           <SwiperSlide style={{ backgroundColor: "blue" }}>
-            <ProgressBar index={2}/>
+            <ProgressBar index={2} />
           </SwiperSlide>
         </Swiper>
       </div>
