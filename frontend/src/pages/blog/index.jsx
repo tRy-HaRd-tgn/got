@@ -4,21 +4,26 @@ import { vector } from "../../imgs";
 import { useEffect } from "react";
 import { News } from "../../components";
 import PostService from "../../services/PostService";
-import data from "./data";
+import { useSelector, useDispatch } from "react-redux";
+
 export const Blog = (props) => {
+  const dispatch = useDispatch();
+  const setNews = (news) => {
+    dispatch({ type: "SET_NEWS", news: news });
+  };
   const pickNews = async (e) => {
     try {
       const responce = await PostService?.getPosts();
-      console.log(responce);
+      setNews(responce.data);
     } catch {
       console.log(e.responce?.data?.message);
     }
   };
   useEffect(() => {
-    console.log("загрузка новостей");
     pickNews();
   }, []);
-
+  const data = useSelector((state) => state.news.news);
+  console.log(data);
   return (
     <main className={styles.main}>
       <Header />
@@ -29,11 +34,12 @@ export const Blog = (props) => {
         {data.map((value, index) => (
           <News
             key={index}
-            header={value.header}
-            author={value.creator}
-            data={value.data}
-            text={value.text}
-          ></News>
+            header={value.title}
+            author={value.author_login}
+            data={value.created_at}
+            text={value.content}
+            url={value.discord_url}
+          />
         ))}
       </div>
       <img src={vector} alt="" className={styles.devider} />
