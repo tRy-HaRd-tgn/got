@@ -1,4 +1,13 @@
-from sqlalchemy import Column, Integer, String, Float, Boolean, ForeignKey, DateTime
+from sqlalchemy import (
+    Column,
+    Integer,
+    String,
+    Float,
+    Boolean,
+    ForeignKey,
+    DateTime,
+    Text,
+)
 from sqlalchemy.orm import relationship
 from app.database import Base
 import datetime
@@ -49,7 +58,7 @@ class Post(Base):
 
     id = Column(Integer, primary_key=True, index=True, nullable=False)
     title = Column(String, nullable=False)
-    content = Column(String, nullable=False)
+    content = Column(Text, nullable=False)
     author_id = Column(Integer, ForeignKey("users.id"), nullable=False)  # ID автора
     image_url = Column(String, nullable=True)
     discord_url = Column(String, nullable=True)  # URL Discord новости
