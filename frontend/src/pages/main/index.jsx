@@ -3,8 +3,10 @@ import { Header, Footer } from "../../components";
 import { vector } from "../../imgs";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { ProgressBar } from "../../components";
+import { useNavigate } from "react-router-dom";
 import "swiper/css";
 export const Main = (props) => {
+  const router = useNavigate();
   return (
     <main className={styles.main}>
       <Header />
@@ -16,7 +18,7 @@ export const Main = (props) => {
           становись частью великого конфликта. Вступай в игру, где каждый твой
           шаг может изменить судьбу мира.
         </p>
-        <button className={styles.descriptionBtn}>Начать свой путь</button>
+        <button onClick={() => router("/letsPlay")} className={styles.descriptionBtn}>Начать свой путь</button>
       </div>
       <img src={vector} alt="" className={styles.devider} />
       <div className={styles.project}>

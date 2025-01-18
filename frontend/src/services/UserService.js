@@ -1,18 +1,10 @@
 import $api from "../http";
 export default class UserService {
-  static async login(username, password) {
-    return $api.post("/users/login", {
-      username,
-      password,
-    });
+  static async login(login, password) {
+    return $api.post("/users/login", { login, password });
   }
-
   static async registration(login, email, password) {
-    return $api.post("/users/register", {
-      login,
-      email,
-      password,
-    });
+    return $api.post("/users/register", { login, email, password });
   }
   static async getProfile() {
     return $api.get("/users/profile");
