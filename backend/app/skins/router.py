@@ -8,6 +8,8 @@ from fastapi.responses import FileResponse
 from app.skins.dependencies import extract_face
 from fastapi_cache.decorator import cache
 
+from app.images.dependencies import FileService
+
 router = APIRouter(
     prefix="/users",
     tags=["Skins"],
@@ -23,23 +25,36 @@ async def upload_skin(
     Загружает скин для текущего пользователя.
     """
     try:
+        # Проверяем формат файла
+        if not skin.filename.endswith(".png"):
+            raise HTTPException(
+                status_code=400, detail="Изображение должно быть в формате PNG"
+            )
+
+        # Проверяем размер файла (максимум 1 МБ)
+        if skin.size > 1024 * 1024:
+            raise HTTPException(
+                status_code=400,
+                detail="Размер изображения не должен превышать 1 МБ",
+            )
+
         # Сохраняем скин на сервере
-        skin_path = Path(f"app/static/skins/{current_user.login}.png")
-        with open(skin_path, "wb") as buffer:
-            buffer.write(await skin.read())
+        skin_url = await FileService.save_image(
+            file=skin, entity_type="skin", login=current_user.login
+        )
 
         # Извлекаем аватарку
         avatar_path = Path(f"app/static/skins/{current_user.login}_face.png")
-        extract_face(skin_path, avatar_path)
+        extract_face(Path(f"app/static/skins/{current_user.login}.png"), avatar_path)
 
         # Обновляем URL скина в профиле пользователя
         await UsersDAO.update(
-            current_user.id, skin_url=str(skin_path), avatar_url=str(avatar_path)
+            current_user.id, skin_url=skin_url, avatar_url=str(avatar_path)
         )
 
         return {
             "message": "Скин успешно загружен",
-            "skin_url": str(skin_path),
+            "skin_url": skin_url,
             "avatar_url": str(avatar_path),
         }
 
@@ -55,17 +70,18 @@ async def upload_skin(
 @cache(expire=120)
 async def get_skin(current_user: User = Depends(get_current_user)):
     """
-    Возвращает URL скина текущего пользователя.
+    Возвращает скин текущего пользователя.
+    Если скин не загружен, возвращает базовый скин (steve.png).
     """
-    # Формируем путь к файлу скина
+    # Путь к скину пользователя
     skin_path = Path(f"app/static/skins/{current_user.login}.png")
 
-    # Проверяем, существует ли файл
+    # Если скин пользователя не существует, возвращаем базовый скин
     if not skin_path.exists():
-        # Если скин не загружен, возвращаем базовое изображение
-        skin_path = Path(f"app/static/skins/{current_user.login}_base.png")
-        if not skin_path.exists():
-            raise HTTPException(status_code=404, detail="Скин не найден")
+        base_skin_path = Path("app/static/skins/steve.png")
+        if not base_skin_path.exists():
+            raise HTTPException(status_code=404, detail="Базовый скин не найден")
+        return FileResponse(base_skin_path)
 
     return FileResponse(skin_path)
 

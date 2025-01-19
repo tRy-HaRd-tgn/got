@@ -20,11 +20,17 @@ class SkinService:
             skin_path = Path(f"app/static/skins/{username}.png")
             avatar_path = Path(f"app/static/skins/{username}_face.png")
 
-            # Создаем базовый скин (например, загружаем шаблон)
-            base_skin = Image.new(
-                "RGBA", (64, 64), (255, 255, 255, 255)
-            )  # Белый квадрат как пример
-            base_skin.save(skin_path)
+            # Путь к базовому скину (steve.png)
+            base_skin_path = Path("app/static/skins/steve.png")
+
+            # Если базовый скин существует, копируем его
+            if base_skin_path.exists():
+                base_skin = Image.open(base_skin_path)
+                base_skin.save(skin_path)
+            else:
+                # Создаем базовый скин (белый квадрат)
+                base_skin = Image.new("RGBA", (64, 64), (255, 255, 255, 255))
+                base_skin.save(skin_path)
 
             # Создаем аватарку на основе скина
             face = base_skin.crop((8, 8, 16, 16))  # Извлекаем область лица
