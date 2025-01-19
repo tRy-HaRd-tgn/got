@@ -1,6 +1,8 @@
 from datetime import datetime
 import os
-from fastapi import APIRouter, Depends, Form, HTTPException, UploadFile, File
+from pathlib import Path
+from typing import Literal
+from fastapi import APIRouter, Depends, Form, HTTPException, Response, UploadFile, File
 from app.donations.dao import DonationsDAO
 from app.donations.schemas import DonationCreate, DonationResponse
 from app.payments.dao import PaymentsDAO
@@ -15,32 +17,57 @@ router = APIRouter(prefix="/donations", tags=["Donations"])
 @router.get("/", response_model=list[DonationResponse])
 async def get_all_donations():
     donations = await DonationsDAO.find_all()
-    return [
-        {
+    result = []
+
+    for donation in donations:
+        # Формируем URL для получения изображения
+        image_url = (
+            f"/donations/{donation.id}/image"
+            if Path(f"app/static/donations/{donation.id}.png").exists()
+            else None
+        )
+
+        # Формируем данные доната
+        donation_data = {
             "id": donation.id,
             "name": donation.name,
             "price": donation.price,
             "category": donation.category,
             "description": donation.description,
+            "image_url": image_url,  # Возвращаем URL для получения изображения
         }
-        for donation in donations
-    ]
+        result.append(donation_data)
+
+    return result
 
 
 @router.get("/{category}", response_model=list[DonationResponse])
-async def get_donations_by_category(category: str):
+async def get_donations_by_category(
+    category: Literal["privileges", "pets", "mounts", "other"]
+):
     donations = await DonationsDAO.get_by_category(category)
-    return [
-        {
+    result = []
+
+    for donation in donations:
+        # Формируем URL для получения изображения
+        image_url = (
+            f"/donations/{donation.id}/image"
+            if Path(f"app/static/donations/{donation.id}.png").exists()
+            else None
+        )
+
+        # Формируем данные доната
+        donation_data = {
             "id": donation.id,
             "name": donation.name,
             "price": donation.price,
             "category": donation.category,
             "description": donation.description,
-            "image_url": donation.image_url,
+            "image_url": image_url,  # Возвращаем URL для получения изображения
         }
-        for donation in donations
-    ]
+        result.append(donation_data)
+
+    return result
 
 
 @router.post("/{donation_id}/buy")
@@ -78,7 +105,7 @@ async def buy_donation(
 async def create_donation(
     name: str = Form(...),
     price: float = Form(...),
-    category: str = Form(...),
+    category: Literal["privileges", "pets", "mounts", "other"] = Form(...),
     description: str = Form(None),
     image: UploadFile = File(None),
     current_user: User = Depends(get_current_user),
@@ -92,8 +119,8 @@ async def create_donation(
     image_url = None
     if image:
         image_url = await FileService.save_image(
-            image, prefix="donation", entity_id=0
-        )  # entity_id будет обновлен после создания доната
+            file=image, entity_type="donation", entity_id=0  # Временный entity_id
+        )
 
     # Создаем донат
     donation = await DonationsDAO.add(
@@ -107,7 +134,7 @@ async def create_donation(
     # Обновляем имя файла с учетом ID доната
     if image_url:
         new_image_url = await FileService.save_image(
-            image, prefix="donation", entity_id=donation.id
+            file=image, entity_type="donation", entity_id=donation.id
         )
         await DonationsDAO.update(donation.id, image_url=new_image_url)
 
@@ -117,8 +144,30 @@ async def create_donation(
         "price": donation.price,
         "category": donation.category,
         "description": donation.description,
-        "image_url": new_image_url if image_url else None,
+        "image_url": (
+            f"/donations/{donation.id}/image" if image_url else None
+        ),  # Возвращаем URL для получения изображения
     }
+
+
+@router.get("/{donation_id}/image")
+async def get_donation_image(donation_id: int):
+    """
+    Возвращает изображение доната по его ID в виде бинарных данных.
+    """
+    # Формируем путь к файлу изображения
+    image_path = Path(f"app/static/donations/donation_{donation_id}.png")
+
+    # Проверяем, существует ли файл
+    if not image_path.exists():
+        raise HTTPException(status_code=404, detail="Изображение доната не найдено")
+
+    # Читаем файл изображения
+    with open(image_path, "rb") as image_file:
+        image_data = image_file.read()
+
+    # Возвращаем бинарные данные с соответствующими заголовками
+    return Response(content=image_data, media_type="image/png")
 
 
 @router.put("/{donation_id}", response_model=DonationResponse)
