@@ -97,12 +97,4 @@ async def get_avatar(current_user: User = Depends(get_current_user)):
     if not avatar_path.exists():
         raise HTTPException(status_code=404, detail="Аватарка не найдена")
 
-    # Устанавливаем заголовки для кеширования на стороне клиента
-    headers = {
-        "Cache-Control": "public, max-age=300",  # Кешировать на 5 минут
-        "ETag": str(
-            avatar_path.stat().st_mtime
-        ),  # Используем время изменения файла как ETag
-    }
-
-    return FileResponse(avatar_path, headers=headers)
+    return FileResponse(avatar_path)
