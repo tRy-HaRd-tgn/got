@@ -51,11 +51,11 @@ async def get_donations_by_category(
 
     for donation in donations:
         # Формируем URL для получения изображения
-        image_url = (
-            f"/donations/{donation.id}/image"
-            if Path(f"app/static/donations/{donation.id}.png").exists()
-            else None
-        )
+        # image_url = (
+        #     f"/donations/{donation.id}/image"
+        #     if Path(f"app/static/donations/{donation.id}.png").exists()
+        #     else None
+        # )
 
         # Формируем данные доната
         donation_data = {
@@ -64,7 +64,7 @@ async def get_donations_by_category(
             "price": donation.price,
             "category": donation.category,
             "description": donation.description,
-            "image_url": image_url,  # Возвращаем URL для получения изображения
+            "image_url": donation.image_url,  # Возвращаем URL для получения изображения
         }
         result.append(donation_data)
 

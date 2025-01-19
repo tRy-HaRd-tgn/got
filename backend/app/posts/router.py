@@ -46,11 +46,11 @@ async def get_posts():
 
     for post in posts:
         # Формируем URL для получения изображения
-        image_url = (
-            f"/posts/{post.id}/image"
-            if Path(f"app/static/posts/{post.id}.png").exists()
-            else None
-        )
+        # image_url = (
+        #     f"/posts/{post.id}/image"
+        #     if Path(f"app/static/posts/{post.id}.png").exists()
+        #     else None
+        # )
 
         # Формируем данные поста
         post_data = {
@@ -59,7 +59,7 @@ async def get_posts():
             "content": post.content,
             "discord_url": post.discord_url,
             "author_login": post.author.login,
-            "image_url": image_url,  # Возвращаем URL для получения изображения
+            "image_url": post.image_url,  # Возвращаем URL для получения изображения
             "created_at": post.created_at.strftime("%d.%m.%Y"),
         }
         result.append(post_data)

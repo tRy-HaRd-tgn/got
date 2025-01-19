@@ -107,22 +107,27 @@ class SkinService:
             return f"/static/skins/{username}_base.png"
 
 
-def extract_face(skin_path: str, output_path: str) -> str:
+def extract_face(skin_path: Path, avatar_path: Path):
     """
-    Извлекает лицо скина и сохраняет его как отдельное изображение.
-    :param skin_path: Путь к файлу скина (64x64).
-    :param output_path: Путь для сохранения аватарки.
+    Извлекает аватарку (лицо) из скина и сохраняет её.
+    :param skin_path: Путь к файлу скина.
+    :param avatar_path: Путь для сохранения аватарки.
     """
-    # Открываем изображение скина
-    skin = Image.open(skin_path)
+    try:
+        # Открываем скин
+        skin = Image.open(skin_path)
 
-    # Извлекаем область лица (8x8 пикселей)
-    face = skin.crop((8, 8, 16, 16))
+        # Извлекаем область лица (пример для скинов Minecraft)
+        face = skin.crop((8, 8, 16, 16))  # Координаты области лица
+        face = face.resize((64, 64), Image.BICUBIC)  # Увеличиваем до 64x64
 
-    # Увеличиваем лицо до 64x64 пикселей
-    face = face.resize((64, 64), Image.BICUBIC)
+        # Сохраняем аватарку
+        face.save(avatar_path)
 
-    # Сохраняем аватарку
-    face.save(output_path)
+        # Логируем успешное извлечение
+        print(f"Аватарка сохранена: {avatar_path}")
 
-    return output_path
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail=f"Ошибка при извлечении аватарки: {str(e)}"
+        )
