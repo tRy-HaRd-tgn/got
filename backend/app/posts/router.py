@@ -46,11 +46,6 @@ async def get_posts():
 
     for post in posts:
         # Формируем URL для получения изображения
-        # image_url = (
-        #     f"/posts/{post.id}/image"
-        #     if Path(f"app/static/posts/{post.id}.png").exists()
-        #     else None
-        # )
 
         # Формируем данные поста
         post_data = {
