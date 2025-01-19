@@ -64,7 +64,7 @@ async def get_donations_by_category(
             "price": donation.price,
             "category": donation.category,
             "description": donation.description,
-            "image_url": donation.image_url,  # Возвращаем URL для получения изображения
+            "image_url": f"/static/donations/donation_{donation.id}.png",  # Возвращаем URL для получения изображения
         }
         result.append(donation_data)
 
@@ -152,9 +152,7 @@ async def create_donation(
         "price": donation.price,
         "category": donation.category,
         "description": donation.description,
-        "image_url": (
-            f"/donations/{donation.id}/image" if image_url else None
-        ),  # Возвращаем URL для получения изображения
+        "image_url": f"static/donations/donation_{donation.id}.png",  # Возвращаем URL для получения изображения
     }
 
 

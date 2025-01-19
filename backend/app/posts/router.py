@@ -30,7 +30,7 @@ async def get_post(post_id: int):
         "content": post.content,
         "discord_url": post.discord_url,
         "author_login": post.author.login,
-        "image_url": f"/posts/{post_id}/image",  # Возвращаем URL для получения изображения
+        "image_url": f"/static/posts/post_{post_id}.png",  # Возвращаем URL для получения изображения
         "created_at": post.created_at.strftime("%d.%m.%Y"),
     }
 
@@ -54,7 +54,7 @@ async def get_posts():
             "content": post.content,
             "discord_url": post.discord_url,
             "author_login": post.author.login,
-            "image_url": post.image_url,  # Возвращаем URL для получения изображения
+            "image_url": f"/static/posts/post_{post.id}.png",  # Возвращаем URL для получения изображения
             "created_at": post.created_at.strftime("%d.%m.%Y"),
         }
         result.append(post_data)
