@@ -6,12 +6,15 @@ from pathlib import Path
 
 class FileService:
     @staticmethod
-    async def save_image(file: UploadFile, entity_type: str, entity_id: int) -> str:
+    async def save_image(
+        file: UploadFile, entity_type: str, entity_id: int = None, login: str = None
+    ) -> str:
         """
-        Сохраняет изображение для поста или доната.
+        Сохраняет изображение для поста, доната или скина.
         :param file: Файл изображения.
-        :param entity_type: Тип сущности ("post" или "donation").
-        :param entity_id: ID сущности (поста или доната).
+        :param entity_type: Тип сущности ("post", "donation" или "skin").
+        :param entity_id: ID сущности (поста или доната). Не используется для скинов.
+        :param login: Логин пользователя (используется только для скинов).
         :return: Путь к сохраненному изображению.
         """
         try:
@@ -31,7 +34,7 @@ class FileService:
             # Читаем изображение
             img = Image.open(file.file)
 
-            # Проверяем размер изображения
+            # Проверяем размер изображения для скинов
             if entity_type == "skin" and img.size not in [
                 (64, 64),
                 (128, 128),
@@ -47,7 +50,21 @@ class FileService:
             upload_dir.mkdir(parents=True, exist_ok=True)
 
             # Формируем имя файла
-            filename = f"{entity_id}.png"
+            if entity_type == "skin":
+                if not login:
+                    raise HTTPException(
+                        status_code=400,
+                        detail="Для скина необходимо указать логин пользователя",
+                    )
+                filename = f"{login}.png"  # Скин сохраняется как login.png
+            else:
+                if not entity_id:
+                    raise HTTPException(
+                        status_code=400,
+                        detail="Для поста или доната необходимо указать entity_id",
+                    )
+                filename = f"{entity_type}_{entity_id}.png"  # Пост или донат сохраняется как entity_type_entity_id.png
+
             file_path = upload_dir / filename
 
             # Удаляем старое изображение (если есть)
