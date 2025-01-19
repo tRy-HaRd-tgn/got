@@ -1,7 +1,9 @@
 import styles from "./styles.module.scss";
 import { newsComp } from "../../imgs";
 import { user, calendar } from "../../imgs";
-export const News = ({ header, text, author, data }) => {
+import { useNavigate } from "react-router-dom";
+export const News = ({ header, text, author, data, url }) => {
+  const navigator = useNavigate();
   return (
     <div className={styles.news}>
       <img className={styles.newsImg} src={newsComp} alt="error" />
@@ -19,7 +21,7 @@ export const News = ({ header, text, author, data }) => {
               <p className={styles.p}>{data}</p>
             </div>
           </div>
-          <button className={styles.butn}>Подробнее</button>
+          <a target="_blank" className={styles.butn} href={url}>Подробнее</a>
         </div>
       </div>
     </div>
