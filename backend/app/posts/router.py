@@ -174,7 +174,7 @@ async def get_post_image(post_id: int):
     Возвращает изображение поста по его ID в виде бинарных данных.
     """
     # Формируем путь к файлу изображения
-    image_path = Path(f"app/static/posts/{post_id}.png")
+    image_path = Path(f"app/static/posts/post_{post_id}.png")
 
     # Проверяем, существует ли файл
     if not image_path.exists():
