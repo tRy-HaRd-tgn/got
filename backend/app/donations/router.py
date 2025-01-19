@@ -10,6 +10,7 @@ from app.users.dao import UsersDAO
 from app.users.dependencies import get_current_user
 from app.models import User
 from app.images.dependencies import FileService
+import uuid
 
 router = APIRouter(prefix="/donations", tags=["Donations"])
 
@@ -118,8 +119,10 @@ async def create_donation(
     # Сохраняем изображение (если есть)
     image_url = None
     if image:
+        # Генерируем временное имя файла
+        temp_entity_id = str(uuid.uuid4())
         image_url = await FileService.save_image(
-            file=image, entity_type="donation", entity_id=0  # Временный entity_id
+            file=image, entity_type="donation", entity_id=temp_entity_id
         )
 
     # Создаем донат
@@ -133,9 +136,14 @@ async def create_donation(
 
     # Обновляем имя файла с учетом ID доната
     if image_url:
-        new_image_url = await FileService.save_image(
-            file=image, entity_type="donation", entity_id=donation.id
-        )
+        # Переименовываем файл
+        old_image_path = Path(f"app/static/donations/donation_{temp_entity_id}.png")
+        new_image_path = Path(f"app/static/donations/donation_{donation.id}.png")
+        if old_image_path.exists():
+            old_image_path.rename(new_image_path)
+
+        # Обновляем URL изображения в базе данных
+        new_image_url = f"/static/donations/donation_{donation.id}.png"
         await DonationsDAO.update(donation.id, image_url=new_image_url)
 
     return {

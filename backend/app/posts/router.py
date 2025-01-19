@@ -7,6 +7,7 @@ from app.users.dependencies import get_current_user
 from datetime import datetime
 from app.images.dependencies import FileService
 from fastapi_cache.decorator import cache
+import uuid
 
 router = APIRouter(
     prefix="/posts",
@@ -85,7 +86,11 @@ async def create_post(
     # Сохраняем изображение (если есть)
     image_url = None
     if image:
-        image_url = await FileService.save_image(image, entity_type="post", entity_id=0)
+        # Генерируем временное имя файла
+        temp_entity_id = str(uuid.uuid4())
+        image_url = await FileService.save_image(
+            image, entity_type="post", entity_id=temp_entity_id
+        )
 
     # Создаем пост
     post = await PostsDAO.add(
@@ -98,9 +103,14 @@ async def create_post(
 
     # Обновляем имя файла с учетом ID поста
     if image_url:
-        new_image_url = await FileService.save_image(
-            image, entity_type="post", entity_id=post.id
-        )
+        # Переименовываем файл
+        old_image_path = Path(f"app/static/posts/post_{temp_entity_id}.png")
+        new_image_path = Path(f"app/static/posts/post_{post.id}.png")
+        if old_image_path.exists():
+            old_image_path.rename(new_image_path)
+
+        # Обновляем URL изображения в базе данных
+        new_image_url = f"/static/posts/post_{post.id}.png"
         await PostsDAO.update(post.id, image_url=new_image_url)
 
     return {
