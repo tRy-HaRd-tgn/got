@@ -11,7 +11,7 @@ from fastapi_cache.decorator import cache
 from app.images.dependencies import FileService
 
 router = APIRouter(
-    prefix="/users",
+    prefix="/skins",
     tags=["Skins"],
 )
 
@@ -67,7 +67,6 @@ async def upload_skin(
 
 
 @router.get("/get-skin")
-@cache(expire=120)
 async def get_skin(current_user: User = Depends(get_current_user)):
     """
     Возвращает скин текущего пользователя.
@@ -76,25 +75,24 @@ async def get_skin(current_user: User = Depends(get_current_user)):
     # Путь к скину пользователя
     skin_path = Path(f"app/static/skins/{current_user.login}.png")
 
-    # Если скин пользователя не существует, возвращаем базовый скин
     if not skin_path.exists():
         base_skin_path = Path("app/static/skins/steve.png")
         if not base_skin_path.exists():
             raise HTTPException(status_code=404, detail="Базовый скин не найден")
         return FileResponse(base_skin_path)
 
-    return FileResponse(skin_path)
+    return FileResponse(skin_path, media_type="image/png")
 
 
 @router.get("/avatar")
-@cache(expire=300)
 async def get_avatar(current_user: User = Depends(get_current_user)):
     """
     Возвращает аватарку текущего пользователя.
     """
-    avatar_path = Path(f"app/static/skins/{current_user.login}_face.png")
+    # Преобразуем относительный путь в абсолютный
+    avatar_path = Path(f"app/static/skins/{current_user.login}.png")
 
     if not avatar_path.exists():
         raise HTTPException(status_code=404, detail="Аватарка не найдена")
 
-    return FileResponse(avatar_path)
+    return FileResponse(avatar_path, media_type="image/png")
