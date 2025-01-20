@@ -23,7 +23,6 @@ export const Blog = (props) => {
     pickNews();
   }, []);
   const data = useSelector((state) => state.news.news);
-  console.log(data);
   return (
     <main className={styles.main}>
       <Header />

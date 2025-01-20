@@ -30,12 +30,7 @@ export const Main = (props) => {
       <img src={vector} alt="" className={styles.devider} />
       <div className={styles.project}>
         <h3>Обзор проекта</h3>
-        <Swiper
-          className={styles.swiper}
-          spaceBetween={150}
-          slidesPerView={1}
-          onSlideChange={() => console.log("slide change")}
-        >
+        <Swiper className={styles.swiper} spaceBetween={150} slidesPerView={1}>
           {data.map((value, index) => Video({ index, value, swiper }))}
         </Swiper>
       </div>
