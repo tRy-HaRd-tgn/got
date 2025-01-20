@@ -35,7 +35,7 @@ async def get_all_donations():
             "price": donation.price,
             "category": donation.category,
             "description": donation.description,
-            "image_url": image_url,  # Возвращаем URL для получения изображения
+            "image_url": f"/static/donations/donation_{donation.id}.png",  # Возвращаем URL для получения изображения
         }
         result.append(donation_data)
 
