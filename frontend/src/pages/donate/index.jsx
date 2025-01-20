@@ -21,6 +21,7 @@ export const Donate = (props) => {
         let newMounts = [];
         let newOther = [];
         for (let i = 0; i < value.data.length; i++) {
+          console.log(value.data[i].image_url);
           if (value.data[i].category == "privileges") {
             newPrivileges.push(value.data[i]);
           }
@@ -48,22 +49,22 @@ export const Donate = (props) => {
     switch (state) {
       case "privileges": {
         return priviligies.map((value, index) => (
-          <DonateComp text={value.name} price={value.price} key={index} />
+          <DonateComp text={value.name} price={value.price} img={value.image_url} key={index} />
         ));
       }
       case "pets": {
         return pets.map((value, index) => (
-          <DonateComp text={value.name} price={value.price} key={index} />
+          <DonateComp text={value.name} price={value.price} img={value.image_url} key={index} />
         ));
       }
       case "mounts": {
         return mounts.map((value, index) => (
-          <DonateComp text={value.name} price={value.price} key={index} />
+          <DonateComp text={value.name} price={value.price} img={value.image_url} key={index} />
         ));
       }
       case "other": {
         return other.map((value, index) => (
-          <DonateComp text={value.name} price={value.price} key={index} />
+          <DonateComp text={value.name} price={value.price} img={value.image_url} key={index} />
         ));
       }
     }

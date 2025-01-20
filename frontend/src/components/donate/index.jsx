@@ -1,9 +1,8 @@
 import styles from "./styles.module.scss";
-import { gold } from "../../imgs";
-export const DonateComp = ({ price, color, text }) => {
+export const DonateComp = ({ price, img, color, text }) => {
   return (
     <div className={styles.wrapper}>
-      <img className={styles.wrapperImg} src={gold} alt="error" />
+      <img className={styles.wrapperImg} src={img} alt="error" />
       <p className={styles.wrapperHeader}>{text}</p>
       <p className={styles.priceP}>
         {price}

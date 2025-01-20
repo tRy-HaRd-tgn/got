@@ -15,6 +15,7 @@ export const Blog = (props) => {
     try {
       const responce = await PostService?.getPosts();
       setNews(responce.data);
+      console.log(responce)
     } catch {
       console.log(e.responce?.data?.message);
     }
