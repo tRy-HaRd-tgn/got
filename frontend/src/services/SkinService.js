@@ -2,14 +2,14 @@ import $api from "../http";
 export default class SkinService {
   static async uploadSkin(url) {
     
-    return $api.post(`/users/upload-skin`, { url });
+    return $api.post(`/skins/upload-skin`, { url });
   }
   static async getSkin() {
     
-    return $api.put(`/users/get-skin`);
+    return $api.put(`/skins/get-skin`);
   }
   static async getAvatar() {
     
-    return $api.get("/users/avatar");
+    return $api.get("/skins/avatar");
   }
 }

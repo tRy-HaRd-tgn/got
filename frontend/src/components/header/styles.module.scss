@@ -1,6 +1,6 @@
 .header {
   position: absolute;
-  height: 10%;
+  height: 12%;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -67,4 +67,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+.userInfoBtn {
+  background: #181f37;
+  border-radius: 32px;
+  border: none;
+  color: white;
+  padding: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  cursor: pointer;
+  z-index: 9999;
 }

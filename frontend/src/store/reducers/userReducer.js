@@ -4,7 +4,8 @@ const defaultState = {
   nickname: "undefined",
   donate: 0,
   regDate: "undefined",
-  skin:'',
+  skin: "",
+  profilePhoto: "",
   info: {},
 };
 export const userReducer = (state = defaultState, action) => {
@@ -43,6 +44,11 @@ export const userReducer = (state = defaultState, action) => {
       return {
         ...state,
         skin: action.skin,
+      };
+    case "SET_PROFILE_PHOTO":
+      return {
+        ...state,
+        profilePhoto: action.profilePhoto,
       };
     default:
       return state;

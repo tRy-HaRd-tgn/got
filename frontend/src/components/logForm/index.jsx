@@ -3,7 +3,6 @@ import styles from "./styles.module.scss";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-
 export const LogForm = ({ setState, state }) => {
   const [error, setError] = useState();
   const [login, setLogin] = useState("");
@@ -24,10 +23,9 @@ export const LogForm = ({ setState, state }) => {
   };
   const setEmail = (temp) => {
     dispatch({ type: "SET_EMAIL", email: temp });
-  }
+  };
   const configureStore = async () => {
     const responce = await UserService.getProfile();
-    console.log(responce)
     setNickName(responce.data.login);
     setDonate(responce.data.balance);
     setRegDate(responce.data.created_at.split("T")[0]);
