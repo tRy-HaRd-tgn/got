@@ -4,6 +4,7 @@ const defaultState = {
   nickname: "undefined",
   donate: 0,
   regDate: "undefined",
+  skin:'',
   info: {},
 };
 export const userReducer = (state = defaultState, action) => {
@@ -37,6 +38,11 @@ export const userReducer = (state = defaultState, action) => {
       return {
         ...state,
         regDate: action.regDate,
+      };
+    case "SET_SKIN":
+      return {
+        ...state,
+        skin: action.skin,
       };
     default:
       return state;
