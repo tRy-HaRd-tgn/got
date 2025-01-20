@@ -2,10 +2,23 @@ import styles from "./styles.module.scss";
 import { Header, Footer } from "../../components";
 import { vector } from "../../imgs";
 import { useState } from "react";
-import { priviligies, pets, mounts, other } from "./data";
 import { DonateComp } from "../../components";
+import { useEffect } from "react";
+import DonationService from "../../services/DonationService";
 export const Donate = (props) => {
   const [choise, setChoise] = useState("");
+  const priviligies = [];
+  const pets = [];
+  const mounts = [];
+  const other = [];
+  useEffect(() => {
+    try {
+      const responce = DonationService.getDonations();
+      console.log(responce);
+    } catch (e) {
+      console.log(e?.responce?.data?.message);
+    }
+  }, []);
   const func = (state) => {
     switch (state) {
       case "privileges": {
@@ -14,16 +27,20 @@ export const Donate = (props) => {
         ));
       }
       case "pets": {
-        return pets.map((value, index) => <DonateComp key={index} />);
+        return pets.map((value, index) => (
+          <DonateComp text={value.text} price={value.price} key={index} />
+        ));
       }
       case "mounts": {
-        return mounts.map((value, index) => <DonateComp key={index} />);
+        return mounts.map((value, index) => (
+          <DonateComp text={value.text} price={value.price} key={index} />
+        ));
       }
-      case "other":
-        {
-          return other.map((value, index) => <DonateComp key={index} />);
-        }
-        return;
+      case "other": {
+        return other.map((value, index) => (
+          <DonateComp text={value.text} price={value.price} key={index} />
+        ));
+      }
     }
   };
   return (
