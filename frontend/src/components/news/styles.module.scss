@@ -10,7 +10,12 @@
   border-radius: 32px;
 }
 .newsImg {
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center ;
   width: 31%;
+  text-align: center;
   height: 100%;
   border-top-left-radius: 15px;
   border-bottom-left-radius: 15px;

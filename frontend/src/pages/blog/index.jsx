@@ -15,7 +15,7 @@ export const Blog = (props) => {
     try {
       const responce = await PostService?.getPosts();
       setNews(responce.data);
-      console.log(responce)
+      console.log(responce);
     } catch {
       console.log(e.responce?.data?.message);
     }
@@ -33,6 +33,7 @@ export const Blog = (props) => {
       <div className={styles.newsWrapper}>
         {data.map((value, index) => (
           <News
+            img={value.image_url}
             key={index}
             header={value.title}
             author={value.author_login}

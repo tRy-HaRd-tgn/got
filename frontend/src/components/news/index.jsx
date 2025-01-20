@@ -2,11 +2,11 @@ import styles from "./styles.module.scss";
 import { newsComp } from "../../imgs";
 import { user, calendar } from "../../imgs";
 import { useNavigate } from "react-router-dom";
-export const News = ({ header, text, author, data, url }) => {
+export const News = ({ header, img, text, author, data, url }) => {
   const navigator = useNavigate();
   return (
     <div className={styles.news}>
-      <img className={styles.newsImg} src={newsComp} alt="error" />
+      <img className={styles.newsImg} src={img} alt="error" />
       <div className={styles.newsRight}>
         <h2>{header}</h2>
         <p className={styles.newsRightP}>{text}</p>
@@ -21,7 +21,9 @@ export const News = ({ header, text, author, data, url }) => {
               <p className={styles.p}>{data}</p>
             </div>
           </div>
-          <a target="_blank" className={styles.butn} href={url}>Подробнее</a>
+          <a target="_blank" className={styles.butn} href={url}>
+            Подробнее
+          </a>
         </div>
       </div>
     </div>
