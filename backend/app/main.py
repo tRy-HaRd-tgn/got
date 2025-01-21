@@ -43,7 +43,7 @@ origins = [
     "http://localhost:5173",
     "http://localhost:8000",
 ]
-
+# test
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
