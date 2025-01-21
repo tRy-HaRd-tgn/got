@@ -189,4 +189,4 @@ async def get_post_image(post_id: int):
         raise HTTPException(status_code=404, detail="Изображение поста не найдено")
 
     # Отдаем файл с соответствующими заголовками
-    return FileResponse(image_path, media_type="image/png")
+    return FileResponse(image_path)
