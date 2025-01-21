@@ -21,13 +21,6 @@ async def get_all_donations():
     result = []
 
     for donation in donations:
-        # Формируем URL для получения изображения
-        image_url = (
-            f"/donations/{donation.id}/image"
-            if Path(f"app/static/donations/{donation.id}.png").exists()
-            else None
-        )
-
         # Формируем данные доната
         donation_data = {
             "id": donation.id,
@@ -50,12 +43,6 @@ async def get_donations_by_category(
     result = []
 
     for donation in donations:
-        # Формируем URL для получения изображения
-        # image_url = (
-        #     f"/donations/{donation.id}/image"
-        #     if Path(f"app/static/donations/{donation.id}.png").exists()
-        #     else None
-        # )
 
         # Формируем данные доната
         donation_data = {
