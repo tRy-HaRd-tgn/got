@@ -6,11 +6,9 @@ services:
       POSTGRES_PASSWORD: ${DB_PASS}
       POSTGRES_DB: ${DB_NAME}
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    networks:
-      - app-network
 
   redis:
     image: redis
@@ -18,12 +16,8 @@ services:
       - "${REDIS_PORT}:6379"
     volumes:
       - redis_data:/data
-    networks:
-      - app-network
 
 volumes:
   postgres_data:
   redis_data:
 
-networks:
-  app-network:
