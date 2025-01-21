@@ -33,6 +33,7 @@ export const Blog = (props) => {
       <div className={styles.newsWrapper}>
         {data.map((value, index) => (
           <News
+            id={value.id}
             img={value.image_url}
             key={index}
             header={value.title}

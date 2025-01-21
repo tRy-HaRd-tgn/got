@@ -1,9 +1,27 @@
 import styles from "./styles.module.scss";
-import { newsComp } from "../../imgs";
 import { user, calendar } from "../../imgs";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-export const News = ({ header, img, text, author, data, url }) => {
+import PostService from "../../services/PostService";
+import { useState } from "react";
+
+export const News = ({ header,img, text, id, author, data, url }) => {
   const navigator = useNavigate();
+  const [image,setImage] = useState(null)
+  useEffect(() => {
+    try {
+      const responce = PostService.getPostImg(id);
+      console.log(responce);
+      responce.then((res) => {
+        const imgUrl=URL.createObjectURL(res.data)
+        console.log(imgUrl);
+        setImage(res.data);
+      })
+      
+    } catch (e) {
+      console.log(e?.responce?.data?.message);
+    }
+  }, []);
   return (
     <div className={styles.news}>
       <img className={styles.newsImg} src={img} alt="error" />
