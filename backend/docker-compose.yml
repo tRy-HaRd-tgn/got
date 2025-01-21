@@ -1,17 +1,4 @@
 services:
-  app:
-    build: .
-    ports:
-      - "8000:8000"
-    env_file:
-      - .env
-    depends_on:
-      - db
-    networks:
-      - app-network
-    volumes:
-      - static_data:/app/static
-
   db:
     image: postgres:13
     environment:
@@ -37,7 +24,6 @@ services:
 volumes:
   postgres_data:
   redis_data:
-  static_data:
 
 networks:
   app-network:
