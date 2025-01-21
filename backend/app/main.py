@@ -59,9 +59,3 @@ app.add_middleware(
 )
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
-
-
-@app.get("/", response_class=HTMLResponse)
-async def read_root(request: Request):
-    with open(TEMPLATES_PATH / "index.html", "r", encoding="utf-8") as file:
-        return HTMLResponse(content=file.read())

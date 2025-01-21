@@ -4,6 +4,7 @@ import { vector, X } from "../../imgs";
 import { ModalIcon } from "../../components";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import SkinService from "../../services/SkinService";
 export const Profile = (props) => {
   const dispath = useDispatch();
   const [modal, setModal] = useState(false);
@@ -15,12 +16,15 @@ export const Profile = (props) => {
     dispath({ type: "SET_SKIN", skin: skin });
   };
 
-  const clickHandler = (e) => {
+  const clickHandler = async (e) => {
     const file = e.target.files[0]; // схватили выбранный файл
-    console.log(file);
-    if (file) {
+    try {
       setPhoto(URL.createObjectURL(file));
       const skin = useSelector((state) => state.user.skin);
+      const responce = await SkinService.uploadSkin(skin);
+      console.log(responce);
+    } catch (e) {
+      console.log(e);
     }
   };
   const skin = useSelector((state) => state.user.skin);

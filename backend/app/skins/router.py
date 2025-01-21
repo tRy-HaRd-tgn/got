@@ -6,7 +6,6 @@ from app.skins.dependencies import SkinService
 from app.users.dao import UsersDAO
 from fastapi.responses import FileResponse
 from app.skins.dependencies import extract_face
-from fastapi_cache.decorator import cache
 
 from app.images.dependencies import FileService
 
@@ -22,40 +21,22 @@ async def upload_skin(
     current_user: User = Depends(get_current_user),  # Текущий пользователь
 ):
     """
-    Загружает скин для текущего пользователя.
+    Загружает скин для текущего пользователя и создает аватарку на его основе.
     """
     try:
-        # Проверяем формат файла
-        if not skin.filename.endswith(".png"):
-            raise HTTPException(
-                status_code=400, detail="Изображение должно быть в формате PNG"
-            )
-
-        # Проверяем размер файла (максимум 1 МБ)
-        if skin.size > 1024 * 1024:
-            raise HTTPException(
-                status_code=400,
-                detail="Размер изображения не должен превышать 1 МБ",
-            )
-
         # Сохраняем скин на сервере
-        skin_url = await FileService.save_image(
-            file=skin, entity_type="skin", login=current_user.login
-        )
+        skin_url = await SkinService.upload_skin(current_user.login, skin)
 
-        # Извлекаем аватарку
-        avatar_path = Path(f"app/static/skins/{current_user.login}_face.png")
-        extract_face(Path(f"app/static/skins/{current_user.login}.png"), avatar_path)
+        # Получаем путь к аватарке
+        avatar_url = SkinService.get_avatar_url(current_user.login)
 
-        # Обновляем URL скина в профиле пользователя
-        await UsersDAO.update(
-            current_user.id, skin_url=skin_url, avatar_url=str(avatar_path)
-        )
+        # Обновляем URL скина и аватарки в профиле пользователя
+        await UsersDAO.update(current_user.id, skin_url=skin_url, avatar_url=avatar_url)
 
         return {
             "message": "Скин успешно загружен",
             "skin_url": skin_url,
-            "avatar_url": str(avatar_path),
+            "avatar_url": avatar_url,
         }
 
     except HTTPException as e:
@@ -66,11 +47,15 @@ async def upload_skin(
         )
 
 
+from fastapi.responses import FileResponse
+from fastapi import HTTPException
+from pathlib import Path
+
+
 @router.get("/get-skin")
 async def get_skin(current_user: User = Depends(get_current_user)):
     """
-    Возвращает скин текущего пользователя.
-    Если скин не загружен, возвращает базовый скин (steve.png).
+    Возвращает скин текущего пользователя с отключенным кешированием.
     """
     # Путь к скину пользователя
     skin_path = Path(f"app/static/skins/{current_user.login}.png")
@@ -81,18 +66,39 @@ async def get_skin(current_user: User = Depends(get_current_user)):
             raise HTTPException(status_code=404, detail="Базовый скин не найден")
         return FileResponse(base_skin_path)
 
-    return FileResponse(skin_path, media_type="image/png")
+    response = FileResponse(skin_path, media_type="image/png")
+
+    # Отключаем кеширование для скинов (мгновенные обновления)
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+
+    response.headers["ETag"] = ""
+    return response
 
 
-@router.get("/avatar")
+@router.get("/get-avatar")
 async def get_avatar(current_user: User = Depends(get_current_user)):
     """
     Возвращает аватарку текущего пользователя.
+    Если аватарка не существует, создает её на основе скина.
+    Если скин не существует, возвращает базовую аватарку.
     """
-    # Преобразуем относительный путь в абсолютный
-    avatar_path = Path(f"app/static/skins/{current_user.login}.png")
 
-    if not avatar_path.exists():
-        raise HTTPException(status_code=404, detail="Аватарка не найдена")
+    # Путь к аватарке пользователя
+    avatar_path = Path(f"app/static/skins/{current_user.login}_face.png")
 
-    return FileResponse(avatar_path, media_type="image/png")
+    if avatar_path.exists():
+        return FileResponse(avatar_path, media_type="image/png")
+
+    skin_path = Path(f"app/static/skins/{current_user.login}.png")
+    if skin_path.exists():
+        extract_face(skin_path, avatar_path)
+        return FileResponse(avatar_path, media_type="image/png")
+
+    base_avatar_path = Path("app/static/skins/steve_face.png")
+    if base_avatar_path.exists():
+        return FileResponse(base_avatar_path, media_type="image/png")
+
+    # Если базовая аватарка не найдена, возвращаем ошибку 404
+    raise HTTPException(status_code=404, detail="Аватарка не найдена")
