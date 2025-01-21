@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 from typing import Literal
 from fastapi import APIRouter, Depends, Form, HTTPException, Response, UploadFile, File
+from fastapi.responses import FileResponse
 from app.donations.dao import DonationsDAO
 from app.donations.schemas import DonationCreate, DonationResponse
 from app.payments.dao import PaymentsDAO
@@ -146,7 +147,8 @@ async def create_donation(
 @router.get("/{donation_id}/image")
 async def get_donation_image(donation_id: int):
     """
-    Возвращает изображение доната по его ID в виде бинарных данных.
+    Возвращает изображение доната по его ID.
+    Используется FileResponse для оптимальной отдачи файлов.
     """
     # Формируем путь к файлу изображения
     image_path = Path(f"app/static/donations/donation_{donation_id}.png")
@@ -155,12 +157,8 @@ async def get_donation_image(donation_id: int):
     if not image_path.exists():
         raise HTTPException(status_code=404, detail="Изображение доната не найдено")
 
-    # Читаем файл изображения
-    with open(image_path, "rb") as image_file:
-        image_data = image_file.read()
-
-    # Возвращаем бинарные данные с соответствующими заголовками
-    return Response(content=image_data, media_type="image/png")
+    # Отдаем файл с соответствующими заголовками
+    return FileResponse(image_path, media_type="image/png")
 
 
 @router.put("/{donation_id}", response_model=DonationResponse)
@@ -185,7 +183,6 @@ async def update_donation(
     # Обновляем изображение, если оно предоставлено
     image_url = donation.image_url
     if image:
-        # Удаляем старое изображение
         FileService.delete_image(donation.image_url)
         # Сохраняем новое изображение
         image_url = await FileService.save_image(
