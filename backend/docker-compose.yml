@@ -9,6 +9,8 @@ services:
       - db
     networks:
       - app-network
+    volumes:
+      - static_data:/app/static
 
   db:
     image: postgres:13
@@ -35,6 +37,7 @@ services:
 volumes:
   postgres_data:
   redis_data:
+  static_data:
 
 networks:
   app-network:
