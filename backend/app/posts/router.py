@@ -1,5 +1,7 @@
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile, Response
 from pathlib import Path
+
+from fastapi.responses import FileResponse
 from app.models import User
 from app.posts.dao import PostsDAO
 from app.posts.schemas import PostCreate, PostResponse
@@ -176,7 +178,8 @@ async def update_post(
 @router.get("/{post_id}/image")
 async def get_post_image(post_id: int):
     """
-    Возвращает изображение поста по его ID в виде бинарных данных.
+    Возвращает изображение поста по его ID.
+    Используется FileResponse для оптимальной отдачи файлов.
     """
     # Формируем путь к файлу изображения
     image_path = Path(f"app/static/posts/post_{post_id}.png")
@@ -185,9 +188,5 @@ async def get_post_image(post_id: int):
     if not image_path.exists():
         raise HTTPException(status_code=404, detail="Изображение поста не найдено")
 
-    # Читаем файл изображения
-    with open(image_path, "rb") as image_file:
-        image_data = image_file.read()
-
-    # Возвращаем бинарные данные с соответствующими заголовками
-    return Response(content=image_data, media_type="image/png")
+    # Отдаем файл с соответствующими заголовками
+    return FileResponse(image_path, media_type="image/png")
