@@ -4,11 +4,10 @@ import { useEffect } from "react";
 export const DonateComp = ({ price, img, color, text }) => {
   const [image, setImage] = useState(null);
   useEffect(() => {
-    console.log(img);
-    setImage("http://localhost:8000"+img);
+    setImage("http://localhost:8000" + img);
   }, []);
   return (
-    <div className={styles.wrapper}>
+    <div style={{ backgroundColor: color }} className={styles.wrapper}>
       <img className={styles.wrapperImg} src={image} alt="error" />
       <p className={styles.wrapperHeader}>{text}</p>
       <p className={styles.priceP}>

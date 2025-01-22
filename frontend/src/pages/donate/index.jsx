@@ -54,7 +54,7 @@ export const Donate = (props) => {
             price={value.price}
             img={value.image_url}
             key={index}
-            color={value.color}
+            color={value.background_color}
           />
         ));
       }
@@ -65,6 +65,7 @@ export const Donate = (props) => {
             price={value.price}
             img={value.image_url}
             key={index}
+            color={value.background_color}
           />
         ));
       }
@@ -75,6 +76,7 @@ export const Donate = (props) => {
             price={value.price}
             img={value.image_url}
             key={index}
+            color={value.background_color}
           />
         ));
       }
@@ -85,6 +87,7 @@ export const Donate = (props) => {
             price={value.price}
             img={value.image_url}
             key={index}
+            color={value.background_color}
           />
         ));
       }
