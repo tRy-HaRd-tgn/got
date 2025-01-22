@@ -1,3 +1,4 @@
+from typing import Optional
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile, Response
 from pathlib import Path
 
@@ -124,10 +125,10 @@ async def create_post(
 @router.put("/{post_id}", response_model=PostResponse)
 async def update_post(
     post_id: int,
-    title: str = Form(None),
-    content: str = Form(None),
-    discord_url: str = Form(None),
-    image: UploadFile = File(None),
+    title: Optional[str] = Form(None),
+    content: Optional[str] = Form(None),
+    discord_url: Optional[str] = Form(None),
+    image: Optional[UploadFile] = File(None),
     current_user: User = Depends(get_current_user),
 ):
     """
@@ -145,8 +146,9 @@ async def update_post(
     # Обновляем изображение, если оно предоставлено
     image_url = post.image_url
     if image:
-        # Удаляем старое изображение
-        FileService.delete_image(entity_type="post", entity_id=post_id)
+        # Удаляем старое изображение, если оно есть
+        if post.image_url:
+            FileService.delete_image(entity_type="post", entity_id=post_id)
         # Сохраняем новое изображение
         image_url = await FileService.save_image(
             image, entity_type="post", entity_id=post_id
@@ -190,3 +192,32 @@ async def get_post_image(post_id: int):
 
     # Отдаем файл с соответствующими заголовками
     return FileResponse(image_path)
+
+
+@router.delete("/{post_id}")
+async def delete_post(
+    post_id: int,
+    current_user: User = Depends(get_current_user),
+):
+    """
+    Удаляет пост по его ID.
+    """
+    if current_user.role != "admin":
+        raise HTTPException(
+            status_code=403, detail="Только админ может удалять новости"
+        )
+
+    post = await PostsDAO.find_one_or_none(id=post_id)
+    if not post:
+        raise HTTPException(status_code=404, detail="Пост не найден")
+
+    # Удаляем изображение, если оно есть
+    if post.image_url:
+        FileService.delete_image(entity_type="post", entity_id=post_id)
+
+    # Удаляем пост из базы данных
+    deleted_post = await PostsDAO.delete(post_id)
+    if not deleted_post:
+        raise HTTPException(status_code=500, detail="Не удалось удалить пост")
+
+    return {"message": "Пост успешно удален", "id": deleted_post.id}
