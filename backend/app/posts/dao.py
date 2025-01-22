@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Optional
-from sqlalchemy import insert, select, update
+from sqlalchemy import delete, insert, select, update
 from app.dao.base import BaseDAO
 from sqlalchemy.orm import joinedload
 from app.models import Post
@@ -63,46 +63,52 @@ class PostsDAO(BaseDAO):
         title: Optional[str] = None,
         content: Optional[str] = None,
         discord_url: Optional[str] = None,
-        image_url: Optional[str] = None,  # Добавляем параметр image_url
+        image_url: Optional[str] = None,
     ) -> Optional[Post]:
         """
         Обновляет пост по его ID.
         Возвращает обновленный пост или None, если пост не найден.
         """
         async with async_session_maker() as session:
-            try:
-                # Формируем словарь с обновляемыми полями
-                update_data = {}
-                if title is not None:
-                    update_data["title"] = title
-                if content is not None:
-                    update_data["content"] = content
-                if discord_url is not None:
-                    update_data["discord_url"] = discord_url
-                if image_url is not None:
-                    update_data["image_url"] = image_url
+            update_data = {}
+            if title is not None:
+                update_data["title"] = title
+            if content is not None:
+                update_data["content"] = content
+            if discord_url is not None:
+                update_data["discord_url"] = discord_url
+            if image_url is not None:
+                update_data["image_url"] = image_url
 
-                # Если есть что обновлять
-                if update_data:
-                    query = (
-                        update(Post)
-                        .where(Post.id == post_id)
-                        .values(**update_data)
-                        .returning(Post)
-                    )
-                    result = await session.execute(query)
-                    updated_post = result.scalars().first()
+            if update_data:
+                query = (
+                    update(Post)
+                    .where(Post.id == post_id)
+                    .values(**update_data)
+                    .returning(Post)
+                )
+                result = await session.execute(query)
+                await session.commit()
+                updated_post = result.scalars().first()
+                return updated_post
 
-                    # Явно загружаем автора
-                    if updated_post:
-                        await session.refresh(updated_post, ["author"])
+            return None
 
-                    await session.commit()  # Фиксируем изменения
-                    return updated_post
+    @classmethod
+    async def delete(cls, post_id: int) -> Optional[Post]:
+        """
+        Удаляет пост по его ID.
+        Возвращает удаленный пост или None, если пост не найден.
+        """
+        async with async_session_maker() as session:
+            query = select(Post).where(Post.id == post_id)
+            result = await session.execute(query)
+            post = result.scalars().first()
 
-                # Если ничего не обновлялось, возвращаем None
-                return None
+            if post:
+                delete_query = delete(Post).where(Post.id == post_id)
+                await session.execute(delete_query)
+                await session.commit()
+                return post
 
-            except Exception as e:
-                await session.rollback()  # Откатываем изменения в случае ошибки
-                raise e  # Пробрасываем исключение дальше
+            return None

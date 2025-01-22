@@ -1,7 +1,7 @@
 from datetime import datetime
 import os
 from pathlib import Path
-from typing import Literal
+from typing import Literal, Optional
 from fastapi import APIRouter, Depends, Form, HTTPException, Response, UploadFile, File
 from fastapi.responses import FileResponse
 from app.donations.dao import DonationsDAO
@@ -12,11 +12,13 @@ from app.users.dependencies import get_current_user
 from app.models import User
 from app.images.dependencies import FileService
 import uuid
+from fastapi_cache.decorator import cache
 
 router = APIRouter(prefix="/donations", tags=["Donations"])
 
 
 @router.get("/", response_model=list[DonationResponse])
+@cache(expire=300)
 async def get_all_donations():
     donations = await DonationsDAO.find_all()
     result = []
@@ -29,6 +31,7 @@ async def get_all_donations():
             "price": donation.price,
             "category": donation.category,
             "description": donation.description,
+            "background_color": donation.background_color,
             "image_url": f"/static/donations/donation_{donation.id}.png",  # Возвращаем URL для получения изображения
         }
         result.append(donation_data)
@@ -37,6 +40,7 @@ async def get_all_donations():
 
 
 @router.get("/{category}", response_model=list[DonationResponse])
+@cache(expire=300)
 async def get_donations_by_category(
     category: Literal["privileges", "pets", "mounts", "other"]
 ):
@@ -52,6 +56,7 @@ async def get_donations_by_category(
             "price": donation.price,
             "category": donation.category,
             "description": donation.description,
+            "background_color": donation.background_color,
             "image_url": f"/static/donations/donation_{donation.id}.png",  # Возвращаем URL для получения изображения
         }
         result.append(donation_data)
@@ -96,6 +101,7 @@ async def create_donation(
     price: float = Form(...),
     category: Literal["privileges", "pets", "mounts", "other"] = Form(...),
     description: str = Form(None),
+    background_color: str = Form(None),
     image: UploadFile = File(None),
     current_user: User = Depends(get_current_user),
 ):
@@ -119,6 +125,7 @@ async def create_donation(
         price=price,
         category=category,
         description=description,
+        background_color=background_color,
         image_url=image_url,
     )
 
@@ -140,6 +147,7 @@ async def create_donation(
         "price": donation.price,
         "category": donation.category,
         "description": donation.description,
+        "background_color": donation.background_color,
         "image_url": f"static/donations/donation_{donation.id}.png",  # Возвращаем URL для получения изображения
     }
 
@@ -164,11 +172,12 @@ async def get_donation_image(donation_id: int):
 @router.put("/{donation_id}", response_model=DonationResponse)
 async def update_donation(
     donation_id: int,
-    name: str = Form(None),
-    price: float = Form(None),
-    category: str = Form(None),
-    description: str = Form(None),
-    image: UploadFile = File(None),
+    name: Optional[str] = Form(None),
+    price: Optional[float] = Form(None),
+    category: Optional[Literal["privileges", "pets", "mounts", "other"]] = Form(None),
+    description: Optional[str] = Form(None),
+    background_color: Optional[str] = Form(None),
+    image: Optional[UploadFile] = File(None),
     current_user: User = Depends(get_current_user),
 ):
     if current_user.role != "admin":
@@ -183,10 +192,12 @@ async def update_donation(
     # Обновляем изображение, если оно предоставлено
     image_url = donation.image_url
     if image:
-        FileService.delete_image(donation.image_url)
+        # Удаляем старое изображение, если оно есть
+        if donation.image_url:
+            FileService.delete_image(donation.image_url)
         # Сохраняем новое изображение
         image_url = await FileService.save_image(
-            image, prefix="donation", entity_id=donation_id
+            file=image, entity_type="donation", entity_id=donation_id
         )
 
     # Обновляем донат
@@ -196,6 +207,7 @@ async def update_donation(
         price=price,
         category=category,
         description=description,
+        background_color=background_color,
         image_url=image_url,
     )
 
@@ -208,5 +220,27 @@ async def update_donation(
         "price": updated_donation.price,
         "category": updated_donation.category,
         "description": updated_donation.description,
+        "background_color": updated_donation.background_color,
         "image_url": updated_donation.image_url,
     }
+
+
+@router.delete("/{donation_id}")
+async def delete_donation(
+    donation_id: int,
+    current_user: User = Depends(get_current_user),
+):
+    # Проверка прав доступа
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Только админ может удалять донаты")
+
+    # Удаление доната
+    deleted_donation = await DonationsDAO.delete(donation_id)
+    if not deleted_donation:
+        raise HTTPException(status_code=404, detail="Донат не найден")
+
+    # Удаление изображения, если оно есть
+    if deleted_donation.image_url:
+        FileService.delete_image(deleted_donation.image_url)
+
+    return {"message": "Донат успешно удален", "id": deleted_donation.id}
