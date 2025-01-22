@@ -1,5 +1,5 @@
 from typing import Optional
-from sqlalchemy import select, update
+from sqlalchemy import delete, select, update
 from app.dao.base import BaseDAO
 from app.models import Donation
 from app.database import async_session_maker
@@ -15,6 +15,7 @@ class DonationsDAO(BaseDAO):
         price: float,
         category: str,
         description: Optional[str] = None,
+        background_color: Optional[str] = None,
         image_url: Optional[str] = None,
     ) -> Donation:
         async with async_session_maker() as session:
@@ -23,6 +24,7 @@ class DonationsDAO(BaseDAO):
                 price=price,
                 category=category,
                 description=description,
+                background_color=background_color,
                 image_url=image_url,
             )
             session.add(donation)
@@ -91,24 +93,24 @@ class DonationsDAO(BaseDAO):
             # Если ничего не обновлялось, возвращаем None
             return None
 
-        @classmethod
-        async def delete(cls, donation_id: int) -> Optional[Donation]:
-            """
-            Удаление доната по его ID.
-            Возвращает удаленный донат или None, если донат не найден.
-            """
-            async with async_session_maker() as session:
-                # Находим донат перед удалением
-                query = select(Donation).where(Donation.id == donation_id)
-                result = await session.execute(query)
-                donation = result.scalars().first()
+    @classmethod
+    async def delete(cls, donation_id: int) -> Optional[Donation]:
+        """
+        Удаление доната по его ID.
+        Возвращает удаленный донат или None, если донат не найден.
+        """
+        async with async_session_maker() as session:
+            # Находим донат перед удалением
+            query = select(Donation).where(Donation.id == donation_id)
+            result = await session.execute(query)
+            donation = result.scalars().first()
 
-                if donation:
-                    # Удаляем донат
-                    delete_query = delete(Donation).where(Donation.id == donation_id)
-                    await session.execute(delete_query)
-                    await session.commit()
-                    return donation
+            if donation:
+                # Удаляем донат
+                delete_query = delete(Donation).where(Donation.id == donation_id)
+                await session.execute(delete_query)
+                await session.commit()
+                return donation
 
-                # Если донат не найден, возвращаем None
-                return None
+            # Если донат не найден, возвращаем None
+            return None

@@ -194,7 +194,7 @@ async def update_donation(
     if image:
         # Удаляем старое изображение, если оно есть
         if donation.image_url:
-            FileService.delete_image(donation.image_url)
+            FileService.delete_image(entity_type="donation", entity_id=donation_id)
         # Сохраняем новое изображение
         image_url = await FileService.save_image(
             file=image, entity_type="donation", entity_id=donation_id
@@ -241,6 +241,6 @@ async def delete_donation(
 
     # Удаление изображения, если оно есть
     if deleted_donation.image_url:
-        FileService.delete_image(deleted_donation.image_url)
+        FileService.delete_image(entity_type="donation", entity_id=donation_id)
 
     return {"message": "Донат успешно удален", "id": deleted_donation.id}

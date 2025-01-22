@@ -16,4 +16,5 @@ class DonationResponse(BaseModel):
     price: float
     category: Literal["privileges", "pets", "mounts", "other"]
     description: Optional[str] = None
+    background_color: Optional[str] = None
     image_url: Optional[str] = None
