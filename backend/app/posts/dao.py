@@ -62,6 +62,7 @@ class PostsDAO(BaseDAO):
         post_id: int,
         title: Optional[str] = None,
         content: Optional[str] = None,
+        author_id: Optional[int] = None,
         discord_url: Optional[str] = None,
         image_url: Optional[str] = None,
     ) -> Optional[Post]:
@@ -70,16 +71,20 @@ class PostsDAO(BaseDAO):
         Возвращает обновленный пост или None, если пост не найден.
         """
         async with async_session_maker() as session:
+            # Формируем словарь с обновляемыми полями
             update_data = {}
             if title is not None:
                 update_data["title"] = title
             if content is not None:
                 update_data["content"] = content
+            if author_id is not None:
+                update_data["author_id"] = author_id
             if discord_url is not None:
                 update_data["discord_url"] = discord_url
             if image_url is not None:
                 update_data["image_url"] = image_url
 
+            # Если есть что обновлять
             if update_data:
                 query = (
                     update(Post)
@@ -92,6 +97,7 @@ class PostsDAO(BaseDAO):
                 updated_post = result.scalars().first()
                 return updated_post
 
+            # Если ничего не обновлялось, возвращаем None
             return None
 
     @classmethod

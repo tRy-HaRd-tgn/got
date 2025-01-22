@@ -11,6 +11,7 @@ from datetime import datetime
 from app.images.dependencies import FileService
 from fastapi_cache.decorator import cache
 import uuid
+from app.database import async_session_maker
 
 router = APIRouter(
     prefix="/posts",
@@ -159,6 +160,7 @@ async def update_post(
         post_id=post_id,
         title=title,
         content=content,
+        author_id=current_user.id,
         discord_url=discord_url,
         image_url=image_url,
     )
@@ -166,12 +168,13 @@ async def update_post(
     if not updated_post:
         raise HTTPException(status_code=500, detail="Не удалось обновить пост")
 
+    # Возвращаем обновленный пост
     return {
         "id": updated_post.id,
         "title": updated_post.title,
         "content": updated_post.content,
         "discord_url": updated_post.discord_url,
-        "author_login": updated_post.author.login,
+        "author_login": current_user.login,  # Используем current_user, так как автор обновлен
         "image_url": f"/posts/{post_id}/image",  # Возвращаем URL для получения изображения
         "created_at": updated_post.created_at.strftime("%d.%m.%Y"),
     }
