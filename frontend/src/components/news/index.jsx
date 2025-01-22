@@ -5,26 +5,19 @@ import { useNavigate } from "react-router-dom";
 import PostService from "../../services/PostService";
 import { useState } from "react";
 
-export const News = ({ header,img, text, id, author, data, url }) => {
+export const News = ({ header, img, text, id, author, data, url }) => {
   const navigator = useNavigate();
-  const [image,setImage] = useState(null)
+  const [image, setImage] = useState(null);
   useEffect(() => {
     try {
-      const responce = PostService.getPostImg(id);
-      console.log(responce);
-      responce.then((res) => {
-        console.log(res.data)
-        const imageUrl = URL.createObjectURL(res.data);
-        console.log(imageUrl)
-        setImage(imageUrl);
-      })
+      setImage("http://localhost:8000"+img);
     } catch (e) {
-      console.log(e?.responce?.data?.message);
+      console.log(e);
     }
   }, []);
   return (
     <div className={styles.news}>
-      <img className={styles.newsImg} src={img} alt="error" />
+      <img className={styles.newsImg} src={image} alt="error" />
       <div className={styles.newsRight}>
         <h2>{header}</h2>
         <p className={styles.newsRightP}>{text}</p>
