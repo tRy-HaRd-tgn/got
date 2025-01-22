@@ -49,30 +49,73 @@ export const Donate = (props) => {
     switch (state) {
       case "privileges": {
         return priviligies.map((value, index) => (
-          <DonateComp text={value.name} price={value.price} img={value.image_url} key={index} />
+          <DonateComp
+            text={value.name}
+            price={value.price}
+            img={value.image_url}
+            key={index}
+            color={value.background_color}
+          />
         ));
       }
       case "pets": {
         return pets.map((value, index) => (
-          <DonateComp text={value.name} price={value.price} img={value.image_url} key={index} />
+          <DonateComp
+            text={value.name}
+            price={value.price}
+            img={value.image_url}
+            key={index}
+            color={value.background_color}
+          />
         ));
       }
       case "mounts": {
         return mounts.map((value, index) => (
-          <DonateComp text={value.name} price={value.price} img={value.image_url} key={index} />
+          <DonateComp
+            text={value.name}
+            price={value.price}
+            img={value.image_url}
+            key={index}
+            color={value.background_color}
+          />
         ));
       }
       case "other": {
         return other.map((value, index) => (
-          <DonateComp text={value.name} price={value.price} img={value.image_url} key={index} />
+          <DonateComp
+            text={value.name}
+            price={value.price}
+            img={value.image_url}
+            key={index}
+            color={value.background_color}
+          />
         ));
+      }
+    }
+  };
+  const checkBackground = (choise) => {
+    switch (choise) {
+      case "privileges": {
+        return `url('src/imgs/backgrounds/prev.png')`;
+      }
+      case "pets": {
+        return `url('src/imgs/backgrounds/donate.png')`;
+      }
+      case "mounts": {
+        return `url('src/imgs/backgrounds/mounts.png')`;
+      }
+      case "other": {
+        return `url('src/imgs/backgrounds/other.png')`;
       }
     }
   };
   return (
     <main className={styles.main}>
       <Header />
-      <div className={styles.description}>
+      <div
+        style={{ backgroundImage: checkBackground(choise) }}
+        className={styles.description}
+      >
         <h1 className={styles.h1}>донат магазин</h1>
         <div className={styles.descriptionDiv}>
           <button
