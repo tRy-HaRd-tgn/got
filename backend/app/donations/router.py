@@ -12,11 +12,13 @@ from app.users.dependencies import get_current_user
 from app.models import User
 from app.images.dependencies import FileService
 import uuid
+from fastapi_cache.decorator import cache
 
 router = APIRouter(prefix="/donations", tags=["Donations"])
 
 
 @router.get("/", response_model=list[DonationResponse])
+@cache(expire=300)
 async def get_all_donations():
     donations = await DonationsDAO.find_all()
     result = []
@@ -38,6 +40,7 @@ async def get_all_donations():
 
 
 @router.get("/{category}", response_model=list[DonationResponse])
+@cache(expire=300)
 async def get_donations_by_category(
     category: Literal["privileges", "pets", "mounts", "other"]
 ):
