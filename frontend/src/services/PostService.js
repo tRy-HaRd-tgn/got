@@ -16,6 +16,6 @@ export default class PostService {
     return $api.post("/posts", { title, content, discord_url, image });
   }
   static async getPostImg(id) {
-    return $api.get(`/posts/${id}/image`);
+    return $api.get(`/posts/${id}/image`, { responseType: "blob" });
   }
 }

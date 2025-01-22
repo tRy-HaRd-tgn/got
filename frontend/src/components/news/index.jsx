@@ -13,11 +13,11 @@ export const News = ({ header,img, text, id, author, data, url }) => {
       const responce = PostService.getPostImg(id);
       console.log(responce);
       responce.then((res) => {
-        const imgUrl=URL.createObjectURL(res.data)
-        console.log(imgUrl);
-        setImage(res.data);
+        console.log(res.data)
+        const imageUrl = URL.createObjectURL(res.data);
+        console.log(imageUrl)
+        setImage(imageUrl);
       })
-      
     } catch (e) {
       console.log(e?.responce?.data?.message);
     }
