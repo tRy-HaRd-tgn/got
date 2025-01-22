@@ -1,7 +1,7 @@
 from datetime import datetime
 import os
 from pathlib import Path
-from typing import Literal
+from typing import Literal, Optional
 from fastapi import APIRouter, Depends, Form, HTTPException, Response, UploadFile, File
 from fastapi.responses import FileResponse
 from app.donations.dao import DonationsDAO
@@ -29,6 +29,7 @@ async def get_all_donations():
             "price": donation.price,
             "category": donation.category,
             "description": donation.description,
+            "background_color": donation.background_color,
             "image_url": f"/static/donations/donation_{donation.id}.png",  # Возвращаем URL для получения изображения
         }
         result.append(donation_data)
@@ -52,6 +53,7 @@ async def get_donations_by_category(
             "price": donation.price,
             "category": donation.category,
             "description": donation.description,
+            "background_color": donation.background_color,
             "image_url": f"/static/donations/donation_{donation.id}.png",  # Возвращаем URL для получения изображения
         }
         result.append(donation_data)
@@ -96,6 +98,7 @@ async def create_donation(
     price: float = Form(...),
     category: Literal["privileges", "pets", "mounts", "other"] = Form(...),
     description: str = Form(None),
+    background_color: str = Form(None),
     image: UploadFile = File(None),
     current_user: User = Depends(get_current_user),
 ):
@@ -119,6 +122,7 @@ async def create_donation(
         price=price,
         category=category,
         description=description,
+        background_color=background_color,
         image_url=image_url,
     )
 
@@ -140,6 +144,7 @@ async def create_donation(
         "price": donation.price,
         "category": donation.category,
         "description": donation.description,
+        "background_color": donation.background_color,
         "image_url": f"static/donations/donation_{donation.id}.png",  # Возвращаем URL для получения изображения
     }
 
@@ -164,11 +169,12 @@ async def get_donation_image(donation_id: int):
 @router.put("/{donation_id}", response_model=DonationResponse)
 async def update_donation(
     donation_id: int,
-    name: str = Form(None),
-    price: float = Form(None),
-    category: str = Form(None),
-    description: str = Form(None),
-    image: UploadFile = File(None),
+    name: Optional[str] = Form(None),
+    price: Optional[float] = Form(None),
+    category: Optional[Literal["privileges", "pets", "mounts", "other"]] = Form(None),
+    description: Optional[str] = Form(None),
+    background_color: Optional[str] = Form(None),
+    image: Optional[UploadFile] = File(None),
     current_user: User = Depends(get_current_user),
 ):
     if current_user.role != "admin":
@@ -183,10 +189,12 @@ async def update_donation(
     # Обновляем изображение, если оно предоставлено
     image_url = donation.image_url
     if image:
-        FileService.delete_image(donation.image_url)
+        # Удаляем старое изображение, если оно есть
+        if donation.image_url:
+            FileService.delete_image(donation.image_url)
         # Сохраняем новое изображение
         image_url = await FileService.save_image(
-            image, prefix="donation", entity_id=donation_id
+            file=image, entity_type="donation", entity_id=donation_id
         )
 
     # Обновляем донат
@@ -196,6 +204,7 @@ async def update_donation(
         price=price,
         category=category,
         description=description,
+        background_color=background_color,
         image_url=image_url,
     )
 
@@ -208,5 +217,6 @@ async def update_donation(
         "price": updated_donation.price,
         "category": updated_donation.category,
         "description": updated_donation.description,
+        "background_color": updated_donation.background_color,
         "image_url": updated_donation.image_url,
     }

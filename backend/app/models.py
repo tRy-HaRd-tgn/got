@@ -26,6 +26,7 @@ class Donation(Base):
         String, nullable=False
     )  # Категория (Привилегии, Питомцы, Маунты, Разное)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)  # Дата создания
+    background_color = Column(String, nullable=True)
 
     def __str__(self) -> str:
         return f"Донат {self.name}: {self.price} руб."
