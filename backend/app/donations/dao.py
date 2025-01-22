@@ -52,6 +52,7 @@ class DonationsDAO(BaseDAO):
         price: Optional[float] = None,
         category: Optional[str] = None,
         description: Optional[str] = None,
+        background_color: Optional[str] = None,
         image_url: Optional[str] = None,
     ) -> Optional[Donation]:
         """
@@ -69,6 +70,8 @@ class DonationsDAO(BaseDAO):
                 update_data["category"] = category
             if description is not None:
                 update_data["description"] = description
+            if background_color is not None:
+                update_data["background_color"] = background_color
             if image_url is not None:
                 update_data["image_url"] = image_url
 
@@ -87,3 +90,25 @@ class DonationsDAO(BaseDAO):
 
             # Если ничего не обновлялось, возвращаем None
             return None
+
+        @classmethod
+        async def delete(cls, donation_id: int) -> Optional[Donation]:
+            """
+            Удаление доната по его ID.
+            Возвращает удаленный донат или None, если донат не найден.
+            """
+            async with async_session_maker() as session:
+                # Находим донат перед удалением
+                query = select(Donation).where(Donation.id == donation_id)
+                result = await session.execute(query)
+                donation = result.scalars().first()
+
+                if donation:
+                    # Удаляем донат
+                    delete_query = delete(Donation).where(Donation.id == donation_id)
+                    await session.execute(delete_query)
+                    await session.commit()
+                    return donation
+
+                # Если донат не найден, возвращаем None
+                return None

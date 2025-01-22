@@ -220,3 +220,24 @@ async def update_donation(
         "background_color": updated_donation.background_color,
         "image_url": updated_donation.image_url,
     }
+
+
+@router.delete("/{donation_id}")
+async def delete_donation(
+    donation_id: int,
+    current_user: User = Depends(get_current_user),
+):
+    # Проверка прав доступа
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Только админ может удалять донаты")
+
+    # Удаление доната
+    deleted_donation = await DonationsDAO.delete(donation_id)
+    if not deleted_donation:
+        raise HTTPException(status_code=404, detail="Донат не найден")
+
+    # Удаление изображения, если оно есть
+    if deleted_donation.image_url:
+        FileService.delete_image(deleted_donation.image_url)
+
+    return {"message": "Донат успешно удален", "id": deleted_donation.id}
