@@ -89,7 +89,7 @@ class FileService:
         :param entity_id: ID сущности (поста или доната).
         """
         try:
-            file_path = Path(f"app/static/{entity_type}s/{entity_id}.png")
+            file_path = Path(f"app/static/{entity_type}s/{entity_type}_{entity_id}.png")
             if file_path.exists():
                 file_path.unlink()
         except Exception as e:
