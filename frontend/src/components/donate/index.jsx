@@ -1,10 +1,18 @@
 import styles from "./styles.module.scss";
 import { useState } from "react";
 import { useEffect } from "react";
-export const DonateComp = ({ price, img, color, text }) => {
+import { useDispatch } from "react-redux";
+export const DonateComp = ({ setModal, price, img, color, text }) => {
+  const dispatch = useDispatch();
   function hexToDec(hex) {
     return parseInt(hex, 16);
   }
+  const setColor2 = (temp) => {
+    dispatch({ type: "SET_COLOR", color: temp });
+  };
+  const setImage2 = (temp) => {
+    dispatch({ type: "SET_IMAGE", image: temp });
+  };
 
   const [rr, setRr] = useState(false);
   const [gg, setGg] = useState(false);
@@ -34,7 +42,16 @@ export const DonateComp = ({ price, img, color, text }) => {
         {price}
         <span style={{ marginLeft: "15px" }}>золотых</span>
       </p>
-      <button className={styles.btn}>Купить</button>
+      <button
+        onClick={() => {
+          setModal(true);
+          setColor2(color);
+          setImage2(image);
+        }}
+        className={styles.btn}
+      >
+        Купить
+      </button>
     </div>
   );
 };
