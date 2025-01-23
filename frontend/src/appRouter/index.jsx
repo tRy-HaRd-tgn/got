@@ -49,6 +49,7 @@ export const AppRouter = () => {
       !href.includes("donate") &&
       !href.includes("blog") &&
       !href.includes("letsPlay") &&
+      !href.includes("logReg") &&
       !href.includes("profile")
     ) {
       navigator("/main");

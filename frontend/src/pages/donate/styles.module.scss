@@ -109,7 +109,7 @@ h3 {
   height: 6vh;
 }
 .descriptionDivButton {
-  background: #181f37;
+  background: rgba(17, 17, 17, 0.75);
   border-radius: 24px;
   border: none;
   width: 19%;
@@ -124,7 +124,7 @@ h3 {
   /* identical to box height */
   cursor: pointer;
 }
-.donateWrapper::-webkit-scrollbar{
+.donateWrapper::-webkit-scrollbar {
   display: none;
 }
 .donateWrapper {

@@ -120,28 +120,28 @@ export const Donate = (props) => {
         <div className={styles.descriptionDiv}>
           <button
             className={styles.descriptionDivButton}
-            style={choise == "privileges" ? { backgroundColor: "green" } : {}}
+            style={choise == "privileges" ? { backgroundColor: "#181f37" } : {}}
             onClick={() => setChoise("privileges")}
           >
             Привилегии
           </button>
           <button
             className={styles.descriptionDivButton}
-            style={choise == "pets" ? { backgroundColor: "green" } : {}}
+            style={choise == "pets" ? { backgroundColor: "#181f37" } : {}}
             onClick={() => setChoise("pets")}
           >
             питомцы
           </button>
           <button
             className={styles.descriptionDivButton}
-            style={choise == "mounts" ? { backgroundColor: "green" } : {}}
+            style={choise == "mounts" ? { backgroundColor: "#181f37" } : {}}
             onClick={() => setChoise("mounts")}
           >
             маунты
           </button>
           <button
             className={styles.descriptionDivButton}
-            style={choise == "other" ? { backgroundColor: "green" } : {}}
+            style={choise == "other" ? { backgroundColor: "#181f37" } : {}}
             onClick={() => setChoise("other")}
           >
             разное
