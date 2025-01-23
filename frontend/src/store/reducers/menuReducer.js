@@ -2,6 +2,9 @@ const defaultState = {
   choise: "",
   color: "",
   image: "",
+  name: "",
+  description: "",
+  price: "",
 };
 
 export const menuReducer = (state = defaultState, action) => {
