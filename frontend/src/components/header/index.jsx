@@ -5,22 +5,47 @@ import { useSelector } from "react-redux";
 import { profile } from "../../imgs";
 import UserService from "../../services/UserService";
 import { useDispatch } from "react-redux";
+import { useEffect } from "react";
 export const Header = (props) => {
   const dispatch = useDispatch();
   const isAuth = useSelector((state) => state.auth.isAuth);
   const nickname = useSelector((state) => state.user.nickname);
   const dontate = useSelector((state) => state.user.donate);
   const setAuth = (temp) => dispatch({ type: "SET_AUTH", isAuth: temp });
+  const choise = useSelector((state) => state.menu.choise);
+  const setChoise = (temp) => dispatch({ type: "SET_CHOISE", choise: temp });
   const router = useNavigate();
+  useEffect(() => {
+    const href = window.location.href;
+    if (href.includes("blog")) setChoise("блог");
+    if (href.includes("donate")) setChoise("донат");
+    if (href.includes("letsPlay")) setChoise("начать игру");
+    if (href.includes("main")) setChoise("главная");
+    if (href.includes("profile")) setChoise("");
+  }, []);
   return (
     <header className={styles.header}>
       <div className={styles.container}>
         <NavBar />
         <div className={styles.menu}>
-          <p className={styles.menuP} onClick={() => router("/")}>
+          <p
+            style={choise == "главная" ? { color: "white" } : {}}
+            className={styles.menuP}
+            onClick={() => {
+              setChoise("главная");
+              router("/main");
+            }}
+          >
             Главная
           </p>
-          <p className={styles.menuP} onClick={() => router("/blog")}>
+          <p
+            style={choise == "блог" ? { color: "white" } : {}}
+            className={styles.menuP}
+            onClick={() => {
+              router("/blog");
+              setChoise("блог");
+            }}
+          >
             БЛОГ
           </p>
           <p
@@ -29,10 +54,24 @@ export const Header = (props) => {
           >
             TORTUGA GOT
           </p>
-          <p className={styles.menuP} onClick={() => router("/donate")}>
+          <p
+            style={choise == "донат" ? { color: "white" } : {}}
+            className={styles.menuP}
+            onClick={() => {
+              router("/donate");
+              setChoise("донат");
+            }}
+          >
             ДОНАТ
           </p>
-          <p className={styles.menuP} onClick={() => router("/letsPlay")}>
+          <p
+            style={choise == "начать игру" ? { color: "white" } : {}}
+            className={styles.menuP}
+            onClick={() => {
+              router("/letsPlay");
+              setChoise("начать игру");
+            }}
+          >
             НАЧАТЬ ИГРУ
           </p>
         </div>
@@ -58,7 +97,7 @@ export const Header = (props) => {
                     console.log(responce);
                     localStorage.removeItem("token");
                     setAuth(false);
-                    router("/");
+                    router("/main");
                   } catch (e) {
                     console.log(e.responce?.data?.message);
                   }

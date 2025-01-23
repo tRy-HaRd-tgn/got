@@ -41,7 +41,7 @@ export const LogForm = ({ setState, state }) => {
       setError(false);
       setAuth(true);
       configureStore();
-      navigator("/");
+      navigator("/main");
     } catch (e) {
       setError(true);
       console.log(e.responce?.detail?.msg);

@@ -31,7 +31,9 @@ export const Main = (props) => {
       <div className={styles.project}>
         <h3>Обзор проекта</h3>
         <Swiper className={styles.swiper} spaceBetween={150} slidesPerView={1}>
-          {data.map((value, index) => Video({ index, value, swiper }))}
+          {data.map((value, index) =>
+            Video({ key: index, index, value, swiper })
+          )}
         </Swiper>
       </div>
       <Footer />

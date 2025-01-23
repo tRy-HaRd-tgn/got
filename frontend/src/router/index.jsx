@@ -6,6 +6,7 @@ import { LogReg } from "../pages";
 import { Profile } from "../pages";
 export const privateRoutes = [
   { path: "/", component: <Main />, exact: true },
+  { path: "/main", component: <Main />, exact: true },
   { path: "/donate", component: <Donate />, exact: true },
   { path: "/blog", component: <Blog />, exact: true },
   { path: "/letsPlay", component: <LetsPlay />, exact: true },
@@ -13,6 +14,7 @@ export const privateRoutes = [
 ];
 export const publicRoutes = [
   { path: "/", component: <Main />, exact: true },
+  { path: "/main", component: <Main />, exact: true },
   { path: "/donate", component: <Donate />, exact: true },
   { path: "/blog", component: <Blog />, exact: true },
   { path: "/letsPlay", component: <LetsPlay />, exact: true },

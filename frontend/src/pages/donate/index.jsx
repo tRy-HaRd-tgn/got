@@ -6,7 +6,7 @@ import { DonateComp } from "../../components";
 import { useEffect } from "react";
 import DonationService from "../../services/DonationService";
 export const Donate = (props) => {
-  const [choise, setChoise] = useState("");
+  const [choise, setChoise] = useState("privileges");
   const [priviligies, setPriviligies] = useState([]);
   const [pets, setPets] = useState([]);
   const [mounts, setMounts] = useState([]);
