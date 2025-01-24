@@ -61,21 +61,54 @@ export const DonateComp = ({ description, price, img, color, text }) => {
                   X
                 </button>
               </div>
-              <div className={styles.description}>{description}</div>
+              <div
+                style={{
+                  fontFamily: "pieces-of-eight-cyrillic-aa",
+                  fontSize: "59px",
+                }}
+                className={styles.description}
+              >
+                {description}
+              </div>
               <>
                 <div className={styles.first}>
-                  <p style={{ fontSize: "34px" }} className={styles.p}>
+                  <p
+                    style={{
+                      fontFamily: "pieces-of-eight-cyrillic-aa",
+                      fontSize: "54px",
+                    }}
+                    className={styles.p}
+                  >
                     Цена
                   </p>
-                  <p style={{ fontSize: "34px" }} className={styles.p}>
-                    {price} {"Золотых"}
+                  <p
+                    style={{
+                      fontFamily: "pieces-of-eight-cyrillic-aa",
+                      fontSize: "54px",
+                    }}
+                    className={styles.p}
+                  >
+                    {price} {"золотых"}
                   </p>
                 </div>
                 <div className={styles.first}>
-                  <p style={{ fontSize: "34px" }} className={styles.p}>
+                  <p
+                    style={{
+                      fontFamily: "pieces-of-eight-cyrillic-aa",
+                      fontSize: "54px",
+                    }}
+                    className={styles.p}
+                  >
                     Промокод
                   </p>
-                  <input className={styles.input} type="text" />
+                  <input
+                    style={{
+                      fontFamily: "pieces-of-eight-cyrillic-aa",
+                      fontSize: "45px",
+                    }}
+                    className={styles.input}
+                    type="text"
+                  />
                 </div>
               </>
               <button className={styles.btn2}>Купить</button>

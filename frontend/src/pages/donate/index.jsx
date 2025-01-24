@@ -12,7 +12,6 @@ export const Donate = (props) => {
   const [pets, setPets] = useState([]);
   const [mounts, setMounts] = useState([]);
   const [other, setOthers] = useState([]);
-  const [temp, setTemp] = useState(0);
   useEffect(() => {
     try {
       const responce = DonationService.getDonations();
@@ -46,57 +45,61 @@ export const Donate = (props) => {
     }
   }, []);
 
-  const func = (state) => {
-    
-    switch (state) {
-      case "privileges": {
-        return priviligies.map((value, index) => (
-          <DonateComp
-            text={value.name}
-            price={value.price}
-            img={value.image_url}
-            key={index}
-            description={value.description}
-            color={value.background_color}
-          />
-        ));
-      }
-      case "pets": {
-        return pets.map((value, index) => (
-          <DonateComp
-            text={value.name}
-            price={value.price}
-            img={value.image_url}
-            key={index}
-            description={value.description}
-            color={value.background_color}
-          />
-        ));
-      }
-      case "mounts": {
-        return mounts.map((value, index) => (
-          <DonateComp
-            text={value.name}
-            price={value.price}
-            img={value.image_url}
-            key={index}
-            description={value.description}
-            color={value.background_color}
-          />
-        ));
-      }
-      case "other": {
-        return other.map((value, index) => (
-          <DonateComp
-            text={value.name}
-            price={value.price}
-            img={value.image_url}
-            key={index}
-            description={value.description}
-            color={value.background_color}
-          />
-        ));
-      }
+  const func1 = (choise) => {
+    if (choise == "privileges") {
+      return priviligies.map((value, index) => (
+        <DonateComp
+          text={value.name}
+          price={value.price}
+          img={value.image_url}
+          key={index}
+          description={value.description}
+          color={value.background_color}
+        />
+      ));
+    }
+  };
+
+  const func2 = (choise) => {
+    if (choise == "pets") {
+      return pets.map((value, index) => (
+        <DonateComp
+          text={value.name}
+          price={value.price}
+          img={value.image_url}
+          key={index}
+          description={value.description}
+          color={value.background_color}
+        />
+      ));
+    }
+  };
+  const func3 = (choise) => {
+    if (choise == "mounts") {
+      return mounts.map((value, index) => (
+        <DonateComp
+          text={value.name}
+          price={value.price}
+          img={value.image_url}
+          key={index}
+          description={value.description}
+          color={value.background_color}
+        />
+      ));
+    }
+  };
+  const func4 = (choise) => {
+    if (choise == "other") {
+      return other.map((value, index) => (
+        <DonateComp
+          text={value.name}
+          price={value.price}
+          img={value.image_url}
+          key={index}
+          description={value.description}
+          color={value.background_color}
+        />
+      ));
     }
   };
   const checkBackground = (choise) => {
@@ -162,7 +165,18 @@ export const Donate = (props) => {
               разное
             </button>
           </div>
-          <div className={styles.donateWrapper}>{func(choise)}</div>{" "}
+          {choise == "privileges" ? (
+            <div className={styles.donateWrapper}>{func1(choise)}</div>
+          ) : null}
+          {choise == "pets" ? (
+            <div className={styles.donateWrapper}>{func2(choise)}</div>
+          ) : null}
+          {choise == "mounts" ? (
+            <div className={styles.donateWrapper}>{func3(choise)}</div>
+          ) : null}
+          {choise == "other" ? (
+            <div className={styles.donateWrapper}>{func4(choise)}</div>
+          ) : null}
         </div>
         <img src={vector} alt="" className={styles.devider} />
         <div className={styles.project}></div>

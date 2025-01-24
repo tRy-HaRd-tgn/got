@@ -75,6 +75,7 @@
   align-items: center;
   justify-content: space-between;
 }
+
 .p {
   color: white;
   font-size: 48px;
@@ -87,8 +88,9 @@
   color: white;
   height: 40%;
   text-align: center;
-  font-size: 42px;
-  font-family: "Game of Thrones KG";
+  font-weight: 1000;
+  font-size: 49px;
+  font-family: "Font Awesome 6 Pro";
 }
 .description {
   color: grey;
@@ -98,26 +100,38 @@
 }
 .first {
   display: flex;
+  height: 10%;
   justify-content: space-between;
   align-items: center;
 }
 .btn2 {
   cursor: pointer;
   background: #181f37;
-  border-radius: 16px;
-  height: 10%;
+  border-radius: 55px;
+  height: 15%;
   border: none;
   color: white;
   font-size: 36px;
-  font-family: "Game of Thrones KG";
+  font-family: "Inter";
 }
 .input {
-  border: 1px solid white;
+  text-transform: uppercase;
+  border: 1.5px solid white;
+  border-top: none;
+  border-left: none;
+  border-right: none;
   text-align: center;
   background: none;
   height: 70%;
   color: white;
   font-size: 36px;
   font-family: "Game of Thrones KG";
-  width: 50%;
+  width: 40%;
+}
+.input:focus {
+  border: 1.5px solid white;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  outline: 0;
 }

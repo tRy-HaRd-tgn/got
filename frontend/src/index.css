@@ -14,9 +14,19 @@
   font-family: "pieces-of-eight-cyrillic-aa";
   src: url("./fonts/pieces-of-eight-cyrillic-aa.ttf"); /* IE 9 Compatibility Mode */
 }
-
-
-
-
+@font-face {
+  font-family: "Font Awesome 6 Pro Regular";
+  src: url("https://db.onlinewebfonts.com/t/b6803a3242e9eb3bbdf920fac17c6ac9.eot");
+  src: url("https://db.onlinewebfonts.com/t/b6803a3242e9eb3bbdf920fac17c6ac9.eot?#iefix")
+      format("embedded-opentype"),
+    url("https://db.onlinewebfonts.com/t/b6803a3242e9eb3bbdf920fac17c6ac9.woff2")
+      format("woff2"),
+    url("https://db.onlinewebfonts.com/t/b6803a3242e9eb3bbdf920fac17c6ac9.woff")
+      format("woff"),
+    url("https://db.onlinewebfonts.com/t/b6803a3242e9eb3bbdf920fac17c6ac9.ttf")
+      format("truetype"),
+    url("https://db.onlinewebfonts.com/t/b6803a3242e9eb3bbdf920fac17c6ac9.svg#Font Awesome 6 Pro Regular")
+      format("svg");
+}
 
 /*pieces-of-eight-cyrillic-aa*/
