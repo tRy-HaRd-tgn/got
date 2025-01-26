@@ -1,6 +1,5 @@
 FROM python:3.9-slim
 
-# Устанавливаем клиентские утилиты PostgreSQL (если нужно)
 RUN apt-get update && apt-get install -y postgresql-client && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -10,7 +9,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-EXPOSE 8000
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
 
-# Выполняем миграции и запускаем приложение
-CMD ["sh", "-c", "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000"]
+CMD ["/start.sh"]
