@@ -106,19 +106,19 @@ export const Donate = (props) => {
     switch (choise) {
       case "privileges": {
         console.log(priviligies);
-        return url("../../imgs/backgrounds/prev.png");
+        return `url(src/imgs/backgrounds/prev.png)`;
       }
       case "pets": {
         console.log(pets);
-        return url("../../imgs/backgrounds/donate.png");
+        return `url(src/imgs/backgrounds/donate.png)`;
       }
       case "mounts": {
         console.log(mounts);
-        return url("../../imgs/backgrounds/mounts.png");
+        return `url(src/imgs/backgrounds/mounts.png)`;
       }
       case "other": {
         console.log(other);
-        return url("../../imgs/backgrounds/other.png");
+        return `url(src/imgs/backgrounds/other.png)`;
       }
     }
   };
