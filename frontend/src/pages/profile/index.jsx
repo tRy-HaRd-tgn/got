@@ -1,6 +1,5 @@
 import styles from "./styles.module.scss";
 import { Header, Footer } from "../../components";
-import SkinService from "../../services/SkinService";
 import { vector, X } from "../../imgs";
 import { ModalIcon } from "../../components";
 import { useEffect, useState } from "react";
@@ -25,7 +24,7 @@ export const Profile = (props) => {
     skin = useSelector((state) => state.user.skin); // сохраняем скин в переменную
   }, []);
   useEffect(() => {
-    const responce = SkinService.getSkin();// после того как изменили tempPhoto получаем новое
+    const responce = SkinService.getSkin(); // после того как изменили tempPhoto получаем новое
     console.log(responce);
     // setProfilePhoto(responce); // загружаем в глобальную переменную скин, если он нам вернулся с бэкенда
   }, [tempPhoto]);
