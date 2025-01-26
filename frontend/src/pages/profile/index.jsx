@@ -1,8 +1,9 @@
 import styles from "./styles.module.scss";
 import { Header, Footer } from "../../components";
+import SkinService from "../../services/SkinService";
 import { vector, X } from "../../imgs";
 import { ModalIcon } from "../../components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SkinService from "../../services/SkinService";
 export const Profile = (props) => {
@@ -12,22 +13,32 @@ export const Profile = (props) => {
   const email = useSelector((state) => state.user.email);
   const donate = useSelector((state) => state.user.donate);
   const regDate = useSelector((state) => state.user.regDate);
+  const [tempPhoto, setTempPhoto] = useState("");
   const setPhoto = (skin) => {
     dispath({ type: "SET_SKIN", skin: skin });
   };
-
+  const setProfilePhoto = (temp) => {
+    dispath({ type: "SET_PROFILEPHOTO", skin: temp });
+  };
+  let skin;
+  useEffect(() => {
+    skin = useSelector((state) => state.user.skin); // сохраняем скин в переменную
+  }, []);
+  useEffect(() => {
+    const responce = SkinService.getSkin();// после того как изменили tempPhoto получаем новое
+    console.log(responce);
+    // setProfilePhoto(responce); // загружаем в глобальную переменную скин, если он нам вернулся с бэкенда
+  }, [tempPhoto]);
   const clickHandler = async (e) => {
     const file = e.target.files[0]; // схватили выбранный файл
     try {
-      setPhoto(URL.createObjectURL(file));
-      const skin = useSelector((state) => state.user.skin);
-      const responce = await SkinService.uploadSkin(skin);
+      setTempPhoto(URL.createObjectURL(file)); // сохраняем в temp загруженное фото
+      const responce = await SkinService.uploadSkin(skin); // загружаем скин на бэк
       console.log(responce);
     } catch (e) {
       console.log(e);
     }
   };
-  const skin = useSelector((state) => state.user.skin);
   return (
     <main className={styles.main}>
       <ModalIcon active={modal} setState={setModal}>

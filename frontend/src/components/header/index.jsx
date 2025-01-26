@@ -2,11 +2,10 @@ import styles from "./styles.module.scss";
 import { NavBar } from "../navBar";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { profile } from "../../imgs";
 import UserService from "../../services/UserService";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-export const Header = (props) => {
+export const Header = () => {
   const dispatch = useDispatch();
   const isAuth = useSelector((state) => state.auth.isAuth);
   const nickname = useSelector((state) => state.user.nickname);
@@ -15,6 +14,7 @@ export const Header = (props) => {
   const choise = useSelector((state) => state.menu.choise);
   const setChoise = (temp) => dispatch({ type: "SET_CHOISE", choise: temp });
   const router = useNavigate();
+  const avatar = useSelector((state) => state.user.profilePhoto);
   useEffect(() => {
     const href = window.location.href;
     if (href.includes("blog")) setChoise("блог");
@@ -81,7 +81,7 @@ export const Header = (props) => {
           </button>
         ) : (
           <div className={styles.userInfo} onClick={() => router("/profile")}>
-            <img src={profile} alt="error" />
+            <img src={avatar} alt="error" />
             <div style={{ marginLeft: "5%" }}>
               <p
                 className={styles.userInfoP}

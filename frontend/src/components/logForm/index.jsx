@@ -1,4 +1,5 @@
 import UserService from "../../services/UserService";
+import SkinService from "../../services/SkinService";
 import styles from "./styles.module.scss";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +16,12 @@ export const LogForm = ({ setState, state }) => {
   const setNickName = (temp) => {
     dispatch({ type: "SET_NICKNAME", nickname: temp });
   };
+  const setProfilePhoto = (temp) => {
+    dispatch({ type: "SET_PROFILEPHOTO", profilePhoto: temp });
+  };
+  const setSkin = (temp) => {
+    dispatch({ type: "SET_SKIN", skin: temp });
+  };
   const setDonate = (temp) => {
     dispatch({ type: "SET_DONATE", donate: temp });
   };
@@ -25,11 +32,17 @@ export const LogForm = ({ setState, state }) => {
     dispatch({ type: "SET_EMAIL", email: temp });
   };
   const configureStore = async () => {
-    const responce = await UserService.getProfile();
+    let responce = await UserService.getProfile();
     setNickName(responce.data.login);
     setDonate(responce.data.balance);
     setRegDate(responce.data.created_at.split("T")[0]);
     setEmail(responce.data.email);
+    responce = await SkinService.getAvatar();
+    console.log(responce);
+    //setProfilePhoto(responce.data.url);
+    console.log(responce)
+    responce = await SkinService.getSkin();
+    //setSkin(responce.data.url);
   };
 
   const logSubmit = async (e) => {
