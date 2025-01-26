@@ -35,6 +35,7 @@ fastapi-cli==0.0.7
 fastapi-mail==1.4.2
 frozenlist==1.4.1
 greenlet==3.1.1
+gunicorn==23.0.0
 h11==0.14.0
 hexbytes==0.3.1
 hiredis==3.1.0
@@ -56,6 +57,7 @@ nodejs==0.1.1
 npm==0.1.1
 optional-django==0.1.0
 orjson==3.10.13
+packaging==24.2
 parsimonious==0.9.0
 passlib==1.7.4
 pendulum==3.0.0

@@ -18,22 +18,32 @@ services:
       - "${REDIS_PORT}:6379"
     volumes:
       - redis_data:/data
-  
+
   fastapi:
     image: fastapi-app
     build:
-      context: ./  # Путь к директории с Dockerfile для FastAPI
+      context: ./backend
     environment:
       - DB_HOST=db
       - DB_USER=${DB_USER}
       - DB_PASS=${DB_PASS}
       - DB_NAME=${DB_NAME}
       - REDIS_HOST=redis
+    ports:
+      - "8000:8000"
     depends_on:
       - db
       - redis
 
+  frontend:
+    image: frontend-app
+    build:
+      context: ./frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - fastapi
+
 volumes:
   postgres_data:
   redis_data:
-
