@@ -2,7 +2,6 @@ import styles from "./styles.module.scss";
 import { user, calendar } from "../../imgs";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import PostService from "../../services/PostService";
 import { useState } from "react";
 
 export const News = ({ header, img, text, id, author, data, url }) => {
@@ -10,7 +9,7 @@ export const News = ({ header, img, text, id, author, data, url }) => {
   const [image, setImage] = useState(null);
   useEffect(() => {
     try {
-      setImage("http://localhost:8000"+img);
+      setImage("http://194.59.186.20:8000"+img);
     } catch (e) {
       console.log(e);
     }

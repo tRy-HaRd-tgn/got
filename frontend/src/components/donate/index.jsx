@@ -14,7 +14,7 @@ export const DonateComp = ({ description, price, img, color, text }) => {
   const [temp, setTemp] = useState();
   const [image, setImage] = useState(null);
   useEffect(() => {
-    setImage("http://localhost:8000" + img);
+    setImage("http://194.59.186.20:8000" + img);
     setRr(hexToDec(color[1] + color[2]));
     setGg(hexToDec(color[3] + color[4]));
     setBb(hexToDec(color[5] + color[6]));
