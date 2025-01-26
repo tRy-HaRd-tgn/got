@@ -97,8 +97,17 @@ h3 {
   height: 70%;
 }
 .swiper {
-  width: 70%;
-  height: 60%;
+  width: 90%;
+  height: 80%;
   border-radius: 25px;
   z-index: 99999;
+}
+.videoWrapper {
+  height: 80vh;
+  width: 80%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }

@@ -15,7 +15,6 @@ export const Video = ({ index, value, swiper }) => {
         referrerPolicy="strict-origin-when-cross-origin"
         allowFullScreen
       />
-      <ProgressBar index={index} />
     </SwiperSlide>
   );
 };

@@ -3,12 +3,14 @@ import { Header, Footer, Video } from "../../components";
 import { vector } from "../../imgs";
 import { Swiper } from "swiper/react";
 import { useNavigate } from "react-router-dom";
-import { useSwiper } from "swiper/react";
 import { data } from "./data";
+import { ProgressBar } from "../../components";
 import "swiper/css";
+import { useState } from "react";
 export const Main = (props) => {
   const router = useNavigate();
-  const swiper = useSwiper();
+  const [swiper, setSwiper] = useState(null);
+  const [index, setIndex] = useState(0);
   return (
     <main className={styles.main}>
       <Header />
@@ -29,12 +31,20 @@ export const Main = (props) => {
       </div>
       <img src={vector} alt="" className={styles.devider} />
       <div className={styles.project}>
-        <h3>Обзор проекта</h3>
-        <Swiper className={styles.swiper} spaceBetween={150} slidesPerView={1}>
-          {data.map((value, index) =>
-            Video({ key: index, index, value, swiper })
-          )}
-        </Swiper>
+        <h3 style={{ marginBottom: "0px", marginTop: "5%" }}>Обзор проекта</h3>
+        <div className={styles.videoWrapper}>
+          <Swiper
+            onSwiper={setSwiper}
+            className={styles.swiper}
+            spaceBetween={130}
+            slidesPerView={1}
+          >
+            {data.map((value, index) =>
+              Video({ key: index, index, value, swiper })
+            )}
+            <ProgressBar swiper={swiper} index={index} setIndex={setIndex} />
+          </Swiper>
+        </div>
       </div>
       <Footer />
     </main>

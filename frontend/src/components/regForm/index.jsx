@@ -24,6 +24,7 @@ export const RegForm = ({ setState, state }) => {
         setSuccess(true);
         setError(false);
       } catch (e) {
+        setError(true);
         console.log(e.responce?.data?.message);
       }
     } else {
