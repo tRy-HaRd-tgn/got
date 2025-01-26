@@ -106,19 +106,19 @@ export const Donate = (props) => {
     switch (choise) {
       case "privileges": {
         console.log(priviligies);
-        return `url('/backgrounds/prev.png')`;
+        return `url('../../imgs/backgrounds/prev.png')`;
       }
       case "pets": {
         console.log(pets);
-        return `url('/backgrounds/donate.png')`;
+        return `url('../../imgs/backgrounds/donate.png')`;
       }
       case "mounts": {
         console.log(mounts);
-        return `url('/backgrounds/mounts.png')`;
+        return `url('../../imgs/backgrounds/mounts.png')`;
       }
       case "other": {
         console.log(other);
-        return `url('/backgrounds/other.png')`;
+        return `url('../../imgs/backgrounds/other.png')`;
       }
     }
   };
@@ -166,9 +166,7 @@ export const Donate = (props) => {
             </button>
           </div>
           {choise == "privileges" ? (
-            <div className={styles.donateWrapper + " " + styles.priv}>
-              {func1(choise)}
-            </div>
+            <div className={styles.donateWrapper}>{func1(choise)}</div>
           ) : null}
           {choise == "pets" ? (
             <div className={styles.donateWrapper}>{func2(choise)}</div>
