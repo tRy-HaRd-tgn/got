@@ -46,6 +46,12 @@
 .descriptionFormInput:not(:last-child) {
   margin-bottom: 5%;
 }
+.descriptionFormInput:focus {
+  outline: none;
+}
+.descriptionFormInput:focus::placeholder {
+  font-size: 0px;
+}
 .descriptionFormButtons {
   display: flex;
   width: 70%;

@@ -40,6 +40,12 @@
   font-family: "pieces-of-eight-cyrillic-aa";
   font-size: 30px;
 }
+.descriptionFormInput:focus {
+  outline: none;
+}
+.descriptionFormInput:focus::placeholder {
+  font-size: 0px;
+}
 ::placeholder {
   color: white;
 }
