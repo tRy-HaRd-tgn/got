@@ -32,17 +32,17 @@ export const LogForm = ({ setState, state }) => {
     dispatch({ type: "SET_EMAIL", email: temp });
   };
   const configureStore = async () => {
-    let responce = await UserService.getProfile();
+    const responce = await UserService.getProfile();
     setNickName(responce.data.login);
     setDonate(responce.data.balance);
     setRegDate(responce.data.created_at.split("T")[0]);
     setEmail(responce.data.email);
-    responce = await SkinService.getAvatar();
-    console.log(responce);
-    //setProfilePhoto(responce.data.url);
-    console.log(responce)
-    responce = await SkinService.getSkin();
-    //setSkin(responce.data.url);
+    const responce2 = await SkinService.getAvatar();
+    console.log(responce2);
+    setProfilePhoto(responce2.data.url);
+    console.log(responce2)
+    const responce3 = await SkinService.getSkin();
+    setSkin(responce3.data.url);
   };
 
   const logSubmit = async (e) => {

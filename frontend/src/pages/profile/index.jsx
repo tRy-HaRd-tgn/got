@@ -19,10 +19,8 @@ export const Profile = (props) => {
   const setProfilePhoto = (temp) => {
     dispath({ type: "SET_PROFILEPHOTO", skin: temp });
   };
-  let skin;
-  useEffect(() => {
-    skin = useSelector((state) => state.user.skin); // сохраняем скин в переменную
-  }, []);
+  const skin = useSelector((state) => state.user.skin); // сохраняем скин в переменную
+
   useEffect(() => {
     const responce = SkinService.getSkin(); // после того как изменили tempPhoto получаем новое
     console.log(responce);
@@ -31,7 +29,7 @@ export const Profile = (props) => {
   const clickHandler = async (e) => {
     const file = e.target.files[0]; // схватили выбранный файл
     try {
-      setTempPhoto(URL.createObjectURL(file)); // сохраняем в temp загруженное фото
+      setTempPhoto(file); // сохраняем в temp загруженное фото
       const responce = await SkinService.uploadSkin(skin); // загружаем скин на бэк
       console.log(responce);
     } catch (e) {
