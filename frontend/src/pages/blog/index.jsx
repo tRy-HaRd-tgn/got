@@ -12,10 +12,9 @@ export const Blog = (props) => {
     dispatch({ type: "SET_NEWS", news: news });
   };
   const pickNews = async (e) => {
-    try { 
+    try {
       const responce = await PostService?.getPosts();
       setNews(responce.data);
-      console.log(responce);
     } catch {
       console.log(e.responce?.data?.message);
     }

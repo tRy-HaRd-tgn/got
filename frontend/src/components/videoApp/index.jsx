@@ -1,8 +1,7 @@
 import { SwiperSlide } from "swiper/react";
-import { ProgressBar } from "../../components";
-import { Swiper } from "swiper/react";
+
 import "swiper/css";
-export const Video = ({ index, value, swiper }) => {
+export const Video = ({ value }) => {
   return (
     <SwiperSlide>
       <iframe
