@@ -1,4 +1,5 @@
 import axios from "axios";
+import AuthService from "../services/UserService";
 
 export const API_URL = "http://194.59.186.20:8000/api";
 

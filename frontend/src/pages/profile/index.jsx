@@ -19,10 +19,8 @@ export const Profile = (props) => {
   const setProfilePhoto = (temp) => {
     dispath({ type: "SET_PROFILEPHOTO", skin: temp });
   };
-  let skin;
-  useEffect(() => {
-    skin = useSelector((state) => state.user.skin); // сохраняем скин в переменную
-  }, []);
+  const skin = useSelector((state) => state.user.skin); // сохраняем скин в переменную
+
   useEffect(() => {
     const responce = SkinService.getSkin(); // после того как изменили tempPhoto получаем новое
     console.log(responce);
