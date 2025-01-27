@@ -117,11 +117,11 @@ async def login_user(
         value=refresh_token,
         httponly=True,
         max_age=settings.REFRESH_TOKEN_EXPIRE_DAYS * 24 * 60 * 60,
-        secure=False,  # Включить secure в production
+        secure=True,  # Включить secure в production
         samesite="lax",
     )
 
-    return {"access_token": access_token, "token_type": "bearer"}
+    return {"access_token": access_token, "token_type": "Bearer"}
 
 
 @router.post("/login-for-test", response_model=Token)
