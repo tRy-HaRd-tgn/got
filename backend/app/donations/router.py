@@ -18,7 +18,6 @@ router = APIRouter(prefix="/donations", tags=["Donations"])
 
 
 @router.get("/", response_model=list[DonationResponse])
-@cache(expire=300)
 async def get_all_donations():
     donations = await DonationsDAO.find_all()
     result = []
@@ -40,7 +39,6 @@ async def get_all_donations():
 
 
 @router.get("/{category}", response_model=list[DonationResponse])
-@cache(expire=300)
 async def get_donations_by_category(
     category: Literal["privileges", "pets", "mounts", "other"]
 ):
@@ -129,7 +127,6 @@ async def create_donation(
         image_url=image_url,
     )
 
-    # Обновляем имя файла с учетом ID доната
     if image_url:
         # Переименовываем файл
         old_image_path = Path(f"app/static/donations/donation_{temp_entity_id}.png")
