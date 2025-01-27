@@ -64,17 +64,17 @@ async def get_skin(current_user: User = Depends(get_current_user)):
         base_skin_path = Path("app/static/skins/steve.png")
         if not base_skin_path.exists():
             raise HTTPException(status_code=404, detail="Базовый скин не найден")
-        return FileResponse(base_skin_path)
+        return base_skin_path
 
-    response = FileResponse(skin_path, media_type="image/png")
+    # response = FileResponse(skin_path, media_type="image/png")
 
     # Отключаем кеширование для скинов (мгновенные обновления)
-    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    response.headers["Pragma"] = "no-cache"
-    response.headers["Expires"] = "0"
+    # response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    # response.headers["Pragma"] = "no-cache"
+    # response.headers["Expires"] = "0"
 
-    response.headers["ETag"] = ""
-    return response
+    # response.headers["ETag"] = ""
+    return skin_path
 
 
 @router.get("/get-avatar")
@@ -89,16 +89,16 @@ async def get_avatar(current_user: User = Depends(get_current_user)):
     avatar_path = Path(f"app/static/skins/{current_user.login}_face.png")
 
     if avatar_path.exists():
-        return FileResponse(avatar_path, media_type="image/png")
+        return avatar_path
 
     skin_path = Path(f"app/static/skins/{current_user.login}.png")
     if skin_path.exists():
         extract_face(skin_path, avatar_path)
-        return FileResponse(avatar_path, media_type="image/png")
+        return avatar_path
 
     base_avatar_path = Path("app/static/skins/steve_face.png")
     if base_avatar_path.exists():
-        return FileResponse(base_avatar_path, media_type="image/png")
+        return base_avatar_path
 
     # Если базовая аватарка не найдена, возвращаем ошибку 404
     raise HTTPException(status_code=404, detail="Аватарка не найдена")
