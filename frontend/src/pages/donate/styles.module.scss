@@ -30,9 +30,9 @@ h1 {
 }
 .project {
   position: relative;
+  background-image: url("../../imgs/backgrounds/rectangles.png");
   background-position: center;
   background-color: rgb(17, 17, 17);
-  background-image: url("../../imgs/backgrounds/rectangles.png");
   background-repeat: no-repeat;
   background-size: 101% 102vh;
   height: 100vh;
@@ -136,4 +136,16 @@ h3 {
   flex-wrap: wrap;
   overflow-y: auto;
   height: 130vh;
+}
+.privileges {
+  background-image: url("../../imgs/backgrounds/prev.png");
+}
+.pets {
+  background-image: url("../../imgs/backgrounds/donate.png");
+}
+.mounts {
+  background-image: url("../../imgs/backgrounds/mounts.png");
+}
+.other {
+  background-image: url("../../imgs/backgrounds/other.png");
 }

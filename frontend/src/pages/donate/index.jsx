@@ -105,20 +105,16 @@ export const Donate = (props) => {
   const checkBackground = (choise) => {
     switch (choise) {
       case "privileges": {
-        console.log(priviligies);
-        return `url('src/imgs/backgrounds/prev.png')`;
+        return styles.privileges;
       }
       case "pets": {
-        console.log(pets);
-        return `url('src/imgs/backgrounds/donate.png')`;
+        return styles.pets;
       }
       case "mounts": {
-        console.log(mounts);
-        return `url('src/imgs/backgrounds/mounts.png')`;
+        return styles.mounts;
       }
       case "other": {
-        console.log(other);
-        return `url('src/imgs/backgrounds/other.png')`;
+        return styles.other;
       }
     }
   };
@@ -126,10 +122,7 @@ export const Donate = (props) => {
     <>
       <main className={styles.main}>
         <Header />
-        <div
-          style={{ backgroundImage: checkBackground(choise) }}
-          className={styles.description}
-        >
+        <div className={styles.description + " " + checkBackground(choise)}>
           <h1 className={styles.h1}>донат магазин</h1>
           <div className={styles.descriptionDiv}>
             <button
