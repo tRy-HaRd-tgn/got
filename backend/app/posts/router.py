@@ -40,7 +40,6 @@ async def get_post(post_id: int):
 
 
 @router.get("/", response_model=list[PostResponse])
-@cache(expire=300)
 async def get_posts():
     """
     Возвращает список всех постов с URL для получения изображений.
