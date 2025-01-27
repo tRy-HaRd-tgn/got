@@ -16,7 +16,9 @@ export const RegForm = ({ setState, state }) => {
     if (password == secPassword) {
       try {
         const responce = await UserService.registration(login, email, password);
-        console.log(responce);
+        if (responce.status === 422) {
+          throw new Error("ошибка валидации");
+        }
         setLogin("");
         setPassword("");
         setEmail("");
@@ -24,12 +26,14 @@ export const RegForm = ({ setState, state }) => {
         setSuccess(true);
         setError(false);
       } catch (e) {
+        setSuccess(false);
         setError(true);
         console.log(e.responce?.data?.message);
       }
     } else {
       console.log("Пароли не совпадают");
       setError(true);
+      setSuccess(false);
     }
   };
   return (
@@ -54,6 +58,7 @@ export const RegForm = ({ setState, state }) => {
       />
       <input
         placeholder={"Пароль"}
+        title="Пароль должен быть длиной от 8 символов, содержать хотя бы одну букву, одну цифру и один из специальных символов: @$!%*?&."
         className={styles.descriptionFormInput}
         type="password"
         value={password}
