@@ -98,6 +98,7 @@ export const Header = () => {
                     localStorage.removeItem("token");
                     setAuth(false);
                     router("/main");
+                    location.reload();
                   } catch (e) {
                     console.log(e.responce?.data?.message);
                   }
