@@ -29,7 +29,7 @@ export const Profile = (props) => {
   const clickHandler = async (e) => {
     const file = e.target.files[0]; // схватили выбранный файл
     try {
-      setTempPhoto(URL.createObjectURL(file)); // сохраняем в temp загруженное фото
+      setTempPhoto(file); // сохраняем в temp загруженное фото
       const responce = await SkinService.uploadSkin(skin); // загружаем скин на бэк
       console.log(responce);
     } catch (e) {
