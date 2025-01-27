@@ -3,7 +3,7 @@ from fastapi import APIRouter, HTTPException
 from app.mailer.mailer import confirm_token
 from app.users.dao import UsersDAO
 from app.skins.dependencies import SkinService
-
+from fastapi.responses import RedirectResponse
 
 router = APIRouter(tags=["Mailer"])
 
@@ -33,7 +33,7 @@ async def confirm_email(token: str):
             is_verified=True,
         )
 
-        return {"message": "Email успешно подтверждён"}
+        return RedirectResponse(f"/users/login")
 
     except HTTPException as e:
         raise e
