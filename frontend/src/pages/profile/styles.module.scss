@@ -93,6 +93,9 @@ body {
   margin-left: 5%;
   margin-right: 5%;
 }
+.inputLabel:hover {
+  background: #232646;
+}
 .menuRightBottomButton {
   background: #181f37;
   border-radius: 32px;
@@ -294,12 +297,36 @@ h3 {
   color: #cccccc;
   border: none;
 }
+.menuRightBottomButton:hover {
+  background: #232646;
+}
+.input {
+  background: rgba(24, 31, 55, 0.5);
+  border: 2px solid #181f37;
+  border-radius: 36px;
+  width: 90%;
+  height: 15%;
+  text-align: center;
+  font-family: "pieces-of-eight-cyrillic-aa";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 44px;
+  line-height: 24px;
+  color: #cccccc;
+  border: none;
+}
+.input:focus {
+  outline: none;
+}
+.input:focus::placeholder {
+  font-size: 0px;
+}
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-.menuSkinImg{
+.menuSkinImg {
   width: 50%;
   height: 100%;
   border-radius: 15px 0px 0px 15px;

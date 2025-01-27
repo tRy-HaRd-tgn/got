@@ -124,6 +124,9 @@ h3 {
   /* identical to box height */
   cursor: pointer;
 }
+.descriptionDivButton:hover {
+  background: #181f37;
+}
 .donateWrapper::-webkit-scrollbar {
   display: none;
 }

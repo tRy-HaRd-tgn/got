@@ -38,6 +38,9 @@
   border-radius: 10px;
   margin-bottom: 5%;
 }
+.btn:hover {
+  background: #232646;
+}
 .wrapperHeader {
   font-family: "Game of Thrones KG";
   font-style: normal;
@@ -114,6 +117,9 @@
   color: white;
   font-size: 36px;
   font-family: "Inter";
+}
+.btn2:hover {
+  background: #232646;
 }
 .input {
   text-transform: uppercase;
