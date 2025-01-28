@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import UserService from "../services/UserService";
 import { useNavigate } from "react-router-dom";
+import { API_URL2 } from "../http";
 import SkinService from "../services/SkinService";
 export const AppRouter = () => {
   const navigator = useNavigate();
@@ -39,9 +40,9 @@ export const AppRouter = () => {
     setRegDate(responce.data.created_at.split("T")[0]);
     setEmail(responce.data.email);
     const responce2 = await SkinService.getAvatar();
-    setProfilePhoto("https://tortugagot.com" + responce2.data);
+    setProfilePhoto(API_URL2 + responce2.data);
     const responce3 = await SkinService.getSkin();
-    setSkin("https://tortugagot.com" + responce3.data);
+    setSkin(API_URL2 + responce3.data);
   };
   const checkAuth = async () => {
     try {
