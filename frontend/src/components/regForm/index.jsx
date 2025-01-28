@@ -1,5 +1,4 @@
 import styles from "./styles.module.scss";
-import axios from "axios";
 import { useState } from "react";
 import UserService from "../../services/UserService";
 import { useNavigate } from "react-router-dom";
