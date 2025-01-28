@@ -14,6 +14,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from redis import asyncio as aioredis
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
+from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 
 
 @asynccontextmanager
@@ -57,5 +58,6 @@ app.add_middleware(
         "Authorization",
     ],
 )
+app.add_middleware(HTTPSRedirectMiddleware)
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
