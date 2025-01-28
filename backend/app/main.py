@@ -36,6 +36,8 @@ app.include_router(mailer_router, prefix="/api")
 app.include_router(skins_router, prefix="/api")
 
 origins = [
+    "http://localhost.tiangolo.com",
+    "https://localhost.tiangolo.com",
     "http://localhost:5173",
     "http://localhost:8000",
     "https://tortugagot.com",
