@@ -4,28 +4,29 @@ import { vector, X } from "../../imgs";
 import { ModalIcon } from "../../components";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { API_URL2 } from "../../http";
 import SkinService from "../../services/SkinService";
 export const Profile = (props) => {
-  const dispath = useDispatch();
+  const dispatch = useDispatch();
   const [modal, setModal] = useState(false);
   const nickname = useSelector((state) => state.user.nickname);
   const email = useSelector((state) => state.user.email);
   const donate = useSelector((state) => state.user.donate);
   const regDate = useSelector((state) => state.user.regDate);
   const [tempPhoto, setTempPhoto] = useState("");
-  const setPhoto = (skin) => {
-    dispath({ type: "SET_SKIN", skin: skin });
-  };
   const setProfilePhoto = (temp) => {
-    dispath({ type: "SET_PROFILEPHOTO", skin: temp });
+    dispatch({ type: "SET_PROFILE_PHOTO", profilePhoto: temp });
+  };
+  const setSkin = (temp) => {
+    dispatch({ type: "SET_SKIN", skin: temp });
   };
   const skin = useSelector((state) => state.user.skin); // сохраняем скин в переменную
 
-  useEffect(async () => {
-    const responce2 = await SkinService.getAvatar();
+  useEffect( () => {
+    const responce2 =  SkinService.getAvatar();
     setProfilePhoto(API_URL2 + responce2.data);
     console.log(responce2.data);
-    const responce3 = await SkinService.getSkin();
+    const responce3 =  SkinService.getSkin();
     setSkin(API_URL2 + responce3.data);
     console.log(responce3.data);
   }, [tempPhoto]);
