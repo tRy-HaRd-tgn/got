@@ -17,7 +17,7 @@ export const LogForm = ({ setState, state }) => {
     dispatch({ type: "SET_NICKNAME", nickname: temp });
   };
   const setProfilePhoto = (temp) => {
-    dispatch({ type: "SET_PROFILEPHOTO", profilePhoto: temp });
+    dispatch({ type: "SET_PROFILE_PHOTO", profilePhoto: temp });
   };
   const setSkin = (temp) => {
     dispatch({ type: "SET_SKIN", skin: temp });
@@ -39,14 +39,14 @@ export const LogForm = ({ setState, state }) => {
     setEmail(responce.data.email);
 
     const responce2 = await SkinService.getAvatar();
-    //setProfilePhoto("http://194.59.186.20:8000" + responce2.data);
-    console.log(responce2);
+    setProfilePhoto("http://194.59.186.20:8000" + responce2.data);
+    console.log(responce2.data);
     const responce3 = await SkinService.getSkin();
-    //setSkin("http://194.59.186.20:8000" + responce3.data);
-    console.log(responce3);
+    setSkin("http://194.59.186.20:8000" + responce3.data);
+    console.log(responce3.data);
   };
 
-  const logSubmit = async (e) => {  
+  const logSubmit = async (e) => {
     e.preventDefault();
     try {
       const responce = await UserService.login(login, password);

@@ -49,8 +49,14 @@ export const Header = () => {
             БЛОГ
           </p>
           <p
-            style={{ fontSize: "24px", color: "white", cursor: "default" }}
+            style={{
+              fontSize: "24px",
+              color: "white",
+            }}
             className={styles.menuP}
+            onClick={() => {
+              router("/main");
+            }}
           >
             TORTUGA GOT
           </p>
@@ -81,7 +87,7 @@ export const Header = () => {
           </button>
         ) : (
           <div className={styles.userInfo} onClick={() => router("/profile")}>
-            <img src={avatar} alt="error" />
+            <img className={styles.avatar} src={avatar} alt="error" />
             <div style={{ marginLeft: "5%" }}>
               <p
                 className={styles.userInfoP}
