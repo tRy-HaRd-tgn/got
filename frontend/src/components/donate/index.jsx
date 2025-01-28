@@ -3,7 +3,8 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { API_URL2 } from "../../http";
 import { ModalIcon } from "../modalIcon";
-export const DonateComp = ({ description, price, img, color, text }) => {
+import SkinService from "../../services/SkinService";
+export const DonateComp = ({ id, description, price, img, color, text }) => {
   function hexToDec(hex) {
     return parseInt(hex, 16);
   }
@@ -11,14 +12,20 @@ export const DonateComp = ({ description, price, img, color, text }) => {
   const [rr, setRr] = useState();
   const [gg, setGg] = useState();
   const [bb, setBb] = useState();
-  const [temp, setTemp] = useState();
   const [image, setImage] = useState(null);
+  const [promo, setPromo] = useState(); // сохранение введенного промокода
   useEffect(() => {
     setImage(API_URL2 + img);
     setRr(hexToDec(color[1] + color[2]));
     setGg(hexToDec(color[3] + color[4]));
     setBb(hexToDec(color[5] + color[6]));
   }, []);
+  function clickHandler() {
+    // покупка доната
+    console.log("покупка доната");
+    console.log(id);
+    //responce = SkinService.buyDonate();
+  }
   return (
     <>
       <ModalIcon style={{ width: "100vw" }} active={modal} setState={setModal}>
@@ -102,6 +109,8 @@ export const DonateComp = ({ description, price, img, color, text }) => {
                     Промокод
                   </p>
                   <input
+                    value={promo}
+                    onChange={(e) => setPromo(e.target.value)}
                     style={{
                       fontFamily: "pieces-of-eight-cyrillic-aa",
                       fontSize: "45px",
@@ -111,7 +120,14 @@ export const DonateComp = ({ description, price, img, color, text }) => {
                   />
                 </div>
               </>
-              <button className={styles.btn2}>Купить</button>
+              <button
+                onClick={() => {
+                  clickHandler();
+                }}
+                className={styles.btn2}
+              >
+                Купить
+              </button>
             </div>
           </div>
         </div>

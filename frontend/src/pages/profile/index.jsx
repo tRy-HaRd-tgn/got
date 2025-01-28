@@ -14,6 +14,8 @@ export const Profile = (props) => {
   const donate = useSelector((state) => state.user.donate);
   const regDate = useSelector((state) => state.user.regDate);
   const [tempPhoto, setTempPhoto] = useState("");
+  const [promo, setPromo] = useState();
+  const [currency, setCurrency] = useState();
   const setProfilePhoto = (temp) => {
     dispatch({ type: "SET_PROFILE_PHOTO", profilePhoto: temp });
   };
@@ -22,14 +24,6 @@ export const Profile = (props) => {
   };
   const skin = useSelector((state) => state.user.skin); // сохраняем скин в переменную
 
-  useEffect( () => {
-    const responce2 =  SkinService.getAvatar();
-    setProfilePhoto(API_URL2 + responce2.data);
-    console.log(responce2.data);
-    const responce3 =  SkinService.getSkin();
-    setSkin(API_URL2 + responce3.data);
-    console.log(responce3.data);
-  }, [tempPhoto]);
   const clickHandler = async (e) => {
     const file = e.target.files[0]; // схватили выбранный файл
     try {
@@ -37,10 +31,20 @@ export const Profile = (props) => {
       console.log(file);
       const responce = await SkinService.uploadSkin(tempPhoto); // загружаем скин на бэк
       console.log(responce);
+
+      const responce2 = await SkinService.getAvatar();
+      setProfilePhoto(API_URL2 + responce2.data);
+      console.log(responce2);
+      const responce3 = await SkinService.getSkin();
+      setSkin(API_URL2 + responce3.data);
+      console.log(responce3);
     } catch (e) {
       console.log(e);
     }
   };
+  function buyDonate() {
+    console.log("buy donate");
+  }
   return (
     <main className={styles.main}>
       <ModalIcon active={modal} setState={setModal}>
@@ -60,11 +64,19 @@ export const Profile = (props) => {
             alt="error"
           />
         </div>
-        <input type="number" placeholder="Сумма" className={styles.input} />
+        <input
+          value={currency}
+          onChange={(e) => setCurrency(e.target.value)}
+          type="number"
+          placeholder="Сумма"
+          className={styles.input}
+        />
         <input
           type="text"
           placeholder="Промокод (если есть)"
           className={styles.input}
+          value={promo}
+          onChange={(e) => setPromo(e.target.value)}
         />
         <button
           style={{
@@ -72,6 +84,9 @@ export const Profile = (props) => {
             cursor: "pointer",
           }}
           className={styles.button}
+          onClick={() => {
+            buyDonate();
+          }}
         >
           Пополнить
         </button>
@@ -81,6 +96,7 @@ export const Profile = (props) => {
         <h1 style={{ fontSize: "70px" }}>Личный кабинет</h1>
         <div className={styles.menu}>
           <div className={styles.menuSkin}>
+            <img className={styles.menuSkinImg} src={skin} alt="error" /> 
             <img className={styles.menuSkinImg} src={skin} alt="error" />
           </div>
           <div className={styles.menuRight}>

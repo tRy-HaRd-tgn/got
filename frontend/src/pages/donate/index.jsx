@@ -45,9 +45,11 @@ export const Donate = (props) => {
   }, []);
 
   const func1 = (choise) => {
+    console.log(priviligies);
     if (choise == "privileges") {
       return priviligies.map((value, index) => (
         <DonateComp
+          id={value.id}
           text={value.name}
           price={value.price}
           img={value.image_url}
@@ -61,8 +63,10 @@ export const Donate = (props) => {
 
   const func2 = (choise) => {
     if (choise == "pets") {
+      console.log(pets);
       return pets.map((value, index) => (
         <DonateComp
+          id={value.id}
           text={value.name}
           price={value.price}
           img={value.image_url}
@@ -74,9 +78,11 @@ export const Donate = (props) => {
     }
   };
   const func3 = (choise) => {
+    console.log(mounts);
     if (choise == "mounts") {
       return mounts.map((value, index) => (
         <DonateComp
+          id={value.id}
           text={value.name}
           price={value.price}
           img={value.image_url}
@@ -88,9 +94,11 @@ export const Donate = (props) => {
     }
   };
   const func4 = (choise) => {
+    console.log(other);
     if (choise == "other") {
       return other.map((value, index) => (
         <DonateComp
+          id={value.id}
           text={value.name}
           price={value.price}
           img={value.image_url}
