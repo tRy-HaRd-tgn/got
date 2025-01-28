@@ -16,7 +16,6 @@ export const Donate = (props) => {
     try {
       const responce = DonationService.getDonations();
       responce.then((value) => {
-        console.log(value.data);
         let newPrivileges = [];
         let newPets = [];
         let newMounts = [];

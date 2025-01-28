@@ -39,10 +39,10 @@ export const LogForm = ({ setState, state }) => {
     setEmail(responce.data.email);
     const responce2 = await SkinService.getAvatar();
     console.log(responce2);
-    setProfilePhoto(responce2.data.url);
+    //setProfilePhoto(responce2.data.url);
     console.log(responce2);
     const responce3 = await SkinService.getSkin();
-    setSkin(responce3.data.url);
+    //setSkin(responce3.data.url);
   };
 
   const logSubmit = async (e) => {
