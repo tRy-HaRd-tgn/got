@@ -39,14 +39,14 @@ export const LogForm = ({ setState, state }) => {
     setEmail(responce.data.email);
 
     const responce2 = await SkinService.getAvatar();
-    setProfilePhoto("http://194.59.186.20:8000" + responce2.data);
-    console.log(responce2.data);
+    //setProfilePhoto("http://194.59.186.20:8000" + responce2.data);
+    console.log(responce2);
     const responce3 = await SkinService.getSkin();
-    setSkin("http://194.59.186.20:8000" + responce3.data);
-    console.log(responce3.data);
+    //setSkin("http://194.59.186.20:8000" + responce3.data);
+    console.log(responce3);
   };
 
-  const logSubmit = async (e) => {
+  const logSubmit = async (e) => {  
     e.preventDefault();
     try {
       const responce = await UserService.login(login, password);
