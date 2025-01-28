@@ -1,5 +1,5 @@
 npm run build
 
-rm -rf ../../../var/www/dist
-mv dist ../../../var/www
+rm -rf ../../dist
+mv dist ../../dist
 sudo systemctl restart nginx
