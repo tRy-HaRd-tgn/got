@@ -47,11 +47,6 @@ async def upload_skin(
         )
 
 
-from fastapi.responses import FileResponse
-from fastapi import HTTPException
-from pathlib import Path
-
-
 @router.get("/get-skin")
 async def get_skin(current_user: User = Depends(get_current_user)):
     """
