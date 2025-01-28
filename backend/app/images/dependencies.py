@@ -19,9 +19,12 @@ class FileService:
         """
         try:
             # Проверяем формат файла
-            if not file.filename.endswith(".png"):
+            allowed_extensions = {".png", ".jpg", ".jpeg"}
+            file_extension = os.path.splitext(file.filename)[1].lower()
+            if file_extension not in allowed_extensions:
                 raise HTTPException(
-                    status_code=400, detail="Изображение должно быть в формате PNG"
+                    status_code=400,
+                    detail="Изображение должно быть в формате PNG, JPG или JPEG",
                 )
 
             # Проверяем размер файла (максимум 1 МБ)
@@ -34,17 +37,6 @@ class FileService:
             # Читаем изображение
             img = Image.open(file.file)
 
-            # Проверяем размер изображения для скинов
-            if entity_type == "skin" and img.size not in [
-                (64, 64),
-                (128, 128),
-                (256, 256),
-            ]:
-                raise HTTPException(
-                    status_code=400,
-                    detail="Размер изображения должен быть 64x64, 128x128 или 256x256 пикселей",
-                )
-
             # Определяем папку для сохранения
             upload_dir = Path(f"app/static/{entity_type}s")
             upload_dir.mkdir(parents=True, exist_ok=True)
@@ -56,14 +48,16 @@ class FileService:
                         status_code=400,
                         detail="Для скина необходимо указать логин пользователя",
                     )
-                filename = f"{login}.png"  # Скин сохраняется как login.png
+                filename = (
+                    f"{login}{file_extension}"  # Скин сохраняется как login.{extension}
+                )
             else:
                 if not entity_id:
                     raise HTTPException(
                         status_code=400,
                         detail="Для поста или доната необходимо указать entity_id",
                     )
-                filename = f"{entity_type}_{entity_id}.png"  # Пост или донат сохраняется как entity_type_entity_id.png
+                filename = f"{entity_type}_{entity_id}{file_extension}"  # Пост или донат сохраняется как entity_type_entity_id.{extension}
 
             file_path = upload_dir / filename
 
