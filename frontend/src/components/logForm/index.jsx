@@ -37,12 +37,13 @@ export const LogForm = ({ setState, state }) => {
     setDonate(responce.data.balance);
     setRegDate(responce.data.created_at.split("T")[0]);
     setEmail(responce.data.email);
+
     const responce2 = await SkinService.getAvatar();
-    console.log(responce2);
-    //setProfilePhoto(responce2.data.url);
-    console.log(responce2);
+    setProfilePhoto("http://194.59.186.20:8000" + responce2.data);
+    console.log(responce2.data);
     const responce3 = await SkinService.getSkin();
-    //setSkin(responce3.data.url);
+    setSkin("http://194.59.186.20:8000" + responce3.data);
+    console.log(responce3.data);
   };
 
   const logSubmit = async (e) => {
