@@ -1,13 +1,11 @@
 #!/bin/bash
 
 # 1. Запуск Docker (Redis и PostgreSQL)
-docker-compose -f docker-compose.yml up -d
+docker-compose --env-file backend/.en up -d --build
 
 # 2. Сборка и запуск фронтенда
 cd frontend
-npm install
-npm run build
-sudo nginx -c /nginx.conf
+npm run preview
 
 # 3. Установка окружения и запуск бэкенда
 cd ../backend
