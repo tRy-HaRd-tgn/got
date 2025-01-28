@@ -58,12 +58,13 @@ async def get_skin(current_user: User = Depends(get_current_user)):
     Возвращает скин текущего пользователя с отключенным кешированием.
     """
     # Путь к скину пользователя
-    skin_path = Path(f"/static/skins/{current_user.login}.png")
+    skin_path = Path(f"app/static/skins/{current_user.login}.png")
 
     if not skin_path.exists():
-        base_skin_path = Path("/static/skins/steve.png")
+        base_skin_path = Path("app/static/skins/steve.png")
         if not base_skin_path.exists():
             raise HTTPException(status_code=404, detail="Базовый скин не найден")
+        base_skin_path = Path("/static/skins/steve.png")
         return base_skin_path
 
     # response = FileResponse(skin_path, media_type="image/png")
@@ -74,6 +75,7 @@ async def get_skin(current_user: User = Depends(get_current_user)):
     # response.headers["Expires"] = "0"
 
     # response.headers["ETag"] = ""
+    skin_path = Path(f"/static/skins/{current_user.login}.png")
     return skin_path
 
 
