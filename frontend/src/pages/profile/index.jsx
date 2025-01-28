@@ -21,15 +21,18 @@ export const Profile = (props) => {
   };
   const skin = useSelector((state) => state.user.skin); // сохраняем скин в переменную
 
-  useEffect(() => {
-    const responce = SkinService.getSkin(); // после того как изменили tempPhoto получаем новое
-    console.log(responce);
-    // setProfilePhoto(responce); // загружаем в глобальную переменную скин, если он нам вернулся с бэкенда
+  useEffect(async () => {
+    const responce2 = await SkinService.getAvatar();
+    setProfilePhoto(API_URL2 + responce2.data);
+    console.log(responce2.data);
+    const responce3 = await SkinService.getSkin();
+    setSkin(API_URL2 + responce3.data);
+    console.log(responce3.data);
   }, [tempPhoto]);
   const clickHandler = async (e) => {
     const file = e.target.files[0]; // схватили выбранный файл
     try {
-      setTempPhoto(URL.createObjectURL(file)); // сохраняем в temp загруженное фото
+      setTempPhoto(file); // сохраняем в temp загруженное фото
       console.log(file);
       const responce = await SkinService.uploadSkin(tempPhoto); // загружаем скин на бэк
       console.log(responce);
@@ -65,7 +68,6 @@ export const Profile = (props) => {
         <button
           style={{
             marginBottom: "7%",
-            background: "#181F37",
             cursor: "pointer",
           }}
           className={styles.button}
