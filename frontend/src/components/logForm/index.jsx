@@ -3,6 +3,7 @@ import SkinService from "../../services/SkinService";
 import styles from "./styles.module.scss";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { API_URL2 } from "../../http";
 import { useState } from "react";
 export const LogForm = ({ setState, state }) => {
   const [error, setError] = useState();
@@ -39,10 +40,10 @@ export const LogForm = ({ setState, state }) => {
     setEmail(responce.data.email);
 
     const responce2 = await SkinService.getAvatar();
-    setProfilePhoto("https://tortugagot.com" + responce2.data);
+    setProfilePhoto(API_URL2 + responce2.data);
     console.log(responce2.data);
     const responce3 = await SkinService.getSkin();
-    setSkin("https://tortugagot.com" + responce3.data);
+    setSkin(API_URL2 + responce3.data);
     console.log(responce3.data);
   };
 

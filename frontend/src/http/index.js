@@ -1,6 +1,7 @@
 import axios from "axios";
 
 export const API_URL = "https://tortugagot.com/api";
+export const API_URL2 = "https://tortugagot.com";
 
 const $api = axios.create({
   withCredentials: true,

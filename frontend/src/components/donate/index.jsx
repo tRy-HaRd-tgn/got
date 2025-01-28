@@ -1,7 +1,7 @@
 import styles from "./styles.module.scss";
 import { useState } from "react";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { API_URL2 } from "../../http";
 import { ModalIcon } from "../modalIcon";
 export const DonateComp = ({ description, price, img, color, text }) => {
   function hexToDec(hex) {
@@ -14,7 +14,7 @@ export const DonateComp = ({ description, price, img, color, text }) => {
   const [temp, setTemp] = useState();
   const [image, setImage] = useState(null);
   useEffect(() => {
-    setImage("https://tortugagot.com" + img);
+    setImage(API_URL2 + img);
     setRr(hexToDec(color[1] + color[2]));
     setGg(hexToDec(color[3] + color[4]));
     setBb(hexToDec(color[5] + color[6]));

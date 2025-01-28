@@ -3,13 +3,14 @@ import { user, calendar } from "../../imgs";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { API_URL2 } from "../../http";
 
 export const News = ({ header, img, text, id, author, data, url }) => {
   const navigator = useNavigate();
   const [image, setImage] = useState(null);
   useEffect(() => {
     try {
-      setImage("https://tortugagot.com"+img);
+      setImage(API_URL2 + img);
     } catch (e) {
       console.log(e);
     }
