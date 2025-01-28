@@ -88,18 +88,21 @@ async def get_avatar(current_user: User = Depends(get_current_user)):
     """
 
     # Путь к аватарке пользователя
-    avatar_path = Path(f"/static/skins/{current_user.login}_face.png")
+    avatar_path = Path(f"app/static/skins/{current_user.login}_face.png")
 
     if avatar_path.exists():
+        avatar_path = Path(f"/static/skins/{current_user.login}_face.png")
         return avatar_path
 
-    skin_path = Path(f"/static/skins/{current_user.login}.png")
+    skin_path = Path(f"app/static/skins/{current_user.login}.png")
     if skin_path.exists():
         extract_face(skin_path, avatar_path)
+        avatar_path = Path(f"/static/skins/{current_user.login}_face.png")
         return avatar_path
 
-    base_avatar_path = Path("/static/skins/steve_face.png")
+    base_avatar_path = Path("app/static/skins/steve_face.png")
     if base_avatar_path.exists():
+        base_avatar_path = Path("/static/skins/steve_face.png")
         return base_avatar_path
 
     # Если базовая аватарка не найдена, возвращаем ошибку 404
