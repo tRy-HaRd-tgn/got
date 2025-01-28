@@ -30,7 +30,7 @@ export const Profile = (props) => {
     const file = e.target.files[0]; // схватили выбранный файл
     try {
       setTempPhoto(URL.createObjectURL(file)); // сохраняем в temp загруженное фото
-      console.log(tempPhoto);
+      console.log(file);
       const responce = await SkinService.uploadSkin(tempPhoto); // загружаем скин на бэк
       console.log(responce);
     } catch (e) {
