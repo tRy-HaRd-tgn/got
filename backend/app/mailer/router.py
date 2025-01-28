@@ -33,7 +33,7 @@ async def confirm_email(token: str):
             is_verified=True,
         )
 
-        return RedirectResponse(f"/users/login")
+        return RedirectResponse(url="https://tortugagot.com/logReg")
 
     except HTTPException as e:
         raise e
