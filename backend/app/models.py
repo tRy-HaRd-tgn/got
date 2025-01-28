@@ -49,6 +49,7 @@ class User(Base):
     # Связь с другими таблицами
     posts = relationship("Post", back_populates="author")
     payment_history = relationship("PaymentHistory", back_populates="user")
+    purchased_donations = relationship("PurchasedDonation", back_populates="user")
 
     def __str__(self) -> str:
         return f"Пользователь {self.login}, баланс: {self.balance:.2f} золота."
@@ -75,16 +76,36 @@ class PaymentHistory(Base):
     __tablename__ = "payment_history"
 
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    transaction_id = Column(String, unique=True, nullable=False)  # Обязательное поле
-    amount = Column(Float, nullable=False)
+    user_id = Column(
+        Integer, ForeignKey("users.id"), nullable=False
+    )  # Связь с пользователем
+    amount = Column(Float, nullable=False)  # Сумма пополнения
+    transaction_id = Column(String, nullable=True)  # ID транзакции в платежной системе
     status = Column(
-        String, nullable=False, default="pending"
-    )  # "pending", "paid", "failed"
-    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+        String, default="pending"
+    )  # Статус платежа (pending, success, failed)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)  # Дата пополнения
 
     # Связь с пользователем
     user = relationship("User", back_populates="payment_history")
 
     def __str__(self) -> str:
-        return f"Платеж {self.transaction_id}: {self.status}"
+        return (
+            f"Пополнение {self.amount} руб. от {self.user.login}, статус: {self.status}"
+        )
+
+
+class PurchasedDonation(Base):
+    __tablename__ = "purchased_donations"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    donation_id = Column(Integer, ForeignKey("donations.id"), nullable=False)
+    purchase_date = Column(DateTime, default=datetime.datetime.utcnow)  # Дата покупки
+    is_active = Column(Boolean, default=True)
+
+    user = relationship("User", back_populates="purchased_donations")
+    donation = relationship("Donation")
+
+    def __str__(self) -> str:
+        return f"Купленный донат {self.donation.name} пользователем {self.user.login}"
