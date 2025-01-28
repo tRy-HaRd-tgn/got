@@ -58,10 +58,10 @@ async def get_skin(current_user: User = Depends(get_current_user)):
     Возвращает скин текущего пользователя с отключенным кешированием.
     """
     # Путь к скину пользователя
-    skin_path = Path(f"app/static/skins/{current_user.login}.png")
+    skin_path = Path(f"/static/skins/{current_user.login}.png")
 
     if not skin_path.exists():
-        base_skin_path = Path("app/static/skins/steve.png")
+        base_skin_path = Path("/static/skins/steve.png")
         if not base_skin_path.exists():
             raise HTTPException(status_code=404, detail="Базовый скин не найден")
         return base_skin_path
@@ -86,17 +86,17 @@ async def get_avatar(current_user: User = Depends(get_current_user)):
     """
 
     # Путь к аватарке пользователя
-    avatar_path = Path(f"app/static/skins/{current_user.login}_face.png")
+    avatar_path = Path(f"/static/skins/{current_user.login}_face.png")
 
     if avatar_path.exists():
         return avatar_path
 
-    skin_path = Path(f"app/static/skins/{current_user.login}.png")
+    skin_path = Path(f"/static/skins/{current_user.login}.png")
     if skin_path.exists():
         extract_face(skin_path, avatar_path)
         return avatar_path
 
-    base_avatar_path = Path("app/static/skins/steve_face.png")
+    base_avatar_path = Path("/static/skins/steve_face.png")
     if base_avatar_path.exists():
         return base_avatar_path
 
