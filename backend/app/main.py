@@ -58,6 +58,6 @@ app.add_middleware(
         "Authorization",
     ],
 )
-app.add_middleware(HTTPSRedirectMiddleware)
+# app.add_middleware(HTTPSRedirectMiddleware)
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
