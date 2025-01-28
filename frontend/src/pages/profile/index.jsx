@@ -55,16 +55,12 @@ export const Profile = (props) => {
             alt="error"
           />
         </div>
-        <input
-          type="number"
-          placeholder="Сумма"
-          className={styles.button}
-        ></input>
+        <input type="number" placeholder="Сумма" className={styles.input} />
         <input
           type="text"
           placeholder="Промокод (если есть)"
-          className={styles.button}
-        ></input>
+          className={styles.input}
+        />
         <button
           style={{
             marginBottom: "7%",

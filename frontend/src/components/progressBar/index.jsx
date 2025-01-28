@@ -1,6 +1,4 @@
-import { use } from "react";
 import styles from "./styles.module.scss";
-import { useEffect } from "react";
 export const ProgressBar = ({ swiper, index, setIndex }) => {
   return (
     <div className={styles.progressBar}>

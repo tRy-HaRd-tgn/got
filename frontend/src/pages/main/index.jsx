@@ -1,13 +1,13 @@
 import styles from "./styles.module.scss";
-import { Header, Footer, Video } from "../../components";
+import React from "react";
+import { Header, Footer, Video, ProgressBar } from "../../components";
 import { vector } from "../../imgs";
 import { Swiper } from "swiper/react";
 import { useNavigate } from "react-router-dom";
-import { data } from "./data";
-import { ProgressBar } from "../../components";
+import { data, data2 } from "./data";
 import "swiper/css";
 import { useState } from "react";
-export const Main = (props) => {
+export const Main = () => {
   const router = useNavigate();
   const [swiper, setSwiper] = useState(null);
   const [index, setIndex] = useState(0);
@@ -16,12 +16,7 @@ export const Main = (props) => {
       <Header />
       <div className={styles.description}>
         <h1>TORTUGA GOT</h1>
-        <p className={styles.descriptionP}>
-          Здесь тебя ждут интриги, война и возможность вписать своё имя в
-          историю Семи Королевств. Исследуй наши земли, выбирай свой путь,
-          становись частью великого конфликта. Вступай в игру, где каждый твой
-          шаг может изменить судьбу мира.
-        </p>
+        <p className={styles.descriptionP}>{data2.text}</p>
         <button
           onClick={() => router("/letsPlay")}
           className={styles.descriptionBtn}
@@ -39,9 +34,11 @@ export const Main = (props) => {
             spaceBetween={130}
             slidesPerView={1}
           >
-            {data.map((value, index) =>
-              Video({ key: index, index, value, swiper })
-            )}
+            {data.map((value) => (
+              <React.Fragment key={value.id}>
+                {Video({ value: value, swiper })}
+              </React.Fragment>
+            ))}
             <ProgressBar swiper={swiper} index={index} setIndex={setIndex} />
           </Swiper>
         </div>

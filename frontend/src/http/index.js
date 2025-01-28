@@ -1,5 +1,4 @@
 import axios from "axios";
-import AuthService from "../services/UserService";
 
 export const API_URL = "http://194.59.186.20:8000/api";
 
@@ -22,7 +21,7 @@ $api.interceptors.response.use(
       const originalRequest = error.config;
       try {
         const response = await AuthService.checkAuth();
-        console.log(response)
+        console.log(response);
         localStorage.setItem("token", response.data.accessToken);
         return $api.request(originalRequest);
       } catch (e) {
