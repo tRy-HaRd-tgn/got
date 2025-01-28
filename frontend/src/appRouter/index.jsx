@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import UserService from "../services/UserService";
 import { useNavigate } from "react-router-dom";
+import SkinService from "../services/SkinService";
 export const AppRouter = () => {
   const navigator = useNavigate();
   const auth = useSelector((state) => state.auth.isAuth);
@@ -24,6 +25,12 @@ export const AppRouter = () => {
   const setEmail = (temp) => {
     dispatch({ type: "SET_EMAIL", email: temp });
   };
+  const setProfilePhoto = (temp) => {
+    dispatch({ type: "SET_PROFILE_PHOTO", profilePhoto: temp });
+  };
+  const setSkin = (temp) => {
+    dispatch({ type: "SET_SKIN", skin: temp });
+  };
   const setChoise = (temp) => dispatch({ type: "SET_CHOISE", choise: temp });
   const configureStore = async () => {
     const responce = await UserService.getProfile();
@@ -31,6 +38,10 @@ export const AppRouter = () => {
     setDonate(responce.data.balance);
     setRegDate(responce.data.created_at.split("T")[0]);
     setEmail(responce.data.email);
+    const responce2 = await SkinService.getAvatar();
+    setProfilePhoto("http://194.59.186.20:8000" + responce2.data);
+    const responce3 = await SkinService.getSkin();
+    setSkin("http://194.59.186.20:8000" + responce3.data);
   };
   const checkAuth = async () => {
     try {
