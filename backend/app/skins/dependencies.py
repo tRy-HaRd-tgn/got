@@ -88,7 +88,7 @@ class SkinService:
                     status_code=400, detail="Размер скина не должен превышать 1 МБ"
                 )
             # Вернуть указатель в начало файла, иначе Image.open(skin.file) сломается
-            skin.file.seek(0)
+            # skin.file.seek(0)
 
             # Читаем изображение
             img = Image.open(skin.file)
