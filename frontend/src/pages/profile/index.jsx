@@ -4,39 +4,47 @@ import { vector, X } from "../../imgs";
 import { ModalIcon } from "../../components";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { API_URL2 } from "../../http";
 import SkinService from "../../services/SkinService";
 export const Profile = (props) => {
-  const dispath = useDispatch();
+  const dispatch = useDispatch();
   const [modal, setModal] = useState(false);
   const nickname = useSelector((state) => state.user.nickname);
   const email = useSelector((state) => state.user.email);
   const donate = useSelector((state) => state.user.donate);
   const regDate = useSelector((state) => state.user.regDate);
   const [tempPhoto, setTempPhoto] = useState("");
-  const setPhoto = (skin) => {
-    dispath({ type: "SET_SKIN", skin: skin });
-  };
+  const [promo, setPromo] = useState();
+  const [currency, setCurrency] = useState();
   const setProfilePhoto = (temp) => {
-    dispath({ type: "SET_PROFILEPHOTO", skin: temp });
+    dispatch({ type: "SET_PROFILE_PHOTO", profilePhoto: temp });
+  };
+  const setSkin = (temp) => {
+    dispatch({ type: "SET_SKIN", skin: temp });
   };
   const skin = useSelector((state) => state.user.skin); // сохраняем скин в переменную
 
-  useEffect(() => {
-    const responce = SkinService.getSkin(); // после того как изменили tempPhoto получаем новое
-    console.log(responce);
-    // setProfilePhoto(responce); // загружаем в глобальную переменную скин, если он нам вернулся с бэкенда
-  }, [tempPhoto]);
   const clickHandler = async (e) => {
     const file = e.target.files[0]; // схватили выбранный файл
     try {
-      setTempPhoto(URL.createObjectURL(file)); // сохраняем в temp загруженное фото
+      setTempPhoto(file); // сохраняем в temp загруженное фото
       console.log(file);
       const responce = await SkinService.uploadSkin(tempPhoto); // загружаем скин на бэк
       console.log(responce);
+
+      const responce2 = await SkinService.getAvatar();
+      setProfilePhoto(API_URL2 + responce2.data);
+      console.log(responce2);
+      const responce3 = await SkinService.getSkin();
+      setSkin(API_URL2 + responce3.data);
+      console.log(responce3);
     } catch (e) {
       console.log(e);
     }
   };
+  function buyDonate() {
+    console.log("buy donate");
+  }
   return (
     <main className={styles.main}>
       <ModalIcon active={modal} setState={setModal}>
@@ -56,19 +64,29 @@ export const Profile = (props) => {
             alt="error"
           />
         </div>
-        <input type="number" placeholder="Сумма" className={styles.input} />
+        <input
+          value={currency}
+          onChange={(e) => setCurrency(e.target.value)}
+          type="number"
+          placeholder="Сумма"
+          className={styles.input}
+        />
         <input
           type="text"
           placeholder="Промокод (если есть)"
           className={styles.input}
+          value={promo}
+          onChange={(e) => setPromo(e.target.value)}
         />
         <button
           style={{
             marginBottom: "7%",
-            background: "#181F37",
             cursor: "pointer",
           }}
           className={styles.button}
+          onClick={() => {
+            buyDonate();
+          }}
         >
           Пополнить
         </button>
@@ -78,6 +96,7 @@ export const Profile = (props) => {
         <h1 style={{ fontSize: "70px" }}>Личный кабинет</h1>
         <div className={styles.menu}>
           <div className={styles.menuSkin}>
+            <img className={styles.menuSkinImg} src={skin} alt="error" /> 
             <img className={styles.menuSkinImg} src={skin} alt="error" />
           </div>
           <div className={styles.menuRight}>
