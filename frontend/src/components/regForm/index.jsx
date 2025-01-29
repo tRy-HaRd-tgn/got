@@ -43,6 +43,7 @@ export const RegForm = ({ setState, state }) => {
       </h4>
       <input
         placeholder={"Логин"}
+        title="Логин не должен содержать цифр и специальных символов"
         className={styles.descriptionFormInput}
         type="text"
         value={login}
