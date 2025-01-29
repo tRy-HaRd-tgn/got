@@ -26,17 +26,13 @@ async def upload_skin(
     try:
         # Сохраняем скин на сервере
         skin_url = await SkinService.upload_skin(current_user.login, skin)
-
-        # Получаем путь к аватарке
-        avatar_url = SkinService.get_avatar_url(current_user.login)
-
+        avatar_url = f"/static/skins/{current_user.login}_face.png"
         # Обновляем URL скина и аватарки в профиле пользователя
         await UsersDAO.update(current_user.id, skin_url=skin_url, avatar_url=avatar_url)
 
         return {
             "message": "Скин успешно загружен",
             "skin_url": skin_url,
-            "avatar_url": avatar_url,
         }
 
     except HTTPException as e:
