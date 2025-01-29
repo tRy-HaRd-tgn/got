@@ -3,13 +3,16 @@ import { useState } from "react";
 import UserService from "../../services/UserService";
 import { useNavigate } from "react-router-dom";
 export const RegForm = ({ setState, state }) => {
-  const [error, setError] = useState(false);
+  const [error, setError] = useState();
   const [success, setSuccess] = useState("");
   const router = useNavigate();
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [secPassword, setSecPassword] = useState("");
+  const [focus, setFocus] = useState(false);
+  const [secError, setSecError] = useState(false);
+  const [secFocus, setSecFocus] = useState(false);
   const submitForm = async (e) => {
     e.preventDefault();
     if (password == secPassword) {
@@ -27,12 +30,20 @@ export const RegForm = ({ setState, state }) => {
       } catch (e) {
         setSuccess(false);
         setError(true);
+        setEmail("");
+        setPassword("");
+        setLogin("");
+        setSecPassword("");
         console.log(e.responce?.data?.message);
       }
     } else {
       console.log("Пароли не совпадают");
-      setError(true);
+      setSecError(true);
       setSuccess(false);
+      setEmail("");
+      setPassword("");
+      setLogin("");
+      setSecPassword("");
     }
   };
   return (
@@ -41,12 +52,26 @@ export const RegForm = ({ setState, state }) => {
       <h4 className={styles.descriptionFormH4}>
         Добро пожаловать, введите свои данные, чтобы продолжить!
       </h4>
+      {focus ? (
+        <p className={styles.error}>Логин не должен содержать цифры</p>
+      ) : (
+        <></>
+      )}
       <input
         placeholder={"Логин"}
-        title="Логин не должен содержать цифр и специальных символов"
+        title="Логин не должен содержать цифр"
         className={styles.descriptionFormInput}
         type="text"
         value={login}
+        onClick={() => {
+          setError(false);
+        }}
+        onFocus={() => {
+          setFocus(true);
+          setError(false);
+          setSecError(false);
+        }}
+        onBlur={() => setFocus(false)}
         onChange={(e) => setLogin(e.target.value)}
       />{" "}
       <input
@@ -55,14 +80,36 @@ export const RegForm = ({ setState, state }) => {
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
+        onFocus={() => {
+          setError(false);
+          setSecError(false);
+        }}
       />
+      {secFocus ? (
+        <p
+          style={{ paddingLeft: "5%", paddingRight: "5%" }}
+          className={styles.error}
+        >
+          Пароль должен быть длиной от 8 символов, содержать хотя бы одну букву,
+          одну цифру и один из специальных символов:{" "}
+          <span style={{ fontFamily: "segoe ui" }}>@$!%*?&</span>.
+        </p>
+      ) : (
+        <></>
+      )}
       <input
         placeholder={"Пароль"}
         title="Пароль должен быть длиной от 8 символов, содержать хотя бы одну букву, одну цифру и один из специальных символов: @$!%*?&."
         className={styles.descriptionFormInput}
         type="password"
         value={password}
+        onBlur={() => setSecFocus(false)}
         onChange={(e) => setPassword(e.target.value)}
+        onFocus={() => {
+          setSecFocus(true);
+          setError(false);
+          setSecError(false);
+        }}
       />
       <input
         placeholder={"Повторите пароль"}
@@ -70,7 +117,16 @@ export const RegForm = ({ setState, state }) => {
         type="password"
         value={secPassword}
         onChange={(e) => setSecPassword(e.target.value)}
+        onFocus={() => {
+          setError(false);
+          setSecError(false);
+        }}
       />
+      {secError ? (
+        <div className={styles.error}>пароли не совпадают</div>
+      ) : (
+        <></>
+      )}
       {error ? <div className={styles.error}>ошибка регистрации</div> : <></>}
       {success ? (
         <div className={styles.text}>подтвердите создание в почтовом ящике</div>
