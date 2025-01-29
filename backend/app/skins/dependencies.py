@@ -82,10 +82,13 @@ class SkinService:
                 )
 
             # Проверяем размер файла (максимум 1 МБ)
-            if skin.size > 1024 * 1024:
+            file_size = await skin.read()
+            if len(file_size) > 1024 * 1024:
                 raise HTTPException(
                     status_code=400, detail="Размер скина не должен превышать 1 МБ"
                 )
+            # Вернуть указатель в начало файла, иначе Image.open(skin.file) сломается
+            skin.file.seek(0)
 
             # Читаем изображение
             img = Image.open(skin.file)
