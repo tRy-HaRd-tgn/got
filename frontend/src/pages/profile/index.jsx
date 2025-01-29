@@ -42,6 +42,7 @@ export const Profile = (props) => {
       const formData = new FormData();
       formData.append("skin", file);
       SkinService.uploadSkin(formData); // загружаем скин на бэк
+      window.location.reload();
     } catch (e) {
       console.log(e);
     }
