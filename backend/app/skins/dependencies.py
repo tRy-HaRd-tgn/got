@@ -1,3 +1,4 @@
+import io
 import os
 from fastapi import UploadFile, HTTPException
 from PIL import Image, ImageDraw, ImageFont
@@ -76,49 +77,51 @@ class SkinService:
         """
         try:
             # Проверяем формат файла
-            if not skin.filename.endswith(".png"):
+            allowed_extensions = {".png"}
+            file_extension = os.path.splitext(skin.filename)[1].lower()
+            if file_extension not in allowed_extensions:
                 raise HTTPException(
                     status_code=400, detail="Скин должен быть в формате PNG"
                 )
 
             # Проверяем размер файла (максимум 1 МБ)
-            file_size = await skin.read()
-            if len(file_size) > 1024 * 1024:
+            file_content = await skin.read()
+            if len(file_content) > 1024 * 1024:
                 raise HTTPException(
                     status_code=400, detail="Размер скина не должен превышать 1 МБ"
                 )
 
             # Читаем изображение
-            img = Image.open(skin.file)
+            img = Image.open(io.BytesIO(file_content))
 
             # Проверяем размер изображения
-            if (
-                img.size != (64, 64)
-                and img.size != (128, 128)
-                and img.size != (256, 256)
-            ):
+            if img.size not in [(64, 64), (128, 128), (256, 256)]:
                 raise HTTPException(
                     status_code=400,
                     detail="Размер скина должен быть 64x64, 128x128 или 256x256 пикселей",
                 )
 
-            # Удаляем старый скин и аватарку (если есть)
-            old_skin_path = os.path.join(UPLOAD_DIR, f"{username}.png")
-            old_avatar_path = os.path.join(UPLOAD_DIR, f"{username}_face.png")
-            if os.path.exists(old_skin_path):
-                os.remove(old_skin_path)
-            if os.path.exists(old_avatar_path):
-                os.remove(old_avatar_path)
+            # Определяем папку для сохранения
+            upload_dir = Path("app/static/skins")
+            upload_dir.mkdir(parents=True, exist_ok=True)
+
+            # Формируем путь для скина и аватарки
+            skin_path = upload_dir / f"{username}.png"
+            avatar_path = upload_dir / f"{username}_face.png"
+
+            # Удаляем старые файлы, если они существуют
+            if skin_path.exists():
+                skin_path.unlink()
+            if avatar_path.exists():
+                avatar_path.unlink()
 
             # Сохраняем новый скин
-            filename = f"{username}.png"
-            file_path = os.path.join(UPLOAD_DIR, filename)
-            img.save(file_path)
+            img.save(skin_path)
 
             # Создаем аватарку на основе нового скина
-            extract_face(Path(file_path), Path(old_avatar_path))
+            extract_face(skin_path, avatar_path)
 
-            return f"/static/skins/{filename}"
+            return f"/static/skins/{username}.png"
 
         except Exception as e:
             raise HTTPException(
