@@ -32,7 +32,7 @@ export const Profile = (props) => {
       const formData = new FormData();
       formData.append("skin", file);
       const responce = await SkinService.uploadSkin(formData); // загружаем скин на бэк
-      window.location.reload();
+      //window.location.reload();
 
       const responce2 = await SkinService.getAvatar();
       setProfilePhoto(API_URL2 + responce2.data);
