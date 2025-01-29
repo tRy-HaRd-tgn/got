@@ -3,6 +3,11 @@ import axios from "axios";
 export const API_URL = "https://tortugagot.com/api";
 export const API_URL2 = "https://tortugagot.com";
 
+//export const API_URL = "http://localhost:8000/api";
+//export const API_URL2 = "http://localhost:8000";
+
+
+
 const $api = axios.create({
   withCredentials: true,
   baseURL: API_URL,

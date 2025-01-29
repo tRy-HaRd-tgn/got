@@ -23,7 +23,14 @@ export const Profile = (props) => {
     dispatch({ type: "SET_SKIN", skin: temp });
   };
   const skin = useSelector((state) => state.user.skin); // сохраняем скин в переменную
-
+  useEffect(async () => {
+    const responce2 = await SkinService.getAvatar();
+    setProfilePhoto(API_URL2 + responce2.data);
+    console.log(responce2);
+    const responce3 = await SkinService.getSkin();
+    setSkin(API_URL2 + responce3.data);
+    console.log(responce3);
+  }, []);
   const clickHandler = async (e) => {
     const file = e.target.files[0]; // схватили выбранный файл
     try {
@@ -31,15 +38,9 @@ export const Profile = (props) => {
       console.log(file);
       const formData = new FormData();
       formData.append("skin", file);
-      const responce = await SkinService.uploadSkin(formData); // загружаем скин на бэк
-      //window.location.reload();
+      await SkinService.uploadSkin(formData); // загружаем скин на бэк
 
-      const responce2 = await SkinService.getAvatar();
-      setProfilePhoto(API_URL2 + responce2.data);
-      console.log(responce2);
-      const responce3 = await SkinService.getSkin();
-      setSkin(API_URL2 + responce3.data);
-      console.log(responce3);
+      window.location.reload();
     } catch (e) {
       console.log(e);
     }
