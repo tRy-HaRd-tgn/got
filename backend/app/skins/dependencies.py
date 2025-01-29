@@ -92,7 +92,8 @@ class SkinService:
 
             # Читаем изображение
             img = Image.open(skin.file)
-
+            img.verify()
+            skin.file.seek(0)
             # Проверяем размер изображения
             if (
                 img.size != (64, 64)
