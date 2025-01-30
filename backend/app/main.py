@@ -2,7 +2,7 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import AsyncIterator
 from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import FileResponse, HTMLResponse
 from app.users.router import router as users_router
 from app.posts.router import router as posts_router
 from app.donations.router import router as donations_router
@@ -61,3 +61,9 @@ app.add_middleware(
 # app.add_middleware(HTTPSRedirectMiddleware)
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
+
+
+# add freekassa
+@app.get("/fk-verify.html")
+def serve_fk_verify():
+    return FileResponse("app/static/fk-verify.html")
