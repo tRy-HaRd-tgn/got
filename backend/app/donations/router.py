@@ -241,9 +241,3 @@ async def delete_donation(
         FileService.delete_image(entity_type="donation", entity_id=donation_id)
 
     return {"message": "Донат успешно удален", "id": deleted_donation.id}
-
-
-# add freekassa
-@router.get("/fk-verify.html")
-def serve_fk_verify():
-    return FileResponse("app/static/fk-verify.html")
