@@ -19,18 +19,6 @@ export const Footer = (props) => {
             купить лицензионную версию игры можно  здесь.
           </p>
         </div>
-        <p
-          style={{
-            width: "55%",
-            fontFamily: "pieces-of-eight-cyrillic-aa",
-            fontSize: "30px",
-          }}
-        >
-          developed by{" "}
-          <span style={{ color: "white", cursor: "pointer" }}>
-            <a href="https://t.me/right_wing_it">@RightWingIt</a>
-          </span>
-        </p>
         <div className={styles.wrapperRight}>
           <NavBar />
         </div>
