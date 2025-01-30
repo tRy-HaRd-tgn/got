@@ -77,21 +77,19 @@ class SkinService:
         """
         try:
             # Проверяем формат файла
-            allowed_extensions = {".png"}
-            file_extension = os.path.splitext(skin.filename)[1].lower()
-            if file_extension not in allowed_extensions:
+            if not skin.filename.endswith(".png"):
                 raise HTTPException(
                     status_code=400, detail="Скин должен быть в формате PNG"
                 )
 
-            # Проверяем размер файла (максимум 1 МБ)
+            # Читаем файл в память
             file_content = await skin.read()
             if len(file_content) > 1024 * 1024:
                 raise HTTPException(
                     status_code=400, detail="Размер скина не должен превышать 1 МБ"
                 )
 
-            # Читаем изображение
+            # Открываем изображение из памяти
             img = Image.open(io.BytesIO(file_content))
 
             # Проверяем размер изображения
@@ -101,24 +99,24 @@ class SkinService:
                     detail="Размер скина должен быть 64x64, 128x128 или 256x256 пикселей",
                 )
 
-            # Определяем папку для сохранения
+            # Папка для сохранения
             upload_dir = Path("app/static/skins")
             upload_dir.mkdir(parents=True, exist_ok=True)
 
-            # Формируем путь для скина и аватарки
+            # Пути файлов
             skin_path = upload_dir / f"{username}.png"
             avatar_path = upload_dir / f"{username}_face.png"
 
-            # Удаляем старые файлы, если они существуют
+            # Удаляем старые файлы
             if skin_path.exists():
                 skin_path.unlink()
             if avatar_path.exists():
                 avatar_path.unlink()
 
-            # Сохраняем новый скин
+            # Сохраняем скин
             img.save(skin_path)
 
-            # Создаем аватарку на основе нового скина
+            # Создаем аватарку
             extract_face(skin_path, avatar_path)
 
             return f"/static/skins/{username}.png"
