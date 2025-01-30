@@ -23,21 +23,26 @@ export const Profile = (props) => {
     dispatch({ type: "SET_SKIN", skin: temp });
   };
   const skin = useSelector((state) => state.user.skin); // сохраняем скин в переменную
-
-  const clickHandler = async (e) => {
+  const configureStore = async () => {
+    const responce2 = await SkinService.getAvatar();
+    setProfilePhoto(API_URL2 + responce2.data);
+    console.log(responce2);
+    const responce3 = await SkinService.getSkin();
+    setSkin(API_URL2 + responce3.data);
+    console.log(responce3);
+  };
+  useEffect(() => {
+    configureStore();
+  }, []);
+  const clickHandler = (e) => {
     const file = e.target.files[0]; // схватили выбранный файл
     try {
       setTempPhoto(file); // сохраняем в temp загруженное фото
       console.log(file);
-      const responce = await SkinService.uploadSkin(tempPhoto); // загружаем скин на бэк
-      console.log(responce);
-
-      const responce2 = await SkinService.getAvatar();
-      setProfilePhoto(API_URL2 + responce2.data);
-      console.log(responce2);
-      const responce3 = await SkinService.getSkin();
-      setSkin(API_URL2 + responce3.data);
-      console.log(responce3);
+      const formData = new FormData();
+      formData.append("skin", file);
+      SkinService.uploadSkin(formData); // загружаем скин на бэк
+      window.location.reload();
     } catch (e) {
       console.log(e);
     }
@@ -96,7 +101,7 @@ export const Profile = (props) => {
         <h1 style={{ fontSize: "70px" }}>Личный кабинет</h1>
         <div className={styles.menu}>
           <div className={styles.menuSkin}>
-            <img className={styles.menuSkinImg} src={skin} alt="error" /> 
+            <img className={styles.menuSkinImg} src={skin} alt="error" />
             <img className={styles.menuSkinImg} src={skin} alt="error" />
           </div>
           <div className={styles.menuRight}>

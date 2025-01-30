@@ -58,6 +58,8 @@ export const LogForm = ({ setState, state }) => {
       navigator("/main");
     } catch (e) {
       setError(true);
+      setPassword("");
+      setLogin("");
       console.log(e.responce?.detail?.msg);
     }
   };

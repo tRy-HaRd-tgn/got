@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { API_URL2 } from "../http";
 import SkinService from "../services/SkinService";
 export const AppRouter = () => {
+  const router = useNavigate();
   const navigator = useNavigate();
   const auth = useSelector((state) => state.auth.isAuth);
   const dispatch = useDispatch();
@@ -50,6 +51,16 @@ export const AppRouter = () => {
       setAuth(true);
       configureStore();
     } catch (e) {
+      try {
+        const responce = await UserService.logout();
+        console.log(responce);
+        localStorage.removeItem("token");
+        setAuth(false);
+        router("/main");
+        location.reload();
+      } catch (e) {
+        console.log(e.responce?.data?.message);
+      }
       console.log(e.responce?.data?.message);
     }
   };
