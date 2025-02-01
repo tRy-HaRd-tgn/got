@@ -61,9 +61,3 @@ app.add_middleware(
 # app.add_middleware(HTTPSRedirectMiddleware)
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
-
-
-# add freekassa
-@app.get("/fk-verify.html")
-def serve_fk_verify():
-    return FileResponse("app/static/fk-verify.html")
