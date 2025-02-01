@@ -1,8 +1,6 @@
 import styles from "./styles.module.scss";
 import { NavBar } from "../navBar";
-import { useNavigate } from "react-router-dom";
-export const Footer = (props) => {
-  const navigator = useNavigate();
+export const Footer = () => {
   return (
     <footer className={styles.footer}>
       <div className={styles.wrapper}>

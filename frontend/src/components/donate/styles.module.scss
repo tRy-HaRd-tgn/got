@@ -5,21 +5,17 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-
   margin-top: 5%;
-
   margin-right: 1.2%;
   margin-left: 1.2%;
   border-radius: 24px;
 }
-
 .priceP {
   font-family: "pieces-of-eight-cyrillic-aa";
   font-style: normal;
   font-weight: 400;
   font-size: 32px;
   line-height: 32px;
-  /* identical to box height */
   margin: 0;
   color: #cccccc;
 }
@@ -79,7 +75,6 @@
   align-items: center;
   justify-content: space-between;
 }
-
 .p {
   color: white;
   font-size: 48px;

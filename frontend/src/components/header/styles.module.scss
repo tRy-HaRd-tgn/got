@@ -1,6 +1,6 @@
 .header {
   position: absolute;
-  height: 12%;
+  height: 15%;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -9,9 +9,10 @@
   z-index: 999;
 }
 .container {
+  
   padding-left: 5%;
   padding-right: 5%;
-  height: 70%;
+  height: auto;
   width: 80%;
   background: rgba(10, 4, 4, 0.822);
 

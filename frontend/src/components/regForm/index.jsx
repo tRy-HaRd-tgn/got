@@ -1,11 +1,9 @@
 import styles from "./styles.module.scss";
 import { useState } from "react";
 import UserService from "../../services/UserService";
-import { useNavigate } from "react-router-dom";
 export const RegForm = ({ setState, state }) => {
   const [error, setError] = useState();
   const [success, setSuccess] = useState("");
-  const router = useNavigate();
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");

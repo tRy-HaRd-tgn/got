@@ -6,14 +6,13 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { API_URL2 } from "../../http";
 import SkinService from "../../services/SkinService";
-export const Profile = (props) => {
+export const Profile = () => {
   const dispatch = useDispatch();
   const [modal, setModal] = useState(false);
   const nickname = useSelector((state) => state.user.nickname);
   const email = useSelector((state) => state.user.email);
   const donate = useSelector((state) => state.user.donate);
   const regDate = useSelector((state) => state.user.regDate);
-  const [tempPhoto, setTempPhoto] = useState("");
   const [promo, setPromo] = useState();
   const [currency, setCurrency] = useState();
   const setProfilePhoto = (temp) => {
@@ -37,8 +36,6 @@ export const Profile = (props) => {
   const clickHandler = (e) => {
     const file = e.target.files[0]; // схватили выбранный файл
     try {
-      setTempPhoto(file); // сохраняем в temp загруженное фото
-      console.log(file);
       const formData = new FormData();
       formData.append("skin", file);
       SkinService.uploadSkin(formData); // загружаем скин на бэк

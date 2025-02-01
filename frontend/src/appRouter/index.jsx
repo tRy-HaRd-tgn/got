@@ -1,10 +1,9 @@
-import { useSelector } from "react-redux";
 import { privateRoutes, publicRoutes } from "../router";
-import { Routes, Route } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
 import { useEffect } from "react";
 import UserService from "../services/UserService";
-import { useNavigate } from "react-router-dom";
 import { API_URL2 } from "../http";
 import SkinService from "../services/SkinService";
 export const AppRouter = () => {

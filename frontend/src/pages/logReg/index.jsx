@@ -2,7 +2,7 @@ import styles from "./styles.module.scss";
 import { Header, Footer,LogForm, RegForm } from "../../components";
 import { vector } from "../../imgs";
 import { useState } from "react";
-export const LogReg = (props) => {
+export const LogReg = () => {
   const [state, setState] = useState(false);
   return (
     <main className={styles.main}>

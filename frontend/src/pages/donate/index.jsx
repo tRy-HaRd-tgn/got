@@ -1,12 +1,9 @@
 import styles from "./styles.module.scss";
-import { Header, Footer } from "../../components";
+import { Header, Footer,DonateComp } from "../../components";
 import { vector } from "../../imgs";
-import { useState } from "react";
-import { DonateComp } from "../../components";
-import { useEffect } from "react";
+import { useState,useEffect } from "react";
 import DonationService from "../../services/DonationService";
-
-export const Donate = (props) => {
+export const Donate = () => {
   const [choise, setChoise] = useState("privileges");
   const [priviligies, setPriviligies] = useState([]);
   const [pets, setPets] = useState([]);
@@ -43,7 +40,6 @@ export const Donate = (props) => {
       console.log(e?.responce?.data?.message);
     }
   }, []);
-
   const func1 = (choise) => {
     console.log(priviligies);
     if (choise == "privileges") {
@@ -60,7 +56,6 @@ export const Donate = (props) => {
       ));
     }
   };
-
   const func2 = (choise) => {
     if (choise == "pets") {
       console.log(pets);

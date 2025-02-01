@@ -1,14 +1,10 @@
 import styles from "./styles.module.scss";
-import { Header, Footer } from "../../components";
-import { vector } from "../../imgs";
+import { Header, Footer,News } from "../../components";
 import { useEffect } from "react";
-import { News } from "../../components";
 import PostService from "../../services/PostService";
 import { useSelector, useDispatch } from "react-redux";
-import { news } from "../../imgs";
-import { rectangles } from "../../imgs";
-
-export const Blog = (props) => {
+import { news,rectangles,vector } from "../../imgs";
+export const Blog = () => {
   const dispatch = useDispatch();
   const setNews = (news) => {
     dispatch({ type: "SET_NEWS", news: news });

@@ -1,9 +1,7 @@
 import styles from "./styles.module.scss";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState,useEffect } from "react";
 import { API_URL2 } from "../../http";
 import { ModalIcon } from "../modalIcon";
-import SkinService from "../../services/SkinService";
 export const DonateComp = ({ id, description, price, img, color, text }) => {
   function hexToDec(hex) {
     return parseInt(hex, 16);
@@ -13,7 +11,7 @@ export const DonateComp = ({ id, description, price, img, color, text }) => {
   const [gg, setGg] = useState();
   const [bb, setBb] = useState();
   const [image, setImage] = useState(null);
-  const [promo, setPromo] = useState(); // сохранение введенного промокода
+  const [promo, setPromo] = useState();
   useEffect(() => {
     setImage(API_URL2 + img);
     setRr(hexToDec(color[1] + color[2]));
@@ -21,10 +19,8 @@ export const DonateComp = ({ id, description, price, img, color, text }) => {
     setBb(hexToDec(color[5] + color[6]));
   }, []);
   function clickHandler() {
-    // покупка доната
     console.log("покупка доната");
     console.log(id);
-    //responce = SkinService.buyDonate();
   }
   return (
     <>
