@@ -49,7 +49,7 @@ export const Blog = (props) => {
       <img src={vector} alt="" className={styles.devider} />
       <div className={styles.project}>
         <img
-          style={{ zIndex: 999 }}
+          style={{ zIndex: 99 }}
           className={styles.img}
           src={rectangles}
           alt=""
