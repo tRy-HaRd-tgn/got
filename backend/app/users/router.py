@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, Response
+from fastapi.responses import FileResponse
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from app.mailer.mailer import generate_confirmation_token, send_confirmation_email
 from app.users.dao import UsersDAO
