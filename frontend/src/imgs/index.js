@@ -14,6 +14,7 @@ import user from "./newsIcons/user.png";
 import calendar from "./newsIcons/calendar.png";
 import gold from "./donatIcons/gold.png";
 import X from "./otherIcons/x.png";
+import rectangles from "./backgrounds/rectangles.png";
 export {
   X,
   header,
@@ -28,6 +29,7 @@ export {
   donate,
   profile,
   newsComp,
+  rectangles,
   user,
   calendar,
   gold,
