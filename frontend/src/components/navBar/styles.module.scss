@@ -19,3 +19,7 @@
 .li:not(:last-child) {
   padding-right: 5%;
 }
+.img:hover {
+  filter: invert(17%) sepia(20%) saturate(6431%) hue-rotate(189deg)
+    brightness(87%) contrast(97%);
+}
