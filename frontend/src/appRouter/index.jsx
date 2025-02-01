@@ -1,7 +1,6 @@
 import { privateRoutes, publicRoutes } from "../router";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-
 import { useEffect } from "react";
 import UserService from "../services/UserService";
 import { API_URL2 } from "../http";

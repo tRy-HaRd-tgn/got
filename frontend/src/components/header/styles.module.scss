@@ -1,6 +1,6 @@
 .header {
   position: absolute;
-  height: 15%;
+  height: 12%;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -9,13 +9,11 @@
   z-index: 999;
 }
 .container {
-  
   padding-left: 5%;
   padding-right: 5%;
-  height: auto;
+  height: 70%;
   width: 80%;
   background: rgba(10, 4, 4, 0.822);
-
   border-radius: 32px;
   display: flex;
   align-items: center;
@@ -38,9 +36,6 @@
 .menuP:hover {
   color: white;
 }
-.menuP:not(:last-child) {
-}
-
 .authBtn {
   font-family: "Game of Thrones KG";
   padding-left: 1.5%;
@@ -58,14 +53,11 @@
 }
 .userInfoP {
   margin: 0;
-
   font-family: "pieces-of-eight-cyrillic-aa";
   font-style: normal;
   font-weight: 400;
   font-size: 20px;
   line-height: 20px;
-  /* identical to box height */
-
   color: #606060;
 }
 .userInfo {
