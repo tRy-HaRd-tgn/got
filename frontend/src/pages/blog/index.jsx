@@ -5,6 +5,8 @@ import { useEffect } from "react";
 import { News } from "../../components";
 import PostService from "../../services/PostService";
 import { useSelector, useDispatch } from "react-redux";
+import { news } from "../../imgs";
+import { rectangles } from "../../imgs";
 
 export const Blog = (props) => {
   const dispatch = useDispatch();
@@ -27,6 +29,7 @@ export const Blog = (props) => {
     <main className={styles.main}>
       <Header />
       <div className={styles.description}>
+        <img className={styles.img} src={news} alt="error" />
         <h1 style={{ marginTop: "20vh" }}>новости проекта</h1>
       </div>
       <div className={styles.newsWrapper}>
@@ -44,8 +47,14 @@ export const Blog = (props) => {
         ))}
       </div>
       <img src={vector} alt="" className={styles.devider} />
-
-      <div className={styles.project}></div>
+      <div className={styles.project}>
+        <img
+          style={{ zIndex: 999 }}
+          className={styles.img}
+          src={rectangles}
+          alt=""
+        />
+      </div>
       <Footer />
     </main>
   );

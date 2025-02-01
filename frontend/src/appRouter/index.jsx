@@ -73,7 +73,8 @@ export const AppRouter = () => {
       !href.includes("blog") &&
       !href.includes("letsPlay") &&
       !href.includes("logReg") &&
-      !href.includes("profile")
+      !href.includes("profile") &&
+      !href.includes("fk-verify.html")
     ) {
       navigator("/main");
       setChoise("главная");

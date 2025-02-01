@@ -5,13 +5,21 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  border-left: 8px solid #0e0e0e;
+  border-right: 8px solid #0e0e0e;
+}
+.img {
+  height: 100%;
+  width: 100.9%;
+  object-fit: cover;
+  position: absolute;
+  z-index: -1;
 }
 .description {
   position: relative;
   background-position: center;
-  background-image: url("../../imgs/backgrounds/news.png");
+
   background-repeat: no-repeat;
-  background-size: 101% 102vh;
   height: 100vh;
   width: 100%;
   display: flex;
@@ -28,6 +36,7 @@ h1 {
   color: #ffffff;
   text-shadow: 0px 0px 1303.28px #ffffff, 0px 0px 383.88px #ffffff,
     0px 0px 109.68px #ffffff, 0px 0px 54.84px #ffffff;
+  margin-bottom: 0px;
 }
 .newsWrapper::-webkit-scrollbar {
   width: 0;
@@ -47,10 +56,9 @@ h1 {
 
   background-position: center;
   background-color: rgb(17, 17, 17);
-  background-image: url("../../imgs/backgrounds/rectangles.png");
+  
 
   background-repeat: no-repeat;
-  background-size: 101% 102vh;
   height: 100vh;
   width: 100%;
   margin: 0;
@@ -72,7 +80,7 @@ h1 {
 .devider {
   position: absolute;
   width: 100%;
-  top: calc(100vh - 69px);
+  top: calc(100vh - 73px);
 }
 .descriptionBtn {
   background: #181f37;
