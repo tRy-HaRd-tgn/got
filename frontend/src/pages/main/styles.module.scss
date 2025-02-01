@@ -12,8 +12,8 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  border-left: 8px solid #0e0e0e; 
-  border-right: 8px solid #0e0e0e;
+  border-left: 8px solid #111111;
+  border-right: 8px solid #111111;
 }
 .description {
   height: 100vh;
@@ -60,7 +60,7 @@ h1 {
 .devider {
   position: absolute;
   width: 100%;
-  top: calc(100vh - 73px);
+  top: calc(100vh - (73px / 2));
 }
 .descriptionBtn {
   background: #181f37;
