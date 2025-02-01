@@ -5,6 +5,8 @@ import { vector } from "../../imgs";
 import { Swiper } from "swiper/react";
 import { useNavigate } from "react-router-dom";
 import { data, data2 } from "./data";
+import { header } from "../../imgs";
+import { about } from "../../imgs";
 import "swiper/css";
 import { useState } from "react";
 export const Main = () => {
@@ -15,6 +17,7 @@ export const Main = () => {
     <main className={styles.main}>
       <Header />
       <div className={styles.description}>
+        <img className={styles.img} src={header} alt="" />
         <h1>TORTUGA GOT</h1>
         <p className={styles.descriptionP}>{data2.text}</p>
         <button
@@ -26,6 +29,7 @@ export const Main = () => {
       </div>
       <img src={vector} alt="" className={styles.devider} />
       <div className={styles.project}>
+        <img className={styles.img} src={about} alt="" />
         <h3 style={{ marginBottom: "0px", marginTop: "5%" }}>Обзор проекта</h3>
         <div className={styles.videoWrapper}>
           <Swiper

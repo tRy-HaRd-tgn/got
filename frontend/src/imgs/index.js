@@ -2,6 +2,7 @@ import vk from "./navBar/vk.svg";
 import ds from "./navBar/ds.svg";
 import yt from "./navBar/yt.svg";
 import tg from "./navBar/tg.svg";
+import header from "./backgrounds/header.png";
 import vector from "./backgrounds/vector.svg";
 import about from "./backgrounds/about.png";
 import news from "./backgrounds/news.png";
@@ -15,6 +16,7 @@ import gold from "./donatIcons/gold.png";
 import X from "./otherIcons/x.png";
 export {
   X,
+  header,
   vk,
   ds,
   yt,
