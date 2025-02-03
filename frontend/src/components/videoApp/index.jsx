@@ -1,5 +1,4 @@
 import { SwiperSlide } from "swiper/react";
-
 import "swiper/css";
 export const Video = ({ value }) => {
   return (

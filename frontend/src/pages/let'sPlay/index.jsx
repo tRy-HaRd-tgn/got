@@ -1,10 +1,8 @@
 import styles from "./styles.module.scss";
-import { Header, Footer } from "../../components";
-import { vector } from "../../imgs";
-import { StartGame } from "../../components";
-import { sandCastle } from "../../imgs";
+import { Header, Footer, StartGame } from "../../components";
+import { vector, sandCastle } from "../../imgs";
 import data from "./data";
-export const LetsPlay = (props) => {
+export const LetsPlay = () => {
   return (
     <main className={styles.main}>
       <Header />

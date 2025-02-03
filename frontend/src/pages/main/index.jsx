@@ -1,12 +1,10 @@
 import styles from "./styles.module.scss";
 import React from "react";
 import { Header, Footer, Video, ProgressBar } from "../../components";
-import { vector } from "../../imgs";
 import { Swiper } from "swiper/react";
 import { useNavigate } from "react-router-dom";
 import { data, data2 } from "./data";
-import { header } from "../../imgs";
-import { about } from "../../imgs";
+import { header, about, vector } from "../../imgs";
 import "swiper/css";
 import { useState } from "react";
 export const Main = () => {
