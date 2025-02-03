@@ -10,24 +10,17 @@ BASE_FONT = "arial.ttf"  # Шрифт для базового изображен
 
 def extract_face(skin_path: Path, avatar_path: Path):
     """
-    Извлекает аватарку (лицо) из скина и сохраняет её.
+    Извлекает лицо из скина и сохраняет его.
+    В данном варианте лицо не масштабируется – оно будет отображаться в исходном разрешении.
     :param skin_path: Путь к файлу скина.
     :param avatar_path: Путь для сохранения аватарки.
     """
     try:
-        # Открываем скин
         skin = Image.open(skin_path)
-
-        # Извлекаем область лица (пример для скинов Minecraft)
-        face = skin.crop((8, 8, 16, 16))  # Координаты области лица
-        face = face.resize((64, 64), Image.BICUBIC)  # Увеличиваем до 64x64
-
-        # Сохраняем аватарку
+        # Извлекаем область лица: координаты (8, 8, 16, 16)
+        face = skin.crop((8, 8, 16, 16))
         face.save(avatar_path)
-
-        # Логируем успешное извлечение
         print(f"Аватарка сохранена: {avatar_path}")
-
     except Exception as e:
         raise HTTPException(
             status_code=500, detail=f"Ошибка при извлечении аватарки: {str(e)}"
