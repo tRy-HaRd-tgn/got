@@ -24,10 +24,10 @@ export const Profile = () => {
   const skin = useSelector((state) => state.user.skin); // сохраняем скин в переменную
   const configureStore = async () => {
     const responce2 = await SkinService.getAvatar();
-    setProfilePhoto(API_URL2 + responce2.data);
+    setProfilePhoto(API_URL2 + "/" + responce2.data);
     console.log(responce2);
     const responce3 = await SkinService.getSkin();
-    setSkin(API_URL2 + responce3.data);
+    setSkin(API_URL2 + "/" + responce3.data);
     console.log(responce3);
   };
   useEffect(() => {

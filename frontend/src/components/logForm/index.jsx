@@ -39,10 +39,10 @@ export const LogForm = ({ setState, state }) => {
     setRegDate(responce.data.created_at.split("T")[0]);
     setEmail(responce.data.email);
     const responce2 = await SkinService.getAvatar();
-    setProfilePhoto(API_URL2 + responce2.data);
+    setProfilePhoto(API_URL2 + "/" + responce2.data);
     console.log(responce2.data);
     const responce3 = await SkinService.getSkin();
-    setSkin(API_URL2 + responce3.data);
+    setSkin(API_URL2 + "/" + responce3.data);
     console.log(responce3.data);
   };
   const logSubmit = async (e) => {
