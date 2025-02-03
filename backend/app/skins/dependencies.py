@@ -88,11 +88,11 @@ class SkinService:
             img = Image.open(io.BytesIO(file_content))
 
             # Проверяем размер изображения
-            if img.size not in [(64, 64), (128, 128), (256, 256)]:
-                raise HTTPException(
-                    status_code=400,
-                    detail="Размер скина должен быть 64x64, 128x128 или 256x256 пикселей",
-                )
+            # if img.size not in [(64, 64), (128, 128), (256, 256)]:
+            #     raise HTTPException(
+            #         status_code=400,
+            #         detail="Размер скина должен быть 64x64, 128x128 или 256x256 пикселей",
+            #     )
 
             # Папка для сохранения
             upload_dir = Path("app/static/skins")
