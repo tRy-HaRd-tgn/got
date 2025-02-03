@@ -1,8 +1,8 @@
 import styles from "./styles.module.scss";
-import { Header, Footer } from "../../components";
+import ReactSkinview3d from "react-skinview3d";
+import { Header, Footer, ModalIcon } from "../../components";
 import { vector, X } from "../../imgs";
-import { ModalIcon } from "../../components";
-import { useEffect, useState } from "react";
+import { useEffect, useState, React } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { API_URL2 } from "../../http";
 import SkinService from "../../services/SkinService";
@@ -22,13 +22,12 @@ export const Profile = () => {
     dispatch({ type: "SET_SKIN", skin: temp });
   };
   const skin = useSelector((state) => state.user.skin); // сохраняем скин в переменную
+  console.log(skin);
   const configureStore = async () => {
     const responce2 = await SkinService.getAvatar();
     setProfilePhoto(API_URL2 + "/" + responce2.data);
-    console.log(responce2);
     const responce3 = await SkinService.getSkin();
     setSkin(API_URL2 + "/" + responce3.data);
-    console.log(responce3);
   };
   useEffect(() => {
     configureStore();
@@ -98,8 +97,12 @@ export const Profile = () => {
         <h1 style={{ fontSize: "70px" }}>Личный кабинет</h1>
         <div className={styles.menu}>
           <div className={styles.menuSkin}>
-            <img className={styles.menuSkinImg} src={skin} alt="error" />
-            <img className={styles.menuSkinImg} src={skin} alt="error" />
+            <ReactSkinview3d
+              height={300}
+              width={150}
+              skinUrl="https://ru-minecraft.ru/uploads/posts/2020-08/1596352143_2020-07-30-redfire-modded-skin-14938998-13240081.png"
+            />
+            <img src={skin} alt="error" />
           </div>
           <div className={styles.menuRight}>
             <div className={styles.menuRightTop}>
