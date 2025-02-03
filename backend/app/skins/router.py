@@ -26,7 +26,7 @@ async def upload_skin(
     try:
         # Сохраняем скин на сервере
         skin_url = await SkinService.upload_skin(current_user.login, skin)
-        avatar_url = f"/static/skins/{current_user.login}_face.png"
+        avatar_url = skin_url.replace(".png", "_face.png")
         # Обновляем URL скина и аватарки в профиле пользователя
         await UsersDAO.update(current_user.id, skin_url=skin_url, avatar_url=avatar_url)
 
@@ -44,57 +44,60 @@ async def upload_skin(
 
 
 @router.get("/get-skin")
-async def get_skin(current_user: User = Depends(get_current_user)):
+async def get_skin(current_user: "User" = Depends(get_current_user)):
     """
-    Возвращает скин текущего пользователя с отключенным кешированием.
+    Отдаёт актуальный скин пользователя.
+    Если файл скина не найден, возвращается базовый скин.
     """
-    # Путь к скину пользователя
-    skin_path = Path(f"app/static/skins/{current_user.login}.png")
+    upload_dir = Path("app/static/skins")
+    # Ищем файлы вида username_<timestamp>.png (без подстроки "face")
+    skin_files = [
+        f
+        for f in upload_dir.glob(f"{current_user.login}_*.png")
+        if "face" not in f.name
+    ]
 
-    if not skin_path.exists():
+    if not skin_files:
         base_skin_path = Path("app/static/skins/steve.png")
         if not base_skin_path.exists():
             raise HTTPException(status_code=404, detail="Базовый скин не найден")
-        base_skin_path = Path("/static/skins/steve.png")
         return base_skin_path
 
-    # response = FileResponse(skin_path, media_type="image/png")
-
-    # Отключаем кеширование для скинов (мгновенные обновления)
-    # response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    # response.headers["Pragma"] = "no-cache"
-    # response.headers["Expires"] = "0"
-
-    # response.headers["ETag"] = ""
-    skin_path = Path(f"/static/skins/{current_user.login}.png")
-    return skin_path
+    # Поскольку файлов один, выбираем его (если вдруг их несколько – можно отсортировать по имени)
+    skin_file = sorted(skin_files)[-1]
+    return skin_file
 
 
 @router.get("/get-avatar")
-async def get_avatar(current_user: User = Depends(get_current_user)):
+async def get_avatar(current_user: "User" = Depends(get_current_user)):
     """
-    Возвращает аватарку текущего пользователя.
-    Если аватарка не существует, создает её на основе скина.
-    Если скин не существует, возвращает базовую аватарку.
+    Отдаёт актуальную аватарку (лицо) пользователя.
+    Если аватарка не найдена, пытается создать её из скина.
+    Если и скин отсутствует, возвращает базовую аватарку.
     """
+    upload_dir = Path("app/static/skins")
+    # Ищем файлы аватарки: username_<timestamp>_face.png
+    avatar_files = list(upload_dir.glob(f"{current_user.login}_*_face.png"))
+    if avatar_files:
+        avatar_file = sorted(avatar_files)[-1]
+        return avatar_file
 
-    # Путь к аватарке пользователя
-    avatar_path = Path(f"app/static/skins/{current_user.login}_face.png")
-
-    if avatar_path.exists():
-        avatar_path = Path(f"/static/skins/{current_user.login}_face.png")
-        return avatar_path
-
-    skin_path = Path(f"app/static/skins/{current_user.login}.png")
-    if skin_path.exists():
+    # Если аватарка не найдена, попробуем извлечь её из скина
+    skin_files = [
+        f
+        for f in upload_dir.glob(f"{current_user.login}_*.png")
+        if "face" not in f.name
+    ]
+    if skin_files:
+        skin_path = sorted(skin_files)[-1]
+        # Определяем путь для нового файла аватарки
+        avatar_path = upload_dir / f"{skin_path.stem}_face.png"
         extract_face(skin_path, avatar_path)
-        avatar_path = Path(f"/static/skins/{current_user.login}_face.png")
         return avatar_path
 
+    # Если ни скин, ни аватарка не найдены, отдаем базовую аватарку
     base_avatar_path = Path("app/static/skins/steve_face.png")
     if base_avatar_path.exists():
-        base_avatar_path = Path("/static/skins/steve_face.png")
         return base_avatar_path
 
-    # Если базовая аватарка не найдена, возвращаем ошибку 404
     raise HTTPException(status_code=404, detail="Аватарка не найдена")

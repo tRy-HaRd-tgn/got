@@ -1,5 +1,6 @@
 import io
 import os
+import time
 from fastapi import UploadFile, HTTPException
 from PIL import Image, ImageDraw, ImageFont
 from pathlib import Path
@@ -66,10 +67,11 @@ class SkinService:
     @staticmethod
     async def upload_skin(username: str, skin: UploadFile) -> str:
         """
-        Загружает скин для игрока и создает аватарку на его основе.
+        Загружает скин для игрока и создаёт аватарку (лицо) на его основе.
+        Теперь имя файла включает таймштамп, чтобы URL менялся при каждом обновлении.
         """
         try:
-            # Проверяем формат файла
+            # Проверяем расширение файла
             if not skin.filename.endswith(".png"):
                 raise HTTPException(
                     status_code=400, detail="Скин должен быть в формате PNG"
@@ -82,7 +84,7 @@ class SkinService:
                     status_code=400, detail="Размер скина не должен превышать 1 МБ"
                 )
 
-            # Открываем изображение из памяти
+            # Открываем изображение
             img = Image.open(io.BytesIO(file_content))
 
             # Проверяем размер изображения
@@ -96,23 +98,28 @@ class SkinService:
             upload_dir = Path("app/static/skins")
             upload_dir.mkdir(parents=True, exist_ok=True)
 
-            # Пути файлов
-            skin_path = upload_dir / f"{username}.png"
-            avatar_path = upload_dir / f"{username}_face.png"
+            # Генерируем новое имя файла с таймштампом
+            ts = int(time.time())
+            new_filename = f"{username}_{ts}.png"
+            skin_path = upload_dir / new_filename
 
-            # Удаляем старые файлы
-            if skin_path.exists():
-                skin_path.unlink()
-            if avatar_path.exists():
-                avatar_path.unlink()
+            # Также сформируем имя для аватарки (лицо)
+            avatar_filename = f"{username}_{ts}_face.png"
+            avatar_path = upload_dir / avatar_filename
+
+            # Если старые файлы существуют — можно их удалить.
+            # Например, можно реализовать логику удаления всех файлов с именем username_*.png
+            for file in upload_dir.glob(f"{username}_*.png"):
+                file.unlink()
 
             # Сохраняем скин
             img.save(skin_path)
 
-            # Создаем аватарку
+            # Создаём аватарку (лицо) без масштабирования – фронтенд сам масштабирует
             extract_face(skin_path, avatar_path)
 
-            return f"/static/skins/{username}.png"
+            # Возвращаем URL для доступа (при условии, что /static/skins/ публично доступен)
+            return f"/static/skins/{new_filename}"
 
         except Exception as e:
             raise HTTPException(
