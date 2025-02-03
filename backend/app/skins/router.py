@@ -48,6 +48,7 @@ async def get_skin(current_user: "User" = Depends(get_current_user)):
     """
     Отдаёт актуальный скин пользователя.
     Если файл скина не найден, возвращается базовый скин.
+    URL возвращается относительно корня приложения (без "app/").
     """
     upload_dir = Path("app/static/skins")
     # Ищем файлы вида username_<timestamp>.png (без подстроки "face")
@@ -61,11 +62,11 @@ async def get_skin(current_user: "User" = Depends(get_current_user)):
         base_skin_path = Path("app/static/skins/steve.png")
         if not base_skin_path.exists():
             raise HTTPException(status_code=404, detail="Базовый скин не найден")
-        return base_skin_path
+        return str(base_skin_path.relative_to("app"))
 
-    # Поскольку файлов один, выбираем его (если вдруг их несколько – можно отсортировать по имени)
+    # Выбираем последний (актуальный) файл
     skin_file = sorted(skin_files)[-1]
-    return skin_file
+    return str(skin_file.relative_to("app"))
 
 
 @router.get("/get-avatar")
@@ -74,13 +75,14 @@ async def get_avatar(current_user: "User" = Depends(get_current_user)):
     Отдаёт актуальную аватарку (лицо) пользователя.
     Если аватарка не найдена, пытается создать её из скина.
     Если и скин отсутствует, возвращает базовую аватарку.
+    URL возвращается относительно корня приложения (без "app/").
     """
     upload_dir = Path("app/static/skins")
     # Ищем файлы аватарки: username_<timestamp>_face.png
     avatar_files = list(upload_dir.glob(f"{current_user.login}_*_face.png"))
     if avatar_files:
         avatar_file = sorted(avatar_files)[-1]
-        return avatar_file
+        return str(avatar_file.relative_to("app"))
 
     # Если аватарка не найдена, попробуем извлечь её из скина
     skin_files = [
@@ -93,11 +95,11 @@ async def get_avatar(current_user: "User" = Depends(get_current_user)):
         # Определяем путь для нового файла аватарки
         avatar_path = upload_dir / f"{skin_path.stem}_face.png"
         extract_face(skin_path, avatar_path)
-        return avatar_path
+        return str(avatar_path.relative_to("app"))
 
     # Если ни скин, ни аватарка не найдены, отдаем базовую аватарку
     base_avatar_path = Path("app/static/skins/steve_face.png")
     if base_avatar_path.exists():
-        return base_avatar_path
+        return str(base_avatar_path.relative_to("app"))
 
     raise HTTPException(status_code=404, detail="Аватарка не найдена")
