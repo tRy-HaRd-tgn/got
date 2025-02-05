@@ -15,6 +15,7 @@
     "react-dom": "^18.3.1",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.1.1",
+    "react-skinview3d": "^5.1.0",
     "react-video": "^1.5.3",
     "react-video-js-player": "^1.1.1",
     "redux": "^5.0.1",
