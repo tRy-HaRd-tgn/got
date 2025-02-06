@@ -21,7 +21,7 @@ $api.interceptors.response.use(
       try {
         const response = await AuthService.checkAuth();
         console.log(response);
-        localStorage.setItem("token", response.data.accessToken);
+        localStorage.setItem("token", response.data.access_token);
         return $api.request(originalRequest);
       } catch (e) {
         console.log("НЕ АВТОРИЗОВАН");
