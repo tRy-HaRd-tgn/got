@@ -97,8 +97,12 @@ export const Profile = () => {
         <h1 style={{ fontSize: "70px" }}>Личный кабинет</h1>
         <div className={styles.menu}>
           <div className={styles.menuSkin}>
-            <ReactSkinview3d height={300} width={150} skinUrl={skin} />
-            <img src={skin} alt="error" />
+            <ReactSkinview3d
+              width="500"
+              height="500"
+              className={styles.skin}
+              skinUrl={skin}
+            />
           </div>
           <div className={styles.menuRight}>
             <div className={styles.menuRightTop}>

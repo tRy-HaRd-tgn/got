@@ -20,5 +20,4 @@ export const publicRoutes = [
   { path: "/blog", component: <Blog />, exact: true },
   { path: "/letsPlay", component: <LetsPlay />, exact: true },
   { path: "/logReg", component: <LogReg />, exact: true },
-  { path: "/fk-verify.html", component: <Verify />, exact: true },
 ];
