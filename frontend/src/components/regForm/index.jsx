@@ -51,13 +51,15 @@ export const RegForm = ({ setState, state }) => {
         Добро пожаловать, введите свои данные, чтобы продолжить!
       </h4>
       {focus ? (
-        <p className={styles.error}>Логин не должен содержать цифры</p>
+        <p className={styles.error}>
+          Логин не должен содержать цифры, должен иметь длину от 3 до 12 символов
+        </p>
       ) : (
         <></>
       )}
       <input
         placeholder={"Логин"}
-        title="Логин не должен содержать цифр"
+        title="Логин не должен содержать цифр, должен иметь длину от 3 до 12 символов"
         className={styles.descriptionFormInput}
         type="text"
         value={login}

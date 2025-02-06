@@ -138,7 +138,11 @@ export const Profile = () => {
                 style={{ display: "none" }}
                 onChange={clickHandler}
               />
-              <label className={styles.inputLabel} htmlFor="input_file">
+              <label
+                title="используейте пожалуйста файл 64x64"
+                className={styles.inputLabel}
+                htmlFor="input_file"
+              >
                 Сменить скин
               </label>
               <button
