@@ -6,6 +6,7 @@ import { useEffect, useState, React } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { API_URL2 } from "../../http";
 import SkinService from "../../services/SkinService";
+import PaymentService from "../../services/PamentService";
 export const Profile = () => {
   const dispatch = useDispatch();
   const [modal, setModal] = useState(false);
@@ -13,8 +14,9 @@ export const Profile = () => {
   const email = useSelector((state) => state.user.email);
   const donate = useSelector((state) => state.user.donate);
   const regDate = useSelector((state) => state.user.regDate);
-  const [promo, setPromo] = useState();
-  const [currency, setCurrency] = useState();
+  const [promo, setPromo] = useState('');
+  const [currency, setCurrency] = useState('');
+
   const setProfilePhoto = (temp) => {
     dispatch({ type: "SET_PROFILE_PHOTO", profilePhoto: temp });
   };
@@ -45,6 +47,12 @@ export const Profile = () => {
   };
   function buyDonate() {
     console.log("buy donate");
+    try {
+      const responce = PaymentService.addBalance(currency);
+      console.log(responce);
+    } catch (e) {
+      console.log(e);
+    }
   }
   return (
     <main className={styles.main}>
@@ -55,11 +63,12 @@ export const Profile = () => {
             display: "flex",
             justifyContent: "space-between",
             width: "90%",
+            height: "10%",
           }}
         >
           <h2 className={styles.modalHeader}>Пополнение баланса</h2>
           <img
-            style={{ cursor: "pointer" }}
+            style={{ cursor: "pointer", height: "30%" }}
             onClick={() => setModal(false)}
             src={X}
             alt="error"
