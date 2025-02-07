@@ -7,11 +7,14 @@ import vector from "./backgrounds/vector.svg";
 import about from "./backgrounds/about.png";
 import news from "./backgrounds/news.png";
 import sandCastle from "./backgrounds/sandCastle.png";
-import donate from "./backgrounds/donate.png";
 import user from "./newsIcons/user.png";
 import calendar from "./newsIcons/calendar.png";
 import X from "./otherIcons/x.png";
 import rectangles from "./backgrounds/rectangles.png";
+import prev from "./backgrounds/prev.png";
+import donate from "./backgrounds/donate.png";
+import mount from "./backgrounds/mounts.png";
+import other from "./backgrounds/other.png";
 export {
   X,
   header,
@@ -27,4 +30,7 @@ export {
   rectangles,
   user,
   calendar,
+  prev,
+  mount,
+  other,
 };
