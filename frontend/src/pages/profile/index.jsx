@@ -97,8 +97,12 @@ export const Profile = () => {
         <h1 style={{ fontSize: "70px" }}>Личный кабинет</h1>
         <div className={styles.menu}>
           <div className={styles.menuSkin}>
-            <ReactSkinview3d height={300} width={150} skinUrl={skin} />
-            <img src={skin} alt="error" />
+            <ReactSkinview3d
+              width="500"
+              height="500"
+              className={styles.skin}
+              skinUrl={skin}
+            />
           </div>
           <div className={styles.menuRight}>
             <div className={styles.menuRightTop}>
@@ -134,7 +138,11 @@ export const Profile = () => {
                 style={{ display: "none" }}
                 onChange={clickHandler}
               />
-              <label className={styles.inputLabel} htmlFor="input_file">
+              <label
+                title="используейте пожалуйста файл 64x64"
+                className={styles.inputLabel}
+                htmlFor="input_file"
+              >
                 Сменить скин
               </label>
               <button

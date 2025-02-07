@@ -49,16 +49,6 @@ export const AppRouter = () => {
       setAuth(true);
       configureStore();
     } catch (e) {
-      try {
-        const responce = await UserService.logout();
-        console.log(responce);
-        localStorage.removeItem("token");
-        setAuth(false);
-        router("/main");
-        location.reload();
-      } catch (e) {
-        console.log(e.responce?.data?.message);
-      }
       console.log(e.responce?.data?.message);
     }
   };
@@ -72,7 +62,8 @@ export const AppRouter = () => {
       !href.includes("letsPlay") &&
       !href.includes("logReg") &&
       !href.includes("profile") &&
-      !href.includes("fk-verify.html")
+      !href.includes("aproved") &&
+      !href.includes("cancelled")
     ) {
       navigator("/main");
       setChoise("главная");
