@@ -7,6 +7,7 @@ from app.dao.base import BaseDAO
 from app.models import PaymentHistory
 from app.database import async_session_maker
 
+
 class PaymentsDAO(BaseDAO):
     model = PaymentHistory
 
@@ -15,18 +16,18 @@ class PaymentsDAO(BaseDAO):
         cls,
         user_id: int,
         amount: float,
+        order_id: str,  # добавляем параметр order_id
         status: str = "pending",
     ) -> PaymentHistory:
         """
-        Создает новую запись платежа с уникальным transaction_id (order_id),
+        Создает новую запись платежа с переданным order_id,
         сохраняет платеж в базе данных и возвращает созданный объект.
         """
         async with async_session_maker() as session:
             try:
-                transaction_id = str(uuid.uuid4())  # Генерируем уникальный order_id
                 payment = PaymentHistory(
                     user_id=user_id,
-                    transaction_id=transaction_id,
+                    transaction_id=order_id,  # используем переданный order_id
                     amount=amount,
                     status=status,
                     created_at=datetime.utcnow(),
@@ -82,7 +83,9 @@ class PaymentsDAO(BaseDAO):
             return result.scalar_one_or_none()
 
     @classmethod
-    async def update_status(cls, order_id: str, new_status: str) -> Optional[PaymentHistory]:
+    async def update_status(
+        cls, order_id: str, new_status: str
+    ) -> Optional[PaymentHistory]:
         """
         Обновляет статус платежа, найденного по order_id.
         Можно расширить логику обновления, добавив сохранение дополнительных данных,
