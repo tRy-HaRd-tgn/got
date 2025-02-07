@@ -8,6 +8,7 @@ from app.posts.router import router as posts_router
 from app.donations.router import router as donations_router
 from app.mailer.router import router as mailer_router
 from app.skins.router import router as skins_router
+from app.payments.router import router as payments_router
 from app.config import settings
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
@@ -35,6 +36,7 @@ app.include_router(posts_router, prefix="/api")
 app.include_router(donations_router, prefix="/api")
 app.include_router(mailer_router, prefix="/api")
 app.include_router(skins_router, prefix="/api")
+app.include_router(payments_router, prefix="/api")
 
 origins = [
     "http://localhost.tiangolo.com",
