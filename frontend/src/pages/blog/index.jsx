@@ -1,9 +1,9 @@
 import styles from "./styles.module.scss";
-import { Header, Footer,News } from "../../components";
+import { Header, Footer, News } from "../../components";
 import { useEffect } from "react";
 import PostService from "../../services/PostService";
 import { useSelector, useDispatch } from "react-redux";
-import { news,rectangles,vector } from "../../imgs";
+import { news, rectangles, vector } from "../../imgs";
 export const Blog = () => {
   const dispatch = useDispatch();
   const setNews = (news) => {

@@ -3,6 +3,7 @@ import { Header, Footer,DonateComp } from "../../components";
 import { vector } from "../../imgs";
 import { useState,useEffect } from "react";
 import DonationService from "../../services/DonationService";
+import { prev, mount, other as others, donate } from "../../imgs/";
 export const Donate = () => {
   const [choise, setChoise] = useState("privileges");
   const [priviligies, setPriviligies] = useState([]);
@@ -107,16 +108,16 @@ export const Donate = () => {
   const checkBackground = (choise) => {
     switch (choise) {
       case "privileges": {
-        return styles.privileges;
+        return prev;
       }
       case "pets": {
-        return styles.pets;
+        return donate;
       }
       case "mounts": {
-        return styles.mounts;
+        return mount;
       }
       case "other": {
-        return styles.other;
+        return others;
       }
     }
   };
@@ -125,6 +126,7 @@ export const Donate = () => {
       <main className={styles.main}>
         <Header />
         <div className={styles.description + " " + checkBackground(choise)}>
+          <img className={styles.img} src={checkBackground(choise)} alt="error" />
           <h1 className={styles.h1}>донат магазин</h1>
           <div className={styles.descriptionDiv}>
             <button
