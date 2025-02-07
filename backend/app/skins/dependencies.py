@@ -9,17 +9,37 @@ UPLOAD_DIR = "app/static/skins"  # Папка для загрузки скино
 BASE_FONT = "arial.ttf"  # Шрифт для базового изображения
 
 
-def extract_face(skin_path: Path, avatar_path: Path):
+def extract_face(skin_path: Path, avatar_path: Path, side: str = "front"):
     """
-    Извлекает лицо из скина и сохраняет его.
-    В данном варианте лицо не масштабируется – оно будет отображаться в исходном разрешении.
+    Извлекает лицо из скина с учётом его разрешения.
+
+    По умолчанию извлекается передняя часть головы, то есть берётся квадрат с координатами:
+      - левый верхний угол: (skin.width/8, skin.width/8)
+      - правый нижний угол: (skin.width/4, skin.width/4)
+
+    Для задней части (side="back") берётся квадрат с координатами:
+      - левый верхний угол: (3*skin.width/8, skin.width/8)
+      - правый нижний угол: (skin.width/2, skin.width/4)
+
     :param skin_path: Путь к файлу скина.
     :param avatar_path: Путь для сохранения аватарки.
+    :param side: "front" для передней части (по умолчанию) или "back" для задней.
     """
     try:
         skin = Image.open(skin_path)
-        # Извлекаем область лица: координаты (8, 8, 16, 16)
-        face = skin.crop((8, 8, 16, 16))
+        # Определяем «блок» как 1/8 от ширины скина (при стандартном скине 64 пикселя → 8 пикселей)
+        block = int(skin.width / 8)
+
+        if side == "front":
+            # Переднее лицо: область (block, block, 2*block, 2*block)
+            coords = (block, block, block * 2, block * 2)
+        elif side == "back":
+            # Заднее лицо: область (3*block, block, 4*block, 2*block)
+            coords = (block * 3, block, block * 4, block * 2)
+        else:
+            raise ValueError("Параметр side должен быть 'front' или 'back'")
+
+        face = skin.crop(coords)
         face.save(avatar_path)
         print(f"Аватарка сохранена: {avatar_path}")
     except Exception as e:
