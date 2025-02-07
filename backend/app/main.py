@@ -67,9 +67,3 @@ app.mount("/static", StaticFiles(directory="app/static"), name="static")
 @app.get("/fk-verify")
 def serve_fk_verify():
     return FileResponse("app/static/html/fk-verify.html")
-
-
-# add new payment system
-@app.get("/enot-verify")
-def serve_enot_verify():
-    return FileResponse("app/static/html/enot_5f57169d.html")
