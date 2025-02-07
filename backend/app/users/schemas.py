@@ -6,32 +6,43 @@ from pydantic import BaseModel, EmailStr, validator
 from fastapi import HTTPException
 
 
+import re
+from pydantic import BaseModel, EmailStr, field_validator
+from fastapi import HTTPException
+
+
 class UserRegister(BaseModel):
     login: str
     email: EmailStr
     password: str
 
-    @validator("login")
-    def validate_login(cls, value):
+    @field_validator("login")
+    @classmethod
+    def validate_login(cls, value: str) -> str:
         login_regex = r"^[a-zA-Z_]{3,12}$"
         if not re.match(login_regex, value):
             raise HTTPException(
                 status_code=400,
-                detail="Логин должен быть длиной от 3 до 12 символов, содержать только буквы и символ '_', "
-                "цифры и пробелы запрещены.",
+                detail=(
+                    "Логин должен быть длиной от 3 до 12 символов, содержать только буквы и символ '_', "
+                    "цифры и пробелы запрещены."
+                ),
             )
         return value
 
-    @validator("password")
-    def validate_password(cls, value):
+    @field_validator("password")
+    @classmethod
+    def validate_password(cls, value: str) -> str:
         password_regex = (
             r"^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&\.])[A-Za-z\d@$!%*?&\.]{8,}$"
         )
         if not re.match(password_regex, value):
             raise HTTPException(
                 status_code=400,
-                detail="Пароль должен быть длиной от 8 символов, содержать хотя бы одну букву, одну цифру "
-                "и один из специальных символов: @$!%*?&.",
+                detail=(
+                    "Пароль должен быть длиной от 8 символов, содержать хотя бы одну букву, одну цифру "
+                    "и один из специальных символов: @$!%*?&."
+                ),
             )
         return value
 
