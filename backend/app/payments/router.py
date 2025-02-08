@@ -12,6 +12,7 @@ from typing import Optional
 router = APIRouter(prefix="/payments", tags=["Payments"])
 
 FREKASSA_URL = "https://pay.fk.money/"
+ALLOWED_IPS = {"168.119.157.136", "168.119.60.227", "178.154.197.79", "51.250.54.238"}
 
 
 def generate_signature(amount: float, order_id: str, currency: str = "RUB") -> str:
@@ -71,15 +72,12 @@ async def topup_balance(
     }
 
 
-# ALLOWED_IPS = {"168.119.157.136", "168.119.60.227", "178.154.197.79", "51.250.54.238"}
-
-
 @router.api_route("/freekassa-callback", methods=["GET", "POST"])
 async def freekassa_callback(request: Request):
     # Проверка IP (для тестирования можно закомментировать)
-    # client_ip = request.client.host
-    # if client_ip not in ALLOWED_IPS:
-    #     raise HTTPException(status_code=400, detail="Hacking attempt!")
+    client_ip = request.client.host
+    if client_ip not in ALLOWED_IPS:
+        raise HTTPException(status_code=400, detail="Hacking attempt!")
 
     form_data = await request.form()
 
