@@ -1,6 +1,6 @@
 export const data = [
   {
-    url: "https://www.youtube.com/embed/S-bH1AcE0uc",
+    url: "https://www.youtube.com/embed/4zStMZeptXk?si=hfepnizT7AEymJLX",
     title:
       "99% ИГРОКОВ СДАЛИСЬ БЫ НО НЕ СТАРЫЙ БОГ!😮🔥ОТ ЭТОГО ВИСПА ВРАЖЕСКАЯ КОМАНДА ДУРЕЕТ 13К ММР 7.37e",
     id: 1,
