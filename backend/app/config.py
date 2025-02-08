@@ -28,6 +28,10 @@ class Settings(BaseSettings):
     EMAIL_PORT: int
     EMAIL_SERVER: str
 
+    FREKASSA_MERCHANT_ID: int
+    FREKASSA_SECRET_WORD: SecretStr
+    FREKASSA_SECRET_WORD2: SecretStr
+
     @model_validator(mode="before")
     @classmethod
     def get_database_url(cls, values):
