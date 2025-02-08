@@ -6,4 +6,13 @@
   align-items: center;
   font-family: "Game of Thrones KG";
   font-size: 35px;
+  flex-direction: column;
+}
+a {
+  text-decoration: none;
+  margin-top: 5%;
+  color: rgb(92, 46, 46);
+}
+a:hover {
+  color: rgb(180, 180, 158);
 }

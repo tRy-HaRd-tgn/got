@@ -14,8 +14,8 @@ export const Profile = () => {
   const email = useSelector((state) => state.user.email);
   const donate = useSelector((state) => state.user.donate);
   const regDate = useSelector((state) => state.user.regDate);
-  const [promo, setPromo] = useState('');
-  const [currency, setCurrency] = useState('');
+  const [promo, setPromo] = useState("");
+  const [currency, setCurrency] = useState("");
 
   const setProfilePhoto = (temp) => {
     dispatch({ type: "SET_PROFILE_PHOTO", profilePhoto: temp });
@@ -23,8 +23,7 @@ export const Profile = () => {
   const setSkin = (temp) => {
     dispatch({ type: "SET_SKIN", skin: temp });
   };
-  const skin = useSelector((state) => state.user.skin); // сохраняем скин в переменную
-  console.log(skin);
+  const skin = useSelector((state) => state.user.skin);
   const configureStore = async () => {
     const responce2 = await SkinService.getAvatar();
     setProfilePhoto(API_URL2 + "/" + responce2.data);
@@ -35,11 +34,11 @@ export const Profile = () => {
     configureStore();
   }, []);
   const clickHandler = (e) => {
-    const file = e.target.files[0]; // схватили выбранный файл
+    const file = e.target.files[0];
     try {
       const formData = new FormData();
       formData.append("skin", file);
-      SkinService.uploadSkin(formData); // загружаем скин на бэк
+      SkinService.uploadSkin(formData);
       window.location.reload();
     } catch (e) {
       console.log(e);
@@ -48,22 +47,12 @@ export const Profile = () => {
   async function buyDonate() {
     console.log("buy donate");
     try {
-      const data = { amount: Number(currency) }; // Преобразуем в число
-      console.log("Отправляемые данные:", data); // Проверяем, что отправляется
-  
-      const response = await fetch("https://tortugagot.com/api/payments/topup", { // Замените URL на ваш
-          method: "POST",
-          headers: {
-              "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-      });
-  
-      const result = await response.json();
-      console.log("Ответ сервера:", result);
-  } catch (e) {
-      console.error("Ошибка запроса:", e);
-  }
+      const responce = await PaymentService.addBalance(Number(currency));
+      window.location.replace(responce.data.payment_url)
+      console.log(responce);
+    } catch (e) {
+      console.error(e);
+    }
   }
   return (
     <main className={styles.main}>
