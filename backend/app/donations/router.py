@@ -14,6 +14,8 @@ from app.images.dependencies import FileService
 import uuid
 from fastapi_cache.decorator import cache
 
+from app.donations.purchased_donations.dao import PurchasedDonationsDAO
+
 router = APIRouter(prefix="/donations", tags=["Donations"])
 
 
@@ -72,24 +74,23 @@ async def buy_donation(
     if not donation:
         raise HTTPException(status_code=404, detail="Донат не найден")
 
-    # Проверяем баланс пользователя
+    # Проверяем, достаточно ли средств на балансе
     if current_user.balance < donation.price:
         raise HTTPException(status_code=400, detail="Недостаточно средств")
 
-    # Создаем транзакцию
-    transaction = await PaymentsDAO.add(
-        user_id=current_user.id,
-        amount=donation.price,
-        status="pending",  # Статус "в ожидании"
-    )
-
-    # Обновляем баланс пользователя
+    # Списываем сумму с баланса пользователя
     current_user.balance -= donation.price
     await UsersDAO.update(current_user.id, balance=current_user.balance)
 
+    # Создаем запись о покупке доната
+    purchased_donation = await PurchasedDonationsDAO.add(
+        user_id=current_user.id,
+        donation_id=donation_id,
+    )
+
     return {
         "message": "Покупка успешно завершена",
-        "transaction_id": transaction.transaction_id,  # Возвращаем transaction_id
+        "purchased_donation_id": purchased_donation.id,
     }
 
 
