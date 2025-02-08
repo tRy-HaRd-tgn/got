@@ -71,15 +71,15 @@ async def topup_balance(
     }
 
 
-ALLOWED_IPS = {"168.119.157.136", "168.119.60.227", "178.154.197.79", "51.250.54.238"}
+# ALLOWED_IPS = {"168.119.157.136", "168.119.60.227", "178.154.197.79", "51.250.54.238"}
 
 
 @router.api_route("/freekassa-callback", methods=["GET", "POST"])
 async def freekassa_callback(request: Request):
     # Проверка IP (для тестирования можно закомментировать)
-    client_ip = request.client.host
-    if client_ip not in ALLOWED_IPS:
-        raise HTTPException(status_code=400, detail="Hacking attempt!")
+    # client_ip = request.client.host
+    # if client_ip not in ALLOWED_IPS:
+    #     raise HTTPException(status_code=400, detail="Hacking attempt!")
 
     form_data = await request.form()
 
@@ -97,10 +97,10 @@ async def freekassa_callback(request: Request):
     commission: Optional[str] = form_data.get("commission")
 
     # Проверяем обязательные поля
-    if not all([merchant_id, amount, merchant_order_id, sign]):
-        raise HTTPException(
-            status_code=422, detail="Не все обязательные параметры переданы"
-        )
+    # if not all([merchant_id, amount, merchant_order_id, sign]):
+    #     raise HTTPException(
+    #         status_code=422, detail="Не все обязательные параметры переданы"
+    #     )
 
     if merchant_id != settings.FREKASSA_MERCHANT_ID:
         raise HTTPException(status_code=400, detail="Неверный MERCHANT_ID")
