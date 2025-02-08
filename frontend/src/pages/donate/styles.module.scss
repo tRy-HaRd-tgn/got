@@ -68,7 +68,7 @@ h1 {
   background: rgba(17, 17, 17, 0.75);
   border-radius: 24px;
   border: none;
-  width: 19%;
+  width: 22%;
   height: 100%;
   color: white;
   font-family: "Game of Thrones KG";
@@ -90,4 +90,5 @@ h1 {
   flex-wrap: wrap;
   overflow-y: auto;
   height: 130vh;
+  justify-content: space-between;
 }

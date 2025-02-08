@@ -16,10 +16,15 @@ $api.interceptors.response.use(
     return config;
   },
   async (error) => {
-    if (error.response.status == 401) {
-      const originalRequest = error.config;
+    const originalRequest = error.config;
+    if (
+      error.response.status == 401 &&
+      error.config &&
+      !error.config._isRetry
+    ) {
+      originalRequest.isRetry = true;
       try {
-        const response = await AuthService.checkAuth();
+        const response = await axios.post(`${API_URL}/users/refresh-token`);
         console.log(response);
         localStorage.setItem("token", response.data.access_token);
         return $api.request(originalRequest);

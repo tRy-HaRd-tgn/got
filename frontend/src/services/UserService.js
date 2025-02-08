@@ -13,7 +13,6 @@ export default class UserService {
     return $api.post("/users/logout");
   }
   static async checkAuth() {
-    // проверка refresh токена
     return $api.post("/users/refresh-token");
   }
 }

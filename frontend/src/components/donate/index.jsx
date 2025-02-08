@@ -1,7 +1,8 @@
 import styles from "./styles.module.scss";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { API_URL2 } from "../../http";
 import { ModalIcon } from "../modalIcon";
+import DonationService from "../../services/DonationService";
 export const DonateComp = ({ id, description, price, img, color, text }) => {
   function hexToDec(hex) {
     return parseInt(hex, 16);
@@ -21,6 +22,7 @@ export const DonateComp = ({ id, description, price, img, color, text }) => {
   function clickHandler() {
     console.log("покупка доната");
     console.log(id);
+    const responce = DonationService.buyDonation(Number(id));
   }
   return (
     <>
