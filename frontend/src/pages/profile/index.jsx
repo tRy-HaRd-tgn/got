@@ -45,14 +45,25 @@ export const Profile = () => {
       console.log(e);
     }
   };
-  function buyDonate() {
+  async function buyDonate() {
     console.log("buy donate");
     try {
-      const responce = PaymentService.addBalance(currency);
-      console.log(responce);
-    } catch (e) {
-      console.log(e);
-    }
+      const data = { amount: Number(currency) }; // Преобразуем в число
+      console.log("Отправляемые данные:", data); // Проверяем, что отправляется
+  
+      const response = await fetch("https://tortugagot.com/api/payments/topup", { // Замените URL на ваш
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+      });
+  
+      const result = await response.json();
+      console.log("Ответ сервера:", result);
+  } catch (e) {
+      console.error("Ошибка запроса:", e);
+  }
   }
   return (
     <main className={styles.main}>
