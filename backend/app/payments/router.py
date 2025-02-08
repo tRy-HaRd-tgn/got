@@ -4,7 +4,8 @@ from fastapi import APIRouter, Depends, HTTPException, Form
 from app.users.dependencies import get_current_user
 from app.models import User
 from app.payments.dao import PaymentsDAO  # Ваш DAO для работы с платежами
-from app.users.dao import UsersDAO  # Ваш DAO для работы с пользователями
+from app.users.dao import UsersDAO
+from app.payments.schemas import PaymentResponse
 
 router = APIRouter(prefix="/payments", tags=["Payments"])
 
@@ -25,7 +26,7 @@ def generate_signature(amount: float, order_id: str) -> str:
     return signature
 
 
-@router.post("/topup")
+@router.post("/topup", response_model=PaymentResponse)
 async def topup_balance(
     amount: float = Form(...), current_user: User = Depends(get_current_user)
 ):
