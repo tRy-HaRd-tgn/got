@@ -34,7 +34,7 @@ def generate_callback_signature_raw(amount: str, order_id: str) -> str:
 
     ВАЖНО: amount используем как строку, без дополнительного форматирования.
     """
-    data = f"{settings.FREKASSA_MERCHANT_ID}:{amount}:{settings.FREKASSA_SECRET_WORD2}:{order_id}"
+    data = f"{settings.FREKASSA_MERCHANT_ID}:{amount}:{settings.FREKASSA_SECRET_WORD2.get_secret_value()}:{order_id}"
     return hashlib.md5(data.encode("utf-8")).hexdigest()
 
 
