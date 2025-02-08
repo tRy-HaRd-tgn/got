@@ -70,7 +70,7 @@ async def topup_balance(amount: float, current_user: User = Depends(get_current_
     }
 
 
-@router.api_route("/freekassa-callback", methods=["GET", "POST"])
+@router.post("/freekassa-callback")
 async def freekassa_callback(request: Request):
     # Проверка IP (для тестирования можно закомментировать)
     client_ip = request.client.host
