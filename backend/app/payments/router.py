@@ -81,7 +81,7 @@ async def topup_balance(
     }
 
 
-@router.post("/freekassa-callback")
+@router.api_route("/freekassa-callback", methods=["GET", "POST"])
 async def freekassa_callback(
     merchant_id: str = Form(..., alias="MERCHANT_ID"),
     amount: float = Form(..., alias="AMOUNT"),
