@@ -39,9 +39,7 @@ def generate_callback_signature_raw(amount: str, order_id: str) -> str:
 
 
 @router.post("/topup", response_model=PaymentResponse)
-async def topup_balance(
-    amount: float = Form(...), current_user: User = Depends(get_current_user)
-):
+async def topup_balance(amount: float, current_user: User = Depends(get_current_user)):
     if amount <= 0:
         raise HTTPException(
             status_code=400, detail="Сумма пополнения должна быть положительной"
