@@ -78,8 +78,11 @@
   cursor: pointer;
   z-index: 9999;
 }
-.avatar{
+.avatar {
   width: 3vw;
   height: 3vw;
   border-radius: 25px;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
 }
