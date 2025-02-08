@@ -27,6 +27,7 @@ from fastapi_cache.decorator import cache
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import redis
+from app.donations.purchased_donations.dao import PurchasedDonationsDAO
 
 router = APIRouter(
     prefix="/users",
@@ -225,3 +226,9 @@ async def logout(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Ошибка при выходе из системы: {str(e)}",
         )
+
+
+@router.get("/my-donations")
+async def get_my_donations(current_user: User = Depends(get_current_user)):
+    purchased_donations = await PurchasedDonationsDAO.find_by_user_id(current_user.id)
+    return purchased_donations
