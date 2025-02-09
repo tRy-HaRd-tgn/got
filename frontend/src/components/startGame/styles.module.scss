@@ -1,7 +1,7 @@
 .component {
   width: 30%;
   padding-top: 2%;
-  height: 100%;
+  height:fit-content;
   background: #1a1a1a;
   border-radius: 32px;
   display: flex;
@@ -31,6 +31,8 @@
   color: #ffffff;
 }
 .componentP {
+  margin-top: 8%;
+  margin-bottom: 8%;
   width: 90%;
   height: 55%;
   font-family: "pieces-of-eight-cyrillic-aa";

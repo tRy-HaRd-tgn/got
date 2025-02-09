@@ -118,7 +118,6 @@ export const Profile = () => {
               <div className={styles.menuRightTopWrapper}>
                 <div>
                   <h2 className={styles.menuRightTopH2}>ИНФОРМАЦИЯ</h2>
-                  <div className={styles.delimeter}></div>
                 </div>
                 <p className={styles.menuRightTopWrapperP}>
                   Ваш ник:{" "}

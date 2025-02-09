@@ -1,6 +1,6 @@
 import styles from "./styles.module.scss";
 import { user, calendar } from "../../imgs";
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_URL2 } from "../../http";
 export const News = ({ header, img, text, id, author, data, url }) => {
@@ -30,7 +30,12 @@ export const News = ({ header, img, text, id, author, data, url }) => {
               <p className={styles.p}>{data}</p>
             </div>
           </div>
-          <a target="_blank" className={styles.butn} href={url}>
+          <a
+            style={{ marginTop: "0px" }}
+            target="_blank"
+            className={styles.butn}
+            href={url}
+          >
             Подробнее
           </a>
         </div>
